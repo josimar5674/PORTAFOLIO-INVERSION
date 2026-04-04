@@ -1,26 +1,71 @@
-<h1>Editar Servicio</h1>
+@extends('layouts.app')
 
-@if ($errors->any())
-    <ul style="color:red;">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+@section('content')
 
-<form method="POST" action="/inversiones/{{ $servicio->inversion_id }}/servicios/{{ $servicio->id }}">
-    @csrf
-    @method('PUT')
+<div class="form-card">
 
-    <input type="hidden" name="inversion_id" value="{{ $servicio->inversion_id }}">
+    <!-- 🔙 VOLVER -->
+    <div style="margin-bottom:10px;">
+        <a href="/inversiones/{{ $servicio->inversion_id }}/servicios" class="btn-secondary">
+            ← Volver a Servicios
+        </a>
+    </div>
 
-    <input type="text" name="nombre" value="{{ $servicio->nombre }}" placeholder="Nombre del servicio"><br>
+    <div class="form-title">
+        ✏️ Editar Servicio - {{ $servicio->nombre }}
+    </div>
 
-    <input type="number" step="0.01" name="costo_mensual" value="{{ $servicio->costo_mensual }}" placeholder="Costo mensual"><br>
+    @if ($errors->any())
+        <div class="error-box">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <input type="text" name="tipo" value="{{ $servicio->tipo }}" placeholder="Tipo"><br>
+    <form method="POST" action="/inversiones/{{ $servicio->inversion_id }}/servicios/{{ $servicio->id }}">
+        @csrf
+        @method('PUT')
 
-    <textarea name="descripcion" placeholder="Descripción">{{ $servicio->descripcion }}</textarea><br>
+        <input type="hidden" name="inversion_id" value="{{ $servicio->inversion_id }}">
 
-    <button type="submit">Actualizar</button>
-</form>
+        <!-- NOMBRE -->
+        <div class="form-group">
+            <label class="form-label">Nombre del servicio</label>
+            <input type="text" name="nombre" class="form-control"
+                value="{{ old('nombre', $servicio->nombre) }}">
+        </div>
+
+        <!-- COSTO -->
+        <div class="form-group">
+            <label class="form-label">Costo mensual</label>
+            <input type="number" step="0.01" name="costo_mensual" class="form-control"
+                value="{{ old('costo_mensual', $servicio->costo_mensual) }}">
+        </div>
+
+        <!-- TIPO -->
+        <div class="form-group">
+            <label class="form-label">Tipo</label>
+            <input type="text" name="tipo" class="form-control"
+                value="{{ old('tipo', $servicio->tipo) }}">
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-control">{{ old('descripcion', $servicio->descripcion) }}</textarea>
+        </div>
+
+        <!-- BOTONES -->
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn-primary-custom">💾 Actualizar</button>
+            <a href="/inversiones/{{ $servicio->inversion_id }}/servicios" class="btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+@endsection

@@ -58,3 +58,14 @@ Route::post('/inversiones/{inversion_id}/servicios', [ServicioController::class,
 Route::get('/inversiones/{inversion_id}/servicios/{id}/edit', [ServicioController::class, 'edit']);
 Route::put('/inversiones/{inversion_id}/servicios/{id}', [ServicioController::class, 'update']);
 Route::delete('/inversiones/{inversion_id}/servicios/{id}', [ServicioController::class, 'destroy']);
+
+Route::get('/', function () {
+    return view('dashboard.dashboard');
+});
+
+
+// GLOBAL
+Route::get('/activos', [AssetController::class, 'index'])->name('activos.index');
+
+// POR INVERSIÓN (la que ya tienes)
+Route::get('/inversiones/{investment_id}/assets', [AssetController::class, 'index']);

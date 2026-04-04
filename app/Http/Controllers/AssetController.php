@@ -7,11 +7,16 @@ use App\Models\Asset;
 
 class AssetController extends Controller
 {
-    public function index($investment_id)
-    {
+  public function index($investment_id = null)
+{
+    if ($investment_id) {
         $assets = Asset::where('investment_id', $investment_id)->get();
-        return view('assets.index', compact('assets', 'investment_id'));
+    } else {
+        $assets = Asset::with('inversion')->get(); // importante
     }
+
+    return view('assets.index', compact('assets', 'investment_id'));
+}
 
     public function create($investment_id)
     {

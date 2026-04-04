@@ -22,4 +22,9 @@ class Asset extends Model
         'description',
         'status'
     ];
+
+public function inversiones()
+{
+    return $this->belongsTo(\App\Models\Inversion::class, 'investment_id');
+}
 }

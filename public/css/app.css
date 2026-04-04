@@ -1,0 +1,414 @@
+/* public/css/app.css */
+
+.panel {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.panel:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+.panel i {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.panel:hover i {
+    color: #2c3e50;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+
+
+.container {
+    flex: 1; 
+    margin-top: 100%px;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+}
+
+
+footer {
+    border-top: 1px solid #ddd;
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.col-md-6 {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+
+
+/* ===== LISTA DE INVERSIONES ===== */
+
+.inversion-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    transition: 0.3s;
+}
+
+.inversion-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+}
+
+/* TITULO */
+.inversion-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* SUBINFO */
+.inversion-info {
+    color: #555;
+    font-size: 14px;
+}
+
+/* SECCIONES */
+.section-title {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #34495e;
+}
+
+/* LINEA SEPARADORA */
+.divider {
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+/* ACCIONES */
+.actions a {
+    margin-right: 10px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.actions a:hover {
+    text-decoration: underline;
+}
+
+/* BOTON ELIMINAR */
+.actions button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    text-decoration: underline;
+}
+
+/* BOTON NUEVO */
+.btn-new {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 15px;
+    background: #27ae60;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn-new:hover {
+    background: #219150;
+}
+
+/* FONDO GENERAL */
+body {
+    background: #f4f6f8;
+     padding-bottom: 80px; /* ajusta según altura del footer */
+
+}
+
+
+
+.page-container {
+    padding-left: 20px;
+}
+
+.page-title {
+    margin-bottom: 10px;
+}
+
+/* ===== FORMULARIOS ===== */
+
+.form-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.form-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #34495e;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+/* BOTONES */
+.btn-primary-custom {
+    background: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-primary-custom:hover {
+    background: #2980b9;
+}
+
+.btn-secondary {
+    background: #bdc3c7;
+    color: #2c3e50;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background: #95a5a6;
+}
+
+/* ERRORES */
+.error-box {
+    background: #ffe6e6;
+    border: 1px solid #ffb3b3;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+
+/* ===== ASSETS ===== */
+
+.asset-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    transition: 0.3s;
+}
+
+.asset-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.asset-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.asset-info {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.asset-actions {
+    margin-top: 10px;
+}
+
+.asset-actions a {
+    margin-right: 10px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.asset-actions button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+/* ===== AVALUOS ===== */
+
+.avaluo-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    transition: 0.3s;
+}
+
+.avaluo-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.avaluo-title {
+    font-weight: bold;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+.avaluo-info {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.avaluo-actions {
+    margin-top: 10px;
+}
+
+.avaluo-actions a {
+    margin-right: 10px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.avaluo-actions button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+/* ===== SERVICIOS ===== */
+
+.servicio-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    transition: 0.3s;
+}
+
+.servicio-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.servicio-title {
+    font-weight: bold;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+.servicio-info {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.servicio-actions {
+    margin-top: 10px;
+}
+
+.servicio-actions a {
+    margin-right: 10px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.servicio-actions button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+/* ===== CLIENTES ===== */
+
+.cliente-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    transition: 0.3s;
+}
+
+.cliente-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.cliente-title {
+    font-weight: bold;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+.cliente-info {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.cliente-actions {
+    margin-top: 10px;
+}
+
+.cliente-actions a {
+    margin-right: 10px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.cliente-actions button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}

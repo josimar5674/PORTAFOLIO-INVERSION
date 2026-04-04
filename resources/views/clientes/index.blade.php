@@ -1,23 +1,65 @@
-<h1>Clientes</h1>
+@extends('layouts.app')
 
+
+
+@section('content')
+
+<h2 style="margin-left:15px;">👥 Clientes</h2>
+<h4 style="margin-left:15px; color:#555;">
+    Total clientes: {{ count($clientes) }}
+</h4>
 @if(session('success'))
-    <p style="color: green">{{ session('success') }}</p>
+    <div class="alert alert-success" style="margin-left:15px;">
+        {{ session('success') }}
+    </div>
 @endif
 
-<a href="/clientes/create">Nuevo Cliente</a>
+<div style="margin-left:15px;">
+    <a href="/clientes/create" class="btn-new">
+        + Nuevo Cliente
+    </a>
+</div>
 
-<ul>
-@foreach($clientes as $cliente)
-    <li>
-        {{ $cliente->nombre }} - {{ $cliente->tipo }}
+<div class="container custom-container">
 
-        <a href="/clientes/{{ $cliente->id }}/edit">Editar</a>
+    <div class="row">
 
-        <form action="/clientes/{{ $cliente->id }}" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
-@endforeach
-</ul>
+        @foreach($clientes as $cliente)
+
+            <div class="col-md-6">
+                <div class="cliente-card">
+
+                    <div class="cliente-title">
+                        {{ $cliente->nombre }}
+                    </div>
+
+                    <div class="cliente-info">
+                        🧾 Tipo: {{ $cliente->tipo }}
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="cliente-actions">
+
+                        <a href="/clientes/{{ $cliente->id }}/edit">
+                            ✏️ Editar
+                        </a>
+
+                        <form action="/clientes/{{ $cliente->id }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">🗑️ Eliminar</button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        @endforeach
+
+    </div>
+
+</div>
+
+@endsection

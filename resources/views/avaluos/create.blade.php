@@ -1,25 +1,70 @@
-<h1>Nuevo Avalúo</h1>
+@extends('layouts.app')
 
-@if ($errors->any())
-    <ul style="color:red;">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+@section('content')
 
-<form method="POST" action="/inversiones/{{ $inversion_id }}/avaluos">
-    @csrf
+<div class="form-card">
 
-    <input type="hidden" name="inversion_id" value="{{ $inversion_id }}">
+    <!-- 🔙 VOLVER -->
+    <div style="margin-bottom:10px;">
+        <a href="/inversiones/{{ $inversion_id }}/avaluos" class="btn-secondary">
+            ← Volver a Avalúos
+        </a>
+    </div>
 
-    <input type="number" step="0.01" name="valor_terreno" placeholder="Valor del terreno"><br>
+    <div class="form-title">
+        ➕ Nuevo Avalúo (Inversión #{{ $inversion_id }})
+    </div>
 
-    <input type="number" step="0.01" name="valor_construccion" placeholder="Valor de construcción"><br>
+    @if ($errors->any())
+        <div class="error-box">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <input type="date" name="fecha_avaluo"><br>
+    <form method="POST" action="/inversiones/{{ $inversion_id }}/avaluos">
+        @csrf
 
-    <textarea name="observaciones" placeholder="Observaciones"></textarea><br>
+        <input type="hidden" name="inversion_id" value="{{ $inversion_id }}">
 
-    <button type="submit">Guardar</button>
-</form>
+        <!-- VALOR TERRENO -->
+        <div class="form-group">
+            <label class="form-label">Valor del terreno</label>
+            <input type="number" step="0.01" name="valor_terreno" class="form-control"
+                value="{{ old('valor_terreno') }}">
+        </div>
+
+        <!-- VALOR CONSTRUCCIÓN -->
+        <div class="form-group">
+            <label class="form-label">Valor de construcción</label>
+            <input type="number" step="0.01" name="valor_construccion" class="form-control"
+                value="{{ old('valor_construccion') }}">
+        </div>
+
+        <!-- FECHA -->
+        <div class="form-group">
+            <label class="form-label">Fecha de avalúo</label>
+            <input type="date" name="fecha_avaluo" class="form-control"
+                value="{{ old('fecha_avaluo') }}">
+        </div>
+
+        <!-- OBSERVACIONES -->
+        <div class="form-group">
+            <label class="form-label">Observaciones</label>
+            <textarea name="observaciones" class="form-control">{{ old('observaciones') }}</textarea>
+        </div>
+
+        <!-- BOTONES -->
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn-primary-custom">💾 Guardar</button>
+            <a href="/inversiones/{{ $inversion_id }}/avaluos" class="btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+@endsection

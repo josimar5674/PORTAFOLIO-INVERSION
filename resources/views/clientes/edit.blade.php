@@ -1,22 +1,77 @@
-<h1>Editar Cliente</h1>
+@extends('layouts.app')
 
-@if ($errors->any())
-    <ul style="color:red;">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+@section('content')
 
-<form method="POST" action="/clientes/{{ $cliente->id }}">
-    @csrf
-    @method('PUT')
+<div class="form-card">
 
-    <input type="text" name="nombre" value="{{ $cliente->nombre }}"><br>
-    <input type="text" name="tipo" value="{{ $cliente->tipo }}"><br>
-    <input type="text" name="identificacion" value="{{ $cliente->identificacion }}"><br>
-    <input type="text" name="telefono" value="{{ $cliente->telefono }}"><br>
-    <input type="email" name="email" value="{{ $cliente->email }}"><br>
+    <!-- 🔙 VOLVER -->
+    <div style="margin-bottom:10px;">
+        <a href="/clientes" class="btn-secondary">
+            ← Volver a Clientes
+        </a>
+    </div>
 
-    <button type="submit">Actualizar</button>
-</form>
+    <div class="form-title">
+        ✏️ Editar Cliente - {{ $cliente->nombre }}
+    </div>
+
+    @if ($errors->any())
+        <div class="error-box">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="/clientes/{{ $cliente->id }}">
+        @csrf
+        @method('PUT')
+
+        <!-- NOMBRE -->
+        <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control"
+                value="{{ old('nombre', $cliente->nombre) }}">
+        </div>
+
+        <!-- TIPO -->
+        <div class="form-group">
+            <label class="form-label">Tipo</label>
+            <input type="text" name="tipo" class="form-control"
+                value="{{ old('tipo', $cliente->tipo) }}">
+        </div>
+
+        <!-- IDENTIFICACIÓN -->
+        <div class="form-group">
+            <label class="form-label">Identificación</label>
+            <input type="text" name="identificacion" class="form-control"
+                value="{{ old('identificacion', $cliente->identificacion) }}">
+        </div>
+
+        <!-- TELÉFONO -->
+        <div class="form-group">
+            <label class="form-label">Teléfono</label>
+            <input type="text" name="telefono" class="form-control"
+                value="{{ old('telefono', $cliente->telefono) }}">
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control"
+                value="{{ old('email', $cliente->email) }}">
+        </div>
+
+        <!-- BOTONES -->
+        <div style="margin-top:20px;">
+            <button type="submit" class="btn-primary-custom">💾 Actualizar</button>
+            <a href="/clientes" class="btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+@endsection
