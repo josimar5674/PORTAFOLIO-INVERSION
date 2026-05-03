@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Servicio extends Model
 {
-    protected $fillable = [
-        'inversion_id',
-        'nombre',
-        'costo_mensual',
-        'tipo',
-        'descripcion'
-    ];
+protected $fillable = [
+    'inversion_id',
+    'clave',
+    'prestador',
+    'categoria',
+    'servicio',
+    'relacion',
+    'costo_mensual',
+    'costo_anual'
+];
 
     public function inversion()
     {

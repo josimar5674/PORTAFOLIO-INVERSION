@@ -12,9 +12,7 @@ Route::get('/clientes/{id}/edit', [ClienteController::class, 'edit']);
 Route::put('/clientes/{id}', [ClienteController::class, 'update']);
 Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 use App\Http\Controllers\InversionController;
@@ -69,3 +67,14 @@ Route::get('/activos', [AssetController::class, 'index'])->name('activos.index')
 
 // POR INVERSIÓN (la que ya tienes)
 Route::get('/inversiones/{investment_id}/assets', [AssetController::class, 'index']);
+
+use App\Http\Controllers\ComercialController;
+
+// Comercial
+Route::get('/inversiones/{inversion_id}/comercial', [ComercialController::class, 'index']);
+Route::get('/inversiones/{inversion_id}/comercial/create', [ComercialController::class, 'create']);
+Route::post('/inversiones/{inversion_id}/comercial', [ComercialController::class, 'store']);
+
+Route::get('/inversiones/{inversion_id}/comercial/{id}/edit', [ComercialController::class, 'edit']);
+Route::put('/inversiones/{inversion_id}/comercial/{id}', [ComercialController::class, 'update']);
+Route::delete('/inversiones/{inversion_id}/comercial/{id}', [ComercialController::class, 'destroy']);

@@ -8,14 +8,27 @@ class Avaluo extends Model
 {
     protected $table = 'avaluos';
 
-    protected $fillable = [
-        'inversion_id',
-        'valor_terreno',
-        'valor_construccion',
-        'valor_total',
-        'fecha_avaluo',
-        'observaciones'
-    ];
+protected $fillable = [
+    'inversion_id',
+
+    'area_terreno',
+    'precio_terreno',
+    'subtotal_terreno',
+    'unidad_terreno',
+
+    'area_construccion',
+    'precio_construccion',
+    'subtotal_construccion',
+
+    'vida_util',
+    'depreciacion',
+
+    'valor_total',
+
+    // 👇 IMPORTANTES
+    'fecha_avaluo',
+    'observaciones',
+];
 
     public function inversion()
     {

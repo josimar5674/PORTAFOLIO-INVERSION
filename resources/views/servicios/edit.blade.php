@@ -12,7 +12,7 @@
     </div>
 
     <div class="form-title">
-        ✏️ Editar Servicio - {{ $servicio->nombre }}
+        ✏️ Editar Servicio - {{ $servicio->clave ?? '' }}
     </div>
 
     @if ($errors->any())
@@ -31,31 +31,54 @@
 
         <input type="hidden" name="inversion_id" value="{{ $servicio->inversion_id }}">
 
-        <!-- NOMBRE -->
+        <!-- CLAVE -->
         <div class="form-group">
-            <label class="form-label">Nombre del servicio</label>
-            <input type="text" name="nombre" class="form-control"
-                value="{{ old('nombre', $servicio->nombre) }}">
+            <label>Clave</label>
+            <input type="text" name="clave" class="form-control"
+                value="{{ old('clave', $servicio->clave) }}">
         </div>
 
-        <!-- COSTO -->
+        <!-- PRESTADOR -->
         <div class="form-group">
-            <label class="form-label">Costo mensual</label>
+            <label>Prestador</label>
+            <input type="text" name="prestador" class="form-control"
+                value="{{ old('prestador', $servicio->prestador) }}">
+        </div>
+
+        <!-- CATEGORÍA -->
+        <div class="form-group">
+            <label>Categoría</label>
+            <input type="text" name="categoria" class="form-control"
+                value="{{ old('categoria', $servicio->categoria) }}">
+        </div>
+
+        <!-- SERVICIO -->
+        <div class="form-group">
+            <label>Servicio</label>
+            <input type="text" name="servicio" class="form-control"
+                value="{{ old('servicio', $servicio->servicio) }}">
+        </div>
+
+        <!-- RELACIÓN -->
+        <div class="form-group">
+            <label>Relación</label>
+            <input type="text" name="relacion" class="form-control"
+                value="{{ old('relacion', $servicio->relacion) }}">
+        </div>
+
+        <!-- COSTO MENSUAL -->
+        <div class="form-group">
+            <label>Costo mensual</label>
             <input type="number" step="0.01" name="costo_mensual" class="form-control"
-                value="{{ old('costo_mensual', $servicio->costo_mensual) }}">
+                value="{{ old('costo_mensual', $servicio->costo_mensual) }}"
+                oninput="calcularAnual(this)">
         </div>
 
-        <!-- TIPO -->
+        <!-- COSTO ANUAL -->
         <div class="form-group">
-            <label class="form-label">Tipo</label>
-            <input type="text" name="tipo" class="form-control"
-                value="{{ old('tipo', $servicio->tipo) }}">
-        </div>
-
-        <!-- DESCRIPCIÓN -->
-        <div class="form-group">
-            <label class="form-label">Descripción</label>
-            <textarea name="descripcion" class="form-control">{{ old('descripcion', $servicio->descripcion) }}</textarea>
+            <label>Costo anual</label>
+            <input type="number" step="0.01" name="costo_anual" class="form-control"
+                value="{{ old('costo_anual', $servicio->costo_anual) }}" readonly>
         </div>
 
         <!-- BOTONES -->
@@ -67,5 +90,14 @@
     </form>
 
 </div>
+
+<script>
+function calcularAnual(input) {
+    const mensual = parseFloat(input.value) || 0;
+    const anual = mensual * 12;
+
+    document.querySelector('input[name="costo_anual"]').value = anual.toFixed(2);
+}
+</script>
 
 @endsection

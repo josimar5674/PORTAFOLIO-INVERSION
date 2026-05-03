@@ -6,17 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cliente extends Model
 {
-    public function inversiones()
+public function inversiones()
 {
-    return $this->hasMany(Inversion::class);
+    return $this->belongsToMany(Inversion::class, 'inversion_cliente');
 }
 
 protected $fillable = [
     'nombre',
-    'tipo',
+    'tipo', 
     'identificacion',
     'telefono',
-    'email'
+    'email',
+    'nacionalidad',
+    'agente_nombre',
+    'agente_email',
+    'agente_numero_id',
+    'agente_movil',
+    'agente_tipo_id'
 ];
 
 }

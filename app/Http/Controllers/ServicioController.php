@@ -18,20 +18,39 @@ class ServicioController extends Controller
         return view('servicios.create', compact('inversion_id'));
     }
 
-    public function store(Request $request, $inversion_id)
-    {
-        $request->merge(['inversion_id' => $inversion_id]);
+  public function store(Request $request, $inversion_id)
+{
+    $request->validate([
+        'costo_mensual' => 'required|array|min:1',
+        'costo_mensual.*' => 'nullable|numeric',
+    ]);
 
-        $request->validate([
-            'nombre' => 'required',
-            'costo_mensual' => 'required|numeric',
+    foreach ($request->costo_mensual as $i => $costo) {
+
+        // Evitar filas vacías
+        if (
+            empty($request->clave[$i]) &&
+            empty($request->servicio[$i]) &&
+            empty($costo)
+        ) {
+            continue;
+        }
+
+        Servicio::create([
+            'inversion_id' => $inversion_id,
+            'clave' => $request->clave[$i] ?? null,
+            'prestador' => $request->prestador[$i] ?? null,
+            'categoria' => $request->categoria[$i] ?? null,
+            'servicio' => $request->servicio[$i] ?? null,
+            'relacion' => $request->relacion[$i] ?? null,
+            'costo_mensual' => $costo ?? 0,
+            'costo_anual' => $request->costo_anual[$i] ?? 0,
         ]);
-
-        Servicio::create($request->all());
-
-        return redirect('/inversiones/' . $inversion_id . '/servicios')
-            ->with('success', 'Servicio creado correctamente');
     }
+
+    return redirect('/inversiones/' . $inversion_id . '/servicios')
+        ->with('success', 'Servicios guardados correctamente');
+}
 
     public function edit($inversion_id, $id)
     {
@@ -39,19 +58,27 @@ class ServicioController extends Controller
         return view('servicios.edit', compact('servicio'));
     }
 
-    public function update(Request $request, $inversion_id, $id)
-    {
-        $request->validate([
-            'nombre' => 'required',
-            'costo_mensual' => 'required|numeric',
-        ]);
+public function update(Request $request, $inversion_id, $id)
+{
+    $request->validate([
+        'costo_mensual' => 'required|numeric',
+    ]);
 
-        $servicio = Servicio::findOrFail($id);
-        $servicio->update($request->all());
+    $servicio = Servicio::findOrFail($id);
 
-        return redirect('/inversiones/' . $inversion_id . '/servicios')
-            ->with('success', 'Servicio actualizado');
-    }
+    $servicio->update([
+        'clave' => $request->clave,
+        'prestador' => $request->prestador,
+        'categoria' => $request->categoria,
+        'servicio' => $request->servicio,
+        'relacion' => $request->relacion,
+        'costo_mensual' => $request->costo_mensual,
+        'costo_anual' => $request->costo_anual,
+    ]);
+
+    return redirect('/inversiones/' . $inversion_id . '/servicios')
+        ->with('success', 'Servicio actualizado correctamente');
+}
 
     public function destroy($inversion_id, $id)
     {

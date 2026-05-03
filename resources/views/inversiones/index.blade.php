@@ -25,21 +25,60 @@
 
     <div class="inversion-title">{{ $inv->nombre }}</div>
 
-    <div class="inversion-info">
-        📍 {{ $inv->ubicacion }}<br>
-        👤 Cliente: {{ $inv->cliente->nombre ?? 'N/A' }}
-    </div>
+<div class="inversion-title">
+   Clave: {{ $inv->clave }} 
+</div>
+
+<div class="inversion-info">
+    📍 {{ $inv->ubicacion ?? 'N/A' }}<br>
+
+    👥 Personas relacionadas:
+    @if($inv->clientes->isEmpty())
+        N/A
+    @else
+        <div style="margin-top:5px;">
+            @foreach($inv->clientes as $cliente)
+                <span style="background:#e5e7eb; padding:4px 8px; border-radius:12px; margin-right:5px;">
+                    {{ $cliente->nombre }}
+                </span>
+            @endforeach
+        </div>
+    @endif
+</div>
 
     <div class="divider"></div>
 
     <div class="section-title">💰 Perfil Financiero</div>
-    <div class="inversion-info">
-        Terreno: {{ number_format($inv->valor_terreno, 2) }}<br>
-        Construcción: {{ number_format($inv->valor_construccion, 2) }}<br>
-        Total: {{ number_format($inv->valor_total, 2) }}<br>
-        Depreciación: {{ number_format($inv->depreciacion_anual, 2) }}<br>
-        Valor Neto: {{ number_format($inv->valor_neto, 2) }}
-    </div>
+ <div class="inversion-info">
+
+    @if($inv->ultimoAvaluo)
+
+    📅 Ultimo Avalúo: {{ $inv->ultimoAvaluo?->fecha_avaluo ?? 'Sin avalúo' }} <br>
+
+        🌱 Terreno: $
+
+        {{ number_format($inv->ultimoAvaluo->subtotal_terreno, 2) }} <br>
+
+        🏗️ Construcción: $
+
+        {{ number_format($inv->ultimoAvaluo->subtotal_construccion, 2) }} <br>
+
+        📉 Depreciación: 
+
+        {{ number_format($inv->ultimoAvaluo->depreciacion, 2) }} <br>
+
+        💰 Total: $
+
+        <strong>{{ number_format($inv->ultimoAvaluo->valor_total, 2) }}</strong>
+
+    @else
+
+        <span style="color:#9ca3af;">Sin avalúo registrado</span>
+
+    @endif
+    
+
+</div>
 
     <div class="divider"></div>
 
@@ -51,17 +90,59 @@
 
     <div class="divider"></div>
 
+<div class="section-title">💰 Perfil Comercial</div>
+
+<div class="inversion-info">
+
+    @if($inv->comercial->isEmpty())
+
+        <span style="color:#9ca3af;">Sin registros comerciales</span>
+
+    @else
+
+        💵 Total ingresos: 
+        <strong>
+            L {{ number_format($inv->comercial->sum('subtotal'), 2) }}
+        </strong>
+
+        <div style="margin-top:5px;">
+            @foreach($inv->comercial->take(3) as $item)
+                <div style="font-size:13px; color:#4b5563;">
+                    • {{ $item->producto }} 
+                    (L {{ number_format($item->subtotal, 2) }})
+                </div>
+            @endforeach
+
+            @if($inv->comercial->count() > 3)
+                <small style="color:#6b7280;">
+                    +{{ $inv->comercial->count() - 3 }} más...
+                </small>
+            @endif
+        </div>
+
+    @endif
+
+</div>
+
+    <div class="divider"></div>
+
     <div class="actions">
         <a href="/inversiones/{{ $inv->id }}/avaluos">📊 Avalúos</a>
         <a href="/inversiones/{{ $inv->id }}/assets">🏢 Activos</a>
         <a href="/inversiones/{{ $inv->id }}/servicios">⚙️ Servicios</a>
+        <a href="/inversiones/{{ $inv->id }}/comercial">💰 Comercial</a>
         <a href="/inversiones/{{ $inv->id }}/edit">✏️ Editar</a>
+    
 
-        <form action="/inversiones/{{ $inv->id }}" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit">🗑️ Eliminar</button>
-        </form>
+       <form action="/inversiones/{{ $inv->id }}" method="POST" style="display:inline;"
+      onsubmit="return confirm('⚠️ Esta acción no se puede deshacer.\n\n¿Seguro que deseas eliminar esta inversión?')">
+    @csrf
+    @method('DELETE')
+ <button type="submit"
+    style="background:#feb4ff; color:white; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;">
+    🗑️ Eliminar
+</button>
+</form>
     </div>
   </div>
     </div>

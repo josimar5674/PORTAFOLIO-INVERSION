@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h2 style="margin-left:15px;">👥 Clientes</h2>
+<h2 style="margin-left:15px;">👥 Personas</h2>
 <h4 style="margin-left:15px; color:#555;">
     Total clientes: {{ count($clientes) }}
 </h4>
@@ -16,7 +16,7 @@
 
 <div style="margin-left:15px;">
     <a href="/clientes/create" class="btn-new">
-        + Nuevo Cliente
+        + Nueva persona
     </a>
 </div>
 
@@ -54,11 +54,19 @@
                     </div>
 
                 </div>
+                  <br>
             </div>
+
+           
 
         @endforeach
 
+
+       
+
     </div>
+
+    
 
 </div>
 

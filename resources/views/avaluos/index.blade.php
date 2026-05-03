@@ -13,7 +13,12 @@
         ← Volver a la Inversión
     </a>
 </div>
-
+<br>
+<div style="margin-left:15px;">
+    <a href="/inversiones/{{ $inversion_id }}/avaluos/create" class="btn-new">
+        + Nuevo Avalúo
+    </a>
+</div>
 
 
 
@@ -23,52 +28,76 @@
     </div>
 @endif
 
-<div style="margin-left:15px;">
-    <a href="/inversiones/{{ $inversion_id }}/avaluos/create" class="btn-new">
-        + Nuevo Avalúo
-    </a>
-</div>
+
 
 <!-- CONTENEDOR -->
 <div class="container custom-container">
 
     <div class="row">
+@foreach($avaluos as $avaluo)
 
-        @foreach($avaluos as $avaluo)
+<div class="col-md-6">
+    <div class="avaluo-card">
 
-            <div class="col-md-6">
-                <div class="avaluo-card">
+        <!-- 📅 FECHA -->
+        <div class="avaluo-title">
+            📅 {{ \Carbon\Carbon::parse($avaluo->fecha_avaluo)->format('d/m/Y') }}
+        </div>
 
-                    <div class="avaluo-title">
-                        📅 {{ $avaluo->fecha_avaluo }}
-                    </div>
+        <!-- 💰 INFO -->
+        <div class="avaluo-info">
 
-                    <div class="avaluo-info">
-                        💰 Terreno: {{ number_format($avaluo->valor_terreno, 2) }}<br>
-                        🏗️ Construcción: {{ number_format($avaluo->valor_construccion, 2) }}<br>
-                        💵 Total: {{ number_format($avaluo->valor_total, 2) }}
-                    </div>
+            🌱 Terreno: 
+            {{ number_format($avaluo->subtotal_terreno, 2) }}
+            ({{ $avaluo->unidad_terreno }}) <br>
 
-                    <div class="divider"></div>
+            🏗️ Construcción: 
+            {{ number_format($avaluo->subtotal_construccion, 2) }} <br>
 
-                    <div class="avaluo-actions">
+            📉 Depreciación: 
+            {{ number_format($avaluo->depreciacion, 2) }} <br><br>
 
-                        <a href="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}/edit">
-                            ✏️ Editar
-                        </a>
+            💵 <strong>Total: {{ number_format($avaluo->valor_total, 2) }}</strong>
 
-                        <form action="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">🗑️ Eliminar</button>
-                        </form>
+            
+        </div>
 
-                    </div>
-
-                </div>
+        <!-- 📝 OBSERVACIONES -->
+        @if($avaluo->observaciones)
+            <div style="margin-top:10px; font-size:13px; color:#555;">
+                📝 {{ $avaluo->observaciones }}
             </div>
+        @endif
 
-        @endforeach
+        <div class="divider"></div>
+
+        <!-- 🔧 ACCIONES -->
+        <div class="avaluo-actions">
+
+            <a href="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}/edit">
+                ✏️ Ver/Editar
+            </a>
+
+            <form action="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}" 
+                  method="POST" 
+                  style="display:inline;"
+                  onsubmit="return confirm('¿Seguro que deseas eliminar este avalúo?')">
+
+                @csrf
+                @method('DELETE')
+
+                <button type="submit">🗑️ Eliminar</button>
+            </form>
+
+        </div>
+
+    </div>
+    <br>
+</div>
+
+
+
+@endforeach
 
     </div>
 

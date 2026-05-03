@@ -10,11 +10,15 @@ class InversionController extends Controller
 {
     public function index()
     {
-        $inversiones = Inversion::with('cliente')->get();
-        return view('inversiones.index', compact('inversiones'));
+       $inversiones = Inversion::with([
+    'clientes',
+    'ultimoAvaluo',
+    'servicios',
+    'comercial' // 👈 ESTE FALTABA
+])->get();
 
-            $inversiones = Inversion::with('ultimoAvaluo')->get();
-$inversiones = Inversion::with(['cliente', 'ultimoAvaluo', 'servicios'])->get();
+
+        return view('inversiones.index', compact('inversiones'));
     }
 
     public function create()
@@ -27,17 +31,27 @@ $inversiones = Inversion::with(['cliente', 'ultimoAvaluo', 'servicios'])->get();
     {
         $request->validate([
             'nombre' => 'required',
-            'cliente_id' => 'required'
+            'clave' => 'required|unique:inversiones,clave',
+            'clientes' => 'required|array|min:1'
         ]);
 
-        Inversion::create($request->all());
+        // Crear inversión
+        $inversion = Inversion::create([
+            'nombre' => $request->nombre,
+            'clave' => $request->clave,
+            'ubicacion' => $request->ubicacion,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        // Guardar relación con clientes
+        $inversion->clientes()->sync($request->clientes);
 
         return redirect('/inversiones')->with('success', 'Inversión creada');
     }
 
     public function edit($id)
     {
-        $inversion = Inversion::findOrFail($id);
+        $inversion = Inversion::with('clientes')->findOrFail($id);
         $clientes = Cliente::all();
 
         return view('inversiones.edit', compact('inversion', 'clientes'));
@@ -47,11 +61,20 @@ $inversiones = Inversion::with(['cliente', 'ultimoAvaluo', 'servicios'])->get();
     {
         $request->validate([
             'nombre' => 'required',
-            'cliente_id' => 'required'
+            'clientes' => 'required|array|min:1'
         ]);
 
         $inversion = Inversion::findOrFail($id);
-        $inversion->update($request->all());
+
+        // Actualizar datos
+        $inversion->update([
+            'nombre' => $request->nombre,
+            'ubicacion' => $request->ubicacion,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        // Actualizar relación
+        $inversion->clientes()->sync($request->clientes);
 
         return redirect('/inversiones')->with('success', 'Inversión actualizada');
     }
@@ -63,7 +86,4 @@ $inversiones = Inversion::with(['cliente', 'ultimoAvaluo', 'servicios'])->get();
 
         return redirect('/inversiones')->with('success', 'Inversión eliminada');
     }
-
-    
-
 }

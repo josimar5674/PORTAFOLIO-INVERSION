@@ -3,17 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Comercial;
 
 class Inversion extends Model
 {
-    public function cliente()
+public function clientes()
 {
-    return $this->belongsTo(Cliente::class);
+    return $this->belongsToMany(Cliente::class, 'inversion_cliente');
 }
 protected $table = 'inversiones';
 protected $fillable = [
     'cliente_id',
     'nombre',
+    'clave',
     'ubicacion',
     'descripcion'
 ];
@@ -82,6 +84,14 @@ public function getCostoOperativoMensualAttribute()
 public function getCostoOperativoAnualAttribute()
 {
     return $this->costo_operativo_mensual * 12;
+}
+
+public function comercial()
+
+{
+
+    return $this->hasMany(Comercial::class);
+
 }
 
 }

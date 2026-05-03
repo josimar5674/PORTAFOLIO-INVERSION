@@ -26,6 +26,12 @@
                 value="{{ old('nombre') }}" placeholder="Ej: Torre Norte">
         </div>
 
+        <div class="form-group">
+    <label class="form-label">Clave</label>
+    <input type="text" name="clave" class="form-control"
+        value="{{ old('clave') }}" placeholder="Ej: INV-001">
+</div>
+
         <!-- UBICACIÓN -->
         <div class="form-group">
             <label class="form-label">Ubicación</label>
@@ -41,19 +47,37 @@
         </div>
 
         <!-- CLIENTE -->
-        <div class="form-group">
-            <label class="form-label">Cliente</label>
-            <select name="cliente_id" class="form-control">
-                <option value="">-- Seleccionar cliente --</option>
+<div class="form-group">
 
-                @foreach($clientes as $cliente)
-                    <option value="{{ $cliente->id }}"
-                        {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                        {{ $cliente->nombre }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    <label class="form-label">Personas relacionadas</label>
+
+    <div style="display:flex; gap:10px;">
+
+        <select id="clienteSelect" class="form-control">
+
+            <option value="">-- Seleccionar Personas --</option>
+
+            @foreach($clientes as $cliente)
+
+                <option value="{{ $cliente->id }}">
+
+                    {{ $cliente->nombre }}
+
+                </option>
+
+            @endforeach
+
+        </select>
+
+        <button type="button" onclick="agregarCliente()" class="btn-primary-custom">➕</button>
+
+    </div>
+
+    <!-- Lista de clientes agregados -->
+
+    <ul id="listaClientes" style="margin-top:10px;"></ul>
+
+</div>
 
         <!-- BOTONES -->
         <div style="margin-top:20px;">
@@ -64,5 +88,61 @@
     </form>
 
 </div>
+
+<script id="clientes-script">
+
+let clientesSeleccionados = [];
+
+function agregarCliente() {
+
+    const select = document.getElementById('clienteSelect');
+    const id = select.value;
+    const nombre = select.options[select.selectedIndex].text;
+
+    if (!id) return;
+
+    // evitar duplicados
+    if (clientesSeleccionados.includes(id)) return;
+
+    clientesSeleccionados.push(id);
+
+    const lista = document.getElementById('listaClientes');
+
+    const li = document.createElement('li');
+
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.padding = "6px 10px";
+    li.style.background = "#f9fafb";
+    li.style.borderRadius = "6px";
+    li.style.marginBottom = "6px";
+
+    li.innerHTML = `
+        <span>${nombre}</span>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button"
+                onclick="eliminarCliente('${id}', this)"
+                style="background:none; border:none; color:#ef4444; cursor:pointer; opacity:0.7;"
+                onmouseover="this.style.opacity=1"
+                onmouseout="this.style.opacity=0.7">
+                🗑️
+            </button>
+        </div>
+
+        <input type="hidden" name="clientes[]" value="${id}">
+    `;
+
+    lista.appendChild(li);
+}
+
+function eliminarCliente(id, btn) {
+    clientesSeleccionados = clientesSeleccionados.filter(c => c != id);
+    btn.closest('li').remove();
+}
+
+</script>
+
 
 @endsection

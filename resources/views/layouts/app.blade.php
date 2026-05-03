@@ -9,7 +9,7 @@
 }
 </style>
     <title>Portafolio Inversión</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -19,24 +19,33 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
 
+        <!-- Header + botón móvil -->
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-       
             <a class="navbar-brand" href="/">
-                 <i class="fa-solid fa-suitcase"></i> Portafolio Inversión
+                <i class="fa-solid fa-suitcase"></i> Portafolio Inversión
             </a>
         </div>
 
-        <ul class="nav navbar-nav">
-            <li><a href="/clientes">Clientes</a></li>
-            <li><a href="/inversiones">Inversiones</a></li>
-        </ul>
+        <!-- Contenido colapsable -->
+        <div class="collapse navbar-collapse" id="navbar-main">
 
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">👤 Usuario</a></li>
-            <li><a href="#">Cerrar sesión</a></li>
-        </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="/clientes">Clientes</a></li>
+                <li><a href="/inversiones">Inversiones</a></li>
+            </ul>
 
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">👤 Usuario</a></li>
+                <li><a href="#">Cerrar sesión</a></li>
+            </ul>
+
+        </div>
     </div>
 </nav>
 
