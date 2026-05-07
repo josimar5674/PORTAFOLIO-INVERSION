@@ -94,4 +94,15 @@ public function comercial()
 
 }
 
+public function entidades()
+{
+    return $this->belongsToMany(
+        Entidad::class,
+        'entidad_inversion'
+    );
+}
+
+
+
+
 }

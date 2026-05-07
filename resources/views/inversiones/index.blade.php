@@ -124,6 +124,40 @@
 
 </div>
 
+<div class="divider"></div>
+
+<div class="section-title">🏢 Entidades Relacionadas</div>
+
+<div class="inversion-info">
+
+    @if($inv->entidades->isEmpty())
+
+        <span style="color:#9ca3af;">
+            Sin entidades registradas
+        </span>
+
+    @else
+
+        @foreach($inv->entidades->take(3) as $entidad)
+
+            <div style="margin-bottom:5px;">
+                • {{ $entidad->denominacion_social }}
+            </div>
+
+        @endforeach
+
+        @if($inv->entidades->count() > 3)
+
+            <small style="color:#6b7280;">
+                +{{ $inv->entidades->count() - 3 }} más...
+            </small>
+
+        @endif
+
+    @endif
+
+</div>
+
     <div class="divider"></div>
 
     <div class="actions">
@@ -131,6 +165,11 @@
         <a href="/inversiones/{{ $inv->id }}/assets">🏢 Activos</a>
         <a href="/inversiones/{{ $inv->id }}/servicios">⚙️ Servicios</a>
         <a href="/inversiones/{{ $inv->id }}/comercial">💰 Comercial</a>
+       <a href="/inversiones/{{ $inv->id }}/entidades">
+
+    🏢 Entidades
+
+</a>
         <a href="/inversiones/{{ $inv->id }}/edit">✏️ Editar</a>
     
 

@@ -78,3 +78,21 @@ Route::post('/inversiones/{inversion_id}/comercial', [ComercialController::class
 Route::get('/inversiones/{inversion_id}/comercial/{id}/edit', [ComercialController::class, 'edit']);
 Route::put('/inversiones/{inversion_id}/comercial/{id}', [ComercialController::class, 'update']);
 Route::delete('/inversiones/{inversion_id}/comercial/{id}', [ComercialController::class, 'destroy']);
+
+use App\Http\Controllers\EntidadController;
+
+
+// Entidades
+Route::get('/entidades', [EntidadController::class, 'index']);
+Route::get('/entidades/create', [EntidadController::class, 'create']);
+Route::post('/entidades', [EntidadController::class, 'store']);
+
+Route::get('/entidades/{id}/edit', [EntidadController::class, 'edit']);
+Route::put('/entidades/{id}', [EntidadController::class, 'update']);
+Route::delete('/entidades/{id}', [EntidadController::class, 'destroy']);
+Route::get(
+    '/inversiones/{id}/entidades',
+    [EntidadController::class, 'porInversion']
+
+
+);

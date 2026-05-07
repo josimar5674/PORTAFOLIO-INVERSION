@@ -79,6 +79,45 @@
 
 </div>
 
+<!-- ENTIDADES -->
+<div class="form-group">
+
+    <label class="form-label">Entidades relacionadas</label>
+
+    <div style="display:flex; gap:10px;">
+
+        <select id="entidadSelect" class="form-control">
+
+            <option value="">
+                -- Seleccionar Entidad --
+            </option>
+
+            @foreach($entidades as $entidad)
+
+                <option value="{{ $entidad->id }}">
+
+                    {{ $entidad->denominacion_social }}
+
+                </option>
+
+            @endforeach
+
+        </select>
+
+        <button type="button"
+                onclick="agregarEntidad()"
+                class="btn-primary-custom">
+
+            ➕
+        </button>
+
+    </div>
+
+    <!-- Lista -->
+    <ul id="listaEntidades" style="margin-top:10px;"></ul>
+
+</div>
+
         <!-- BOTONES -->
         <div style="margin-top:20px;">
             <button type="submit" class="btn-primary-custom">💾 Guardar</button>
@@ -141,6 +180,77 @@ function eliminarCliente(id, btn) {
     clientesSeleccionados = clientesSeleccionados.filter(c => c != id);
     btn.closest('li').remove();
 }
+
+
+
+
+let entidadesSeleccionadas = [];
+
+function agregarEntidad() {
+
+    const select = document.getElementById('entidadSelect');
+
+    const id = select.value;
+
+    const nombre = select.options[select.selectedIndex].text;
+
+    if (!id) return;
+
+    // evitar duplicados
+    if (entidadesSeleccionadas.includes(id)) return;
+
+    entidadesSeleccionadas.push(id);
+
+    const lista = document.getElementById('listaEntidades');
+
+    const li = document.createElement('li');
+
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.padding = "6px 10px";
+    li.style.background = "#f9fafb";
+    li.style.borderRadius = "6px";
+    li.style.marginBottom = "6px";
+
+    li.innerHTML = `
+        <span>${nombre}</span>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+
+            <button type="button"
+                onclick="eliminarEntidad('${id}', this)"
+                style="background:none;
+                       border:none;
+                       color:#ef4444;
+                       cursor:pointer;
+                       opacity:0.7;"
+                onmouseover="this.style.opacity=1"
+                onmouseout="this.style.opacity=0.7">
+
+                🗑️
+
+            </button>
+
+        </div>
+
+        <input type="hidden"
+               name="entidades[]"
+               value="${id}">
+    `;
+
+    lista.appendChild(li);
+}
+
+function eliminarEntidad(id, btn) {
+
+    entidadesSeleccionadas =
+        entidadesSeleccionadas.filter(e => e != id);
+
+    btn.closest('li').remove();
+}
+
+
 
 </script>
 

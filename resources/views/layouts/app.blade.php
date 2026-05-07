@@ -38,6 +38,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/clientes">Clientes</a></li>
                 <li><a href="/inversiones">Inversiones</a></li>
+                  <li><a href="/entidades">Entidades</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
