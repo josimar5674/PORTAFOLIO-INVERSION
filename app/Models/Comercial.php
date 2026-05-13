@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comercial extends Model
 {
-    protected $table = 'comercial'; // o comercial_detalle si lo separas
+    protected $table = 'comercial';
 
     protected $fillable = [
         'inversion_id',
@@ -22,9 +22,4 @@ class Comercial extends Model
     {
         return $this->belongsTo(Inversion::class);
     }
-
-    public function comercial()
-{
-    return $this->hasMany(\App\Models\Comercial::class);
-}
 }

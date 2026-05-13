@@ -27,8 +27,12 @@ public function avaluos()
 }
 
 public function ultimoAvaluo()
+
 {
-    return $this->hasOne(Avaluo::class)->latestOfMany();
+
+    return $this->hasOne(Avaluo::class)
+      ->ofMany('fecha_avaluo', 'max');
+
 }
 
 public function getValorTerrenoAttribute()
@@ -102,7 +106,9 @@ public function entidades()
     );
 }
 
-
-
+public function activosRegistrales()
+{
+    return $this->hasMany(ActivoRegistral::class);
+}
 
 }

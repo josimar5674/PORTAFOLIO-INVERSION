@@ -31,21 +31,19 @@
 
 
 <!-- CONTENEDOR -->
-<div class="container custom-container">
-
-    <div class="row">
+<div class="card-grid">
 @foreach($avaluos as $avaluo)
 
 <div class="col-md-6">
-    <div class="avaluo-card">
+    <div class="card">
 
         <!-- 📅 FECHA -->
-        <div class="avaluo-title">
+        <div class="card-title">
             📅 {{ \Carbon\Carbon::parse($avaluo->fecha_avaluo)->format('d/m/Y') }}
         </div>
 
         <!-- 💰 INFO -->
-        <div class="avaluo-info">
+        <div class="card-info">
 
             🌱 Terreno: 
             {{ number_format($avaluo->subtotal_terreno, 2) }}
@@ -57,7 +55,7 @@
             📉 Depreciación: 
             {{ number_format($avaluo->depreciacion, 2) }} <br><br>
 
-            💵 <strong>Total: {{ number_format($avaluo->valor_total, 2) }}</strong>
+            💵 <strong>Total:$ {{ number_format($avaluo->valor_total, 2) }}</strong>
 
             
         </div>
@@ -72,34 +70,35 @@
         <div class="divider"></div>
 
         <!-- 🔧 ACCIONES -->
-        <div class="avaluo-actions">
+        <div class="card-actions">
 
             <a href="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}/edit">
                 ✏️ Ver/Editar
             </a>
 
-            <form action="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}" 
-                  method="POST" 
-                  style="display:inline;"
-                  onsubmit="return confirm('¿Seguro que deseas eliminar este avalúo?')">
+         <form action="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}" 
+      method="POST" 
+      style="display:inline;"
+      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
 
-                @csrf
-                @method('DELETE')
+    @csrf
+    @method('DELETE')
 
-                <button type="submit">🗑️ Eliminar</button>
-            </form>
+    <button type="submit" class="btn-danger">
+        🗑️ Eliminar
+    </button>
+
+</form>
 
         </div>
 
-    </div>
-    <br>
 </div>
 
 
+    </div>
 
 @endforeach
 
-    </div>
 
 </div>
 

@@ -24,46 +24,60 @@
     <a href="/inversiones" class="btn-secondary">← Volver a Inversiones</a>
 </div>
 
-<div class="container custom-container">
+<div class="card-grid">
 
-    <div class="row">
+    @foreach($assets as $asset)
 
-        @foreach($assets as $asset)
+        <div class="card">
 
-            <div class="col-md-6">
-                <div class="asset-card">
-
-                    <div class="asset-title">
-                        {{ $asset->name }}
-                    </div>
-
-                    <div class="asset-info">
-                        📦 Tipo: {{ $asset->type }}<br>
-                        🏢 Nivel: {{ $asset->level_number }}
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="asset-actions">
-
-                        <a href="/inversiones/{{ $investment_id }}/assets/{{ $asset->id }}/edit">
-                            ✏️ Editar
-                        </a>
-
-                        <form action="/inversiones/{{ $investment_id }}/assets/{{ $asset->id }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">🗑️ Eliminar</button>
-                        </form>
-
-                    </div>
-
-                </div>
+            <div class="card-title">
+                {{ $asset->name }}
             </div>
 
-        @endforeach
+            <div class="card-info">
 
-    </div>
+                📦 Tipo:
+                {{ $asset->type }}
+
+                <br><br>
+
+                🏢 Nivel:
+                {{ $asset->level_number }}
+
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="card-actions">
+
+                <a href="/inversiones/{{ $investment_id }}/assets/{{ $asset->id }}/edit">
+
+                    ✏️ Editar
+
+                </a>
+
+                <form action="/inversiones/{{ $investment_id }}/assets/{{ $asset->id }}"
+                      method="POST"
+                      style="display:inline;"
+                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit"
+                            class="btn-danger">
+
+                        🗑️ Eliminar
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    @endforeach
 
 </div>
 

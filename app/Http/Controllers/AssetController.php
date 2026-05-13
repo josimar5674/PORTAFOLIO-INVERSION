@@ -36,25 +36,29 @@ class AssetController extends Controller
             ->with('success', 'Activo creado correctamente');
     }
 
-    public function edit($id)
-    {
-        $asset = Asset::findOrFail($id);
-        return view('assets.edit', compact('asset'));
-    }
+public function edit($investment_id, $id)
+{
+    $asset = Asset::findOrFail($id);
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required',
-        ]);
+    return view('assets.edit', compact(
+        'asset',
+        'investment_id'
+    ));
+}
 
-        $asset = Asset::findOrFail($id);
-        $asset->update($request->all());
+public function update(Request $request, $investment_id, $id)
+{
+    $request->validate([
+        'name' => 'required',
+    ]);
 
-        return redirect('/inversiones/' . $asset->investment_id . '/assets')
-            ->with('success', 'Activo actualizado');
-    }
+    $asset = Asset::findOrFail($id);
 
+    $asset->update($request->all());
+
+    return redirect('/inversiones/' . $investment_id . '/assets')
+        ->with('success', 'Activo actualizado');
+}
     public function destroy($id)
     {
         $asset = Asset::findOrFail($id);

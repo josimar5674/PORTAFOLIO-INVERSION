@@ -24,61 +24,84 @@
 </div>
 
 <!-- CONTENEDOR -->
-<div class="container custom-container">
-    <div class="row">
+<!-- GRID -->
+<div class="card-grid">
 
-        @foreach($servicios as $servicio)
+    @foreach($servicios as $servicio)
 
-            <div class="col-md-6">
-                <div class="servicio-card">
+        <div class="card">
 
-                    <!-- 🔹 TÍTULO -->
-                    <div class="servicio-title">
-                        {{ $servicio->clave ?? 'N/A' }} - {{ $servicio->servicio ?? 'Sin nombre' }}
-                    </div>
+            <!-- TITULO -->
+            <div class="card-title">
 
-                    <!-- 🔹 INFO -->
-                    <div class="servicio-info">
-                        👤 Prestador: {{ $servicio->prestador ?? 'N/A' }} <br>
-                        📂 Categoría: {{ $servicio->categoria ?? 'N/A' }} <br>
-                        🔗 Relación: {{ $servicio->relacion ?? 'N/A' }} <br><br>
+                {{ $servicio->clave ?? 'N/A' }}
+                -
+                {{ $servicio->servicio ?? 'Sin nombre' }}
 
-                        💰 Mensual: $ {{ number_format($servicio->costo_mensual, 2) }} <br>
-                        📆 Anual: $ {{ number_format($servicio->costo_anual, 2) }}
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <!-- 🔹 ACCIONES -->
-                    <div class="servicio-actions">
-
-                        <a href="/inversiones/{{ $inversion_id }}/servicios/{{ $servicio->id }}/edit">
-                            ✏️ Editar
-                        </a>
-
-                        <form method="POST"
-                              action="/inversiones/{{ $inversion_id }}/servicios/{{ $servicio->id }}"
-                              style="display:inline;"
-                              onsubmit="return confirm('⚠️ Esta acción no se puede deshacer.\n\n¿Seguro que deseas eliminar este servicio?')">
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit"
-                                style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:6px; cursor:pointer;">
-                                🗑️ Eliminar
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                </div>
             </div>
 
-        @endforeach
+            <!-- INFO -->
+            <div class="card-info">
 
-    </div>
+                👤 Prestador:
+                {{ $servicio->prestador ?? 'N/A' }}
+
+                <br><br>
+
+                📂 Categoría:
+                {{ $servicio->categoria ?? 'N/A' }}
+
+                <br><br>
+
+                🔗 Relación:
+                {{ $servicio->relacion ?? 'N/A' }}
+
+                <br><br>
+
+                💰 Mensual:
+                $ {{ number_format($servicio->costo_mensual, 2) }}
+
+                <br>
+
+                📆 Anual:
+                $ {{ number_format($servicio->costo_anual, 2) }}
+
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- ACCIONES -->
+            <div class="card-actions">
+
+                <a href="/inversiones/{{ $inversion_id }}/servicios/{{ $servicio->id }}/edit">
+
+                    ✏️ Editar
+
+                </a>
+
+                <form method="POST"
+                      action="/inversiones/{{ $inversion_id }}/servicios/{{ $servicio->id }}"
+                      style="display:inline;"
+                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit"
+                            class="btn-danger">
+
+                        🗑️ Eliminar
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    @endforeach
+
 </div>
 
 @endsection

@@ -21,7 +21,7 @@
 <!-- 🔥 TOTAL -->
 <div style="margin:15px;">
     <strong>
-        Total Comercial: L {{ number_format($items->sum('subtotal'), 2) }}
+        Total Comercial: $ {{ number_format($items->sum('subtotal'), 2) }}
     </strong>
 </div>
 
@@ -54,8 +54,8 @@
             📦 Cantidad: {{ number_format($item->cantidad, 2) }} <br>
             📏 Unidad: {{ $item->unidad ?? 'N/A' }} <br><br>
 
-            💵 Precio: L {{ number_format($item->precio_unitario, 2) }} <br>
-            💰 Subtotal: <strong>L {{ number_format($item->subtotal, 2) }}</strong>
+            💵 Precio: $ {{ number_format($item->precio_unitario, 2) }} <br>
+            💰 Subtotal: <strong> $ {{ number_format($item->subtotal, 2) }}</strong>
         </div>
 
         <div style="border-top:1px solid #e5e7eb; margin:10px 0;"></div>

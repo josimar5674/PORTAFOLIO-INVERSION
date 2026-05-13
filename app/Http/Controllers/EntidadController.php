@@ -7,13 +7,21 @@ use App\Models\Entidad;
 
 class EntidadController extends Controller
 {
-   public function index()
+public function index()
 
 {
 
     $entidades = Entidad::all();
 
-    return view('entidades.index', compact('entidades'));
+    $inversion = null;
+
+    return view(
+        'entidades.index',
+        compact(
+            'entidades',
+            'inversion'
+        )
+    );
 
 }
 
@@ -85,4 +93,6 @@ public function update(Request $request, $id)
         'inversion'
     ));
 }
+
+
 }

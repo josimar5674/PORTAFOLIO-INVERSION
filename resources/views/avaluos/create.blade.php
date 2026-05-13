@@ -96,7 +96,15 @@ input {
             </div>
         </div>
 
+        <!-- 🔹 TOTAL -->
+        <div class="total-box">
+            💰 Total del inmueble: $
+            <span id="totalGeneral">0.00</span>
+        </div>
 
+        <input type="hidden" name="valor_total" id="valor_total">
+
+        <br>
 
         <!-- 🔹 DEPRECIACIÓN -->
         <div class="card-seccion">
@@ -106,7 +114,11 @@ input {
                 <input type="number" name="vida_util" placeholder="Vida útil (años)" oninput="calcularDepreciacion()">
                 <input type="number" name="depreciacion" placeholder="Depreciación anual" readonly>
             </div>
+
+        
         </div>
+
+        
 
         <div class="card-seccion">
     <h4>📅 Información del Avalúo</h4>
@@ -117,13 +129,7 @@ input {
                value="{{ old('observaciones') }}">
     </div>
 </div>
-        <!-- 🔹 TOTAL -->
-        <div class="total-box">
-            💰 Total del inmueble: 
-            <span id="totalGeneral">0.00</span>
-        </div>
 
-        <input type="hidden" name="valor_total" id="valor_total">
 
         <!-- BOTONES -->
      <div style="margin-top:20px; display:flex; gap:10px; align-items:center;">

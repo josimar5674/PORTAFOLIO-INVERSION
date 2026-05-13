@@ -7,6 +7,11 @@
         ⚙️ Perfil Operativo - Servicios (Inversión #{{ $inversion_id }})
     </div>
 
+<!-- 🔙 VOLVER -->
+<div style="margin-left:15px; margin-bottom:10px;">
+   <a href="/inversiones" class="btn-secondary">← Volver a Inversiones</a>
+</div>
+
     <form method="POST" action="/inversiones/{{ $inversion_id }}/servicios">
         @csrf
 

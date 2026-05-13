@@ -7,9 +7,25 @@
 <h2 style="margin-left:15px;">🏢 Entidades</h2>
 
 <div style="margin-left:15px; margin-bottom:10px;">
-   <a href="/" class="btn-secondary">
-       ← Volver al Dashboard
-   </a>
+  @if(isset($inversion) && $inversion)
+
+    <a href="/inversiones"
+       class="btn-secondary">
+
+        ← Volver a Inversiones
+
+    </a>
+
+@else
+
+    <a href="/"
+       class="btn-secondary">
+
+        ← Volver al Dashboard
+
+    </a>
+
+@endif
 </div>
 
 <div style="margin-left:15px;">
@@ -109,6 +125,7 @@
             </button>
 
         </form>
+
 
     </div>
 

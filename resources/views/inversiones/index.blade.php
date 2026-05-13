@@ -17,10 +17,11 @@
 
 
 <hr>
-<div class="row">
+
+<div class="inversion-grid">
 @foreach($inversiones as $inv)
 
-    <div class="col-md-6">
+
         <div class="inversion-card">
 
     <div class="inversion-title">{{ $inv->nombre }}</div>
@@ -84,8 +85,8 @@
 
     <div class="section-title">⚙️ Perfil Operativo</div>
     <div class="inversion-info">
-        Costo mensual: {{ number_format($inv->costo_operativo_mensual, 2) }}<br>
-        Costo anual: {{ number_format($inv->costo_operativo_anual, 2) }}
+        Costo mensual: $ {{ number_format($inv->costo_operativo_mensual, 2) }}<br>
+        Costo anual: $ {{ number_format($inv->costo_operativo_anual, 2) }}
     </div>
 
     <div class="divider"></div>
@@ -102,14 +103,14 @@
 
         💵 Total ingresos: 
         <strong>
-            L {{ number_format($inv->comercial->sum('subtotal'), 2) }}
+             {{ number_format($inv->comercial->sum('subtotal'), 2) }}
         </strong>
 
         <div style="margin-top:5px;">
             @foreach($inv->comercial->take(3) as $item)
                 <div style="font-size:13px; color:#4b5563;">
                     • {{ $item->producto }} 
-                    (L {{ number_format($item->subtotal, 2) }})
+                    ($ {{ number_format($item->subtotal, 2) }})
                 </div>
             @endforeach
 
@@ -158,36 +159,99 @@
 
 </div>
 
+
+<div class="divider"></div>
+
+<div class="section-title">📑 Perfil Registral</div>
+
+<div class="inversion-info">
+
+    @if($inv->activosRegistrales->isEmpty())
+
+        <span style="color:#9ca3af;">
+            Sin activos registrales
+        </span>
+
+    @else
+
+        @foreach($inv->activosRegistrales->take(3) as $activo)
+
+            <div style="margin-bottom:5px;">
+
+                • Matrícula:
+                {{ $activo->numero_matricula }}
+
+            </div>
+
+        @endforeach
+
+        @if($inv->activosRegistrales->count() > 3)
+
+            <small style="color:#6b7280;">
+                +{{ $inv->activosRegistrales->count() - 3 }} más...
+            </small>
+
+        @endif
+
+    @endif
+
+</div>
+
     <div class="divider"></div>
 
-    <div class="actions">
-        <a href="/inversiones/{{ $inv->id }}/avaluos">📊 Avalúos</a>
-        <a href="/inversiones/{{ $inv->id }}/assets">🏢 Activos</a>
-        <a href="/inversiones/{{ $inv->id }}/servicios">⚙️ Servicios</a>
-        <a href="/inversiones/{{ $inv->id }}/comercial">💰 Comercial</a>
-       <a href="/inversiones/{{ $inv->id }}/entidades">
+<div class="actions">
 
-    🏢 Entidades
+    <a href="/inversiones/{{ $inv->id }}/avaluos">
+        📊 Avalúos
+    </a>
 
-</a>
-        <a href="/inversiones/{{ $inv->id }}/edit">✏️ Editar</a>
-    
+    <a href="/inversiones/{{ $inv->id }}/assets">
+        🏢 Activos
+    </a>
 
-       <form action="/inversiones/{{ $inv->id }}" method="POST" style="display:inline;"
-      onsubmit="return confirm('⚠️ Esta acción no se puede deshacer.\n\n¿Seguro que deseas eliminar esta inversión?')">
-    @csrf
-    @method('DELETE')
- <button type="submit"
-    style="background:#feb4ff; color:white; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;">
-    🗑️ Eliminar
-</button>
-</form>
-    </div>
-  </div>
-    </div>
+    <a href="/inversiones/{{ $inv->id }}/servicios">
+        ⚙️ Servicios
+    </a>
 
-</li>
+    <a href="/inversiones/{{ $inv->id }}/comercial">
+        💰 Comercial
+    </a>
+
+    <a href="/inversiones/{{ $inv->id }}/entidades">
+        🏢 Entidades
+    </a>
+
+    <a href="/inversiones/{{ $inv->id }}/activos-registrales">
+        📑 Activos Registrales
+    </a>
+
+    <a href="/inversiones/{{ $inv->id }}/edit">
+        ✏️ Editar
+    </a>
+
+    <form action="/inversiones/{{ $inv->id }}"
+          method="POST"
+          style="display:inline;"
+          onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+                class="btn-danger">
+
+            🗑️ Eliminar
+
+        </button>
+
+    </form>
+
+</div>
+
+</div> {{-- ← cierre inversion-card --}}
+
 @endforeach
-</ul>
+
+</div>
 
 @endsection

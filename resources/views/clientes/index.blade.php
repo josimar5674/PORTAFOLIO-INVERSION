@@ -20,53 +20,47 @@
     </a>
 </div>
 
-<div class="container custom-container">
+<div class="card-grid">
 
-    <div class="row">
+    @foreach($clientes as $cliente)
 
-        @foreach($clientes as $cliente)
+        <div class="cliente-card">
 
-            <div class="col-md-6">
-                <div class="cliente-card">
-
-                    <div class="cliente-title">
-                        {{ $cliente->nombre }}
-                    </div>
-
-                    <div class="cliente-info">
-                        🧾 Tipo: {{ $cliente->tipo }}
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="cliente-actions">
-
-                        <a href="/clientes/{{ $cliente->id }}/edit">
-                            ✏️ Editar
-                        </a>
-
-                        <form action="/clientes/{{ $cliente->id }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">🗑️ Eliminar</button>
-                        </form>
-
-                    </div>
-
-                </div>
-                  <br>
+            <div class="cliente-title">
+                {{ $cliente->nombre }}
             </div>
 
-           
+            <div class="cliente-info">
+                🧾 Tipo: {{ $cliente->tipo }}
+            </div>
 
-        @endforeach
+            <div class="divider"></div>
 
+            <div class="cliente-actions">
 
-       
+                <a href="/clientes/{{ $cliente->id }}/edit">
+                    ✏️ Editar
+                </a>
 
-    </div>
+            <form action="/clientes/{{ $cliente->id }}"
+      method="POST"
+      style="display:inline;"
+      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
 
-    
+    @csrf
+    @method('DELETE')
+
+    <button type="submit">
+        🗑️ Eliminar
+    </button>
+
+</form>
+
+            </div>
+
+        </div>
+
+    @endforeach
 
 </div>
 

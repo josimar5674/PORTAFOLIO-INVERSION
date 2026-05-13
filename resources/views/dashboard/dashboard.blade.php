@@ -2,56 +2,121 @@
 
 @section('content')
 
-<div class="container">
+<div class="page-container">
 
-    <h2 class="text-center">Dashboard - Portafolio de Inversión</h2>
-    <hr>
+    <h1 class="page-title">
+        📊 Dashboard
+    </h1>
 
-    <div class="row">
-
-
-<div class="col-sm-4">
-    <a href="/clientes" style="text-decoration:none;">
-        <div class="panel panel-success text-center">
-            <div class="panel-heading">
-                <h4><i class="fa-solid fa-users"></i> Clientes</h4>
-            </div>
-            <div class="panel-body">
-                <p>Gestionar base clientes</p>
-            </div>
-        </div>
-    </a>
 </div>
 
+<div class="dashboard-grid">
 
-        <!-- INVERSIONES -->
-  <div class="col-sm-4">
-    <a href="/inversiones" style="text-decoration:none;">
-        <div class="panel panel panel-primary text-center">
-            <div class="panel-heading">
-                <h4><i class="fa-solid fa-building-circle-arrow-right"></i> Inversiones</h4>
-            </div>
-            <div class="panel-body">
-                <p>Gestionar portafolio</p>
-            </div>
+    <!-- CLIENTES -->
+    <a href="/clientes" class="dashboard-card">
+
+        <div class="dashboard-icon">
+            👥
         </div>
-    </a>
-</div>
 
-  <div class="col-sm-4">
-    <a href="/entidades" style="text-decoration:none;">
-        <div class="panel panel-warning text-center">
-            <div class="panel-heading">
-                <h4><i class="fa-solid fa-sitemap"></i> Entidades</h4>
-            </div>
-            <div class="panel-body">
-                <p>Gestionar portafolio</p>
-            </div>
+        <div class="dashboard-title">
+            Clientes
         </div>
+
+        <div class="dashboard-description">
+            Gestionar base de clientes
+        </div>
+
+        <div class="dashboard-metric">
+
+            Total registrados:
+            <strong>
+
+                {{ $clientes }}
+
+            </strong>
+
+        </div>
+
     </a>
-</div>
 
+    <!-- INVERSIONES -->
+    <a href="/inversiones" class="dashboard-card">
 
+        <div class="dashboard-icon">
+            💼
+        </div>
+
+        <div class="dashboard-title">
+            Inversiones
+        </div>
+
+        <div class="dashboard-description">
+            Gestionar portafolio de inversión
+        </div>
+
+        <div class="dashboard-metric">
+
+            💰 Financiero:
+            <strong>
+
+                $ {{ number_format($totalFinanciero, 2) }}
+
+            </strong>
+
+        </div>
+
+        <div class="dashboard-metric">
+
+            ⚙️ Operativo:
+            <strong>
+
+                $ {{ number_format($totalOperativo, 2) }}
+
+            </strong>
+
+        </div>
+
+        <div class="dashboard-metric">
+
+            📈 Comercial:
+            <strong>
+
+                $ {{ number_format($totalComercial, 2) }}
+
+            </strong>
+
+        </div>
+
+    </a>
+
+    <!-- ENTIDADES -->
+    <a href="/entidades" class="dashboard-card">
+
+        <div class="dashboard-icon">
+            🏢
+        </div>
+
+        <div class="dashboard-title">
+            Entidades
+        </div>
+
+        <div class="dashboard-description">
+            Gestionar entidades relacionadas
+        </div>
+
+        <div class="dashboard-metric">
+
+            Total entidades:
+            <strong>
+
+                {{ $entidades }}
+
+            </strong>
+
+        </div>
+
+    </a>
 
 </div>
 

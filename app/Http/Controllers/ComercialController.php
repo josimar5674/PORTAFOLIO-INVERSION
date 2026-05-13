@@ -14,10 +14,15 @@ class ComercialController extends Controller
         return view('comercial.index', compact('items', 'inversion_id'));
     }
 
-    public function create($inversion_id)
-    {
-        return view('comercial.create', compact('inversion_id'));
-    }
+public function create($inversion_id)
+{
+    $clientes = \App\Models\Cliente::orderBy('nombre')->get();
+
+    return view('comercial.create', compact(
+        'inversion_id',
+        'clientes'
+    ));
+}
 
     public function store(Request $request, $inversion_id)
     {

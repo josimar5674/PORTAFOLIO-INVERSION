@@ -29,7 +29,21 @@
         <tbody id="tablaComercial">
             <tr>
                 <td><input type="text" name="producto[]" class="form-control"></td>
-                <td><input type="text" name="cliente[]" class="form-control"></td>
+                <td><select name="cliente[]" class="form-control">
+
+    <option value="">Seleccione cliente</option>
+
+    @foreach($clientes as $cliente)
+
+        <option value="{{ $cliente->nombre }}">
+
+            {{ $cliente->nombre }}
+
+        </option>
+
+    @endforeach
+
+</select></td>
 
                 <td>
                     <input type="number" step="0.01" name="cantidad[]" 
@@ -66,7 +80,7 @@
     </div>
 
     <div style="margin-top:20px; text-align:right;">
-        <strong>TOTAL: L <span id="totalGeneral">0.00</span></strong>
+        <strong>TOTAL: $ <span id="totalGeneral">0.00</span></strong>
     </div>
 
     <div style="margin-top:20px;">

@@ -107,8 +107,8 @@ return view('inversiones.edit', compact(
 
         // Actualizar datos
      $inversion->update([
+        
     'nombre' => $request->nombre,
-    'clave' => $request->clave,
     'ubicacion' => $request->ubicacion,
     'descripcion' => $request->descripcion,
 ]);
