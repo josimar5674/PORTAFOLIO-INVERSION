@@ -8,17 +8,31 @@ use App\Models\Inversion;
 
 class DashboardController extends Controller
 {
-    public function index()
+  public function index()
+
+{
+
+    if (auth()->user()->role != 'admin')
+
     {
-        $clientes = Cliente::count();
 
-        $entidades = Entidad::count();
+        return redirect('/inversiones');
 
-        $inversiones = Inversion::with([
-            'ultimoAvaluo',
-            'servicios',
-            'comercial'
-        ])->get();
+    }
+
+    $clientes = Cliente::count();
+
+    $entidades = Entidad::count();
+
+    $inversiones = Inversion::with([
+
+        'ultimoAvaluo',
+
+        'servicios',
+
+        'comercial'
+
+    ])->get();
 
         /*
         |--------------------------------------------------------------------------
