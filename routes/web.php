@@ -15,6 +15,8 @@ use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ComercialController;
 use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EstadoResultadoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -225,28 +227,45 @@ Route::get('/', [DashboardController::class, 'index'])
         [ComercialController::class, 'destroy']
     );
 
-    /*
-    |--------------------------------------------------------------------------
-    | ENTIDADES
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| ENTIDADES (SOLO ADMIN)
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/entidades', [EntidadController::class, 'index']);
+/*
+|--------------------------------------------------------------------------
+| ENTIDADES
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/entidades/create', [EntidadController::class, 'create']);
+Route::get('/entidades', [EntidadController::class, 'index']);
 
-    Route::post('/entidades', [EntidadController::class, 'store']);
+Route::get('/entidades/create', [EntidadController::class, 'create']);
 
-    Route::get('/entidades/{id}/edit', [EntidadController::class, 'edit']);
+Route::post('/entidades', [EntidadController::class, 'store']);
 
-    Route::put('/entidades/{id}', [EntidadController::class, 'update']);
+Route::get('/entidades/{id}/edit', [EntidadController::class, 'edit']);
 
-    Route::delete('/entidades/{id}', [EntidadController::class, 'destroy']);
+Route::put('/entidades/{id}', [EntidadController::class, 'update']);
 
-    Route::get(
-        '/inversiones/{id}/entidades',
-        [EntidadController::class, 'porInversion']
-    );
+Route::delete('/entidades/{id}', [EntidadController::class, 'destroy']);
+
+Route::get(
+    '/inversiones/{id}/entidades',
+    [EntidadController::class, 'porInversion']
+);
+
+/*
+|--------------------------------------------------------------------------
+| ENTIDADES POR INVERSIÓN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/inversiones/{id}/entidades',
+    [EntidadController::class, 'porInversion']
+);
 
     /*
     |--------------------------------------------------------------------------
@@ -284,9 +303,8 @@ Route::get('/', [DashboardController::class, 'index'])
         [ActivoRegistralController::class, 'destroy']
     );
 
-});
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | USUARIOS
 |--------------------------------------------------------------------------
@@ -301,3 +319,35 @@ Route::post('/usuarios', [UserController::class, 'store']);
 Route::get('/usuarios/{id}/edit', [UserController::class, 'edit']);
 
 Route::put('/usuarios/{id}', [UserController::class, 'update']);
+
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Estado de Resultados
+|--------------------------------------------------------------------------
+*/
+
+
+Route::get('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'index']);
+
+Route::get('/inversiones/{inversion_id}/estado-resultados/create', [EstadoResultadoController::class, 'create']);
+
+Route::post('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'store']);
+
+Route::get('/inversiones/{inversion_id}/estado-resultados/{id}/edit', [EstadoResultadoController::class, 'edit']);
+
+Route::put('/inversiones/{inversion_id}/estado-resultados/{id}', [EstadoResultadoController::class, 'update']);
+
+Route::delete('/inversiones/{inversion_id}/estado-resultados/{id}', [EstadoResultadoController::class, 'destroy']);
+
+Route::post(
+    '/inversiones/{inversion_id}/estado-resultados/generar',
+    [EstadoResultadoController::class, 'generar']
+);
+
+
+});

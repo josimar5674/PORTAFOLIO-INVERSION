@@ -7,13 +7,13 @@
     <div class="form-title">➕ Crear Inversión</div>
 
     @if ($errors->any())
-        <div class="error-box">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="error-box">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form method="POST" action="/inversiones">
@@ -27,16 +27,72 @@
         </div>
 
         <div class="form-group">
-    <label class="form-label">Clave</label>
-    <input type="text" name="clave" class="form-control"
-        value="{{ old('clave') }}" placeholder="Ej: INV-001">
-</div>
+            <label class="form-label">Clave</label>
+            <input type="text" name="clave" class="form-control"
+                value="{{ old('clave') }}" placeholder="Ej: INV-001">
+        </div>
 
         <!-- UBICACIÓN -->
         <div class="form-group">
             <label class="form-label">Ubicación</label>
             <input type="text" name="ubicacion" class="form-control"
                 value="{{ old('ubicacion') }}" placeholder="Ciudad, zona, etc.">
+        </div>
+
+        <div class="form-group">
+            <h4>📈 Criterios Financieros</h4>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px;">
+
+            <div class="form-group">
+                <label class="form-label">
+                    Tasa de Descuento (T/D) %
+                </label>
+
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    name="tasa_descuento"
+                    class="form-control"
+                    value="{{ old('tasa_descuento', 0) }}"
+                    placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    Tasa de Impuestos (T/I) %
+                </label>
+
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    name="tasa_impuestos"
+                    class="form-control"
+                    value="{{ old('tasa_impuestos', 0) }}"
+                    placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    Tasa de Crecimiento %
+                </label>
+
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    name="tasa_crecimiento"
+                    class="form-control"
+                    value="{{ old('tasa_crecimiento', 0) }}"
+                    placeholder="0.00">
+            </div>
+
         </div>
 
         <!-- DESCRIPCIÓN -->
@@ -47,76 +103,76 @@
         </div>
 
         <!-- CLIENTE -->
-<div class="form-group">
+        <div class="form-group">
 
-    <label class="form-label">Personas relacionadas</label>
+            <label class="form-label">Personas relacionadas</label>
 
-    <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px;">
 
-        <select id="clienteSelect" class="form-control">
+                <select id="clienteSelect" class="form-control">
 
-            <option value="">-- Seleccionar Personas --</option>
+                    <option value="">-- Seleccionar Personas --</option>
 
-            @foreach($clientes as $cliente)
+                    @foreach($clientes as $cliente)
 
-                <option value="{{ $cliente->id }}">
+                    <option value="{{ $cliente->id }}">
 
-                    {{ $cliente->nombre }}
+                        {{ $cliente->nombre }}
 
-                </option>
+                    </option>
 
-            @endforeach
+                    @endforeach
 
-        </select>
+                </select>
 
-        <button type="button" onclick="agregarCliente()" class="btn-primary-custom">➕</button>
+                <button type="button" onclick="agregarCliente()" class="btn-primary-custom">➕</button>
 
-    </div>
+            </div>
 
-    <!-- Lista de clientes agregados -->
+            <!-- Lista de clientes agregados -->
 
-    <ul id="listaClientes" style="margin-top:10px;"></ul>
+            <ul id="listaClientes" style="margin-top:10px;"></ul>
 
-</div>
+        </div>
 
-<!-- ENTIDADES -->
-<div class="form-group">
+        <!-- ENTIDADES -->
+        <div class="form-group">
 
-    <label class="form-label">Entidades relacionadas</label>
+            <label class="form-label">Entidades relacionadas</label>
 
-    <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px;">
 
-        <select id="entidadSelect" class="form-control">
+                <select id="entidadSelect" class="form-control">
 
-            <option value="">
-                -- Seleccionar Entidad --
-            </option>
+                    <option value="">
+                        -- Seleccionar Entidad --
+                    </option>
 
-            @foreach($entidades as $entidad)
+                    @foreach($entidades as $entidad)
 
-                <option value="{{ $entidad->id }}">
+                    <option value="{{ $entidad->id }}">
 
-                    {{ $entidad->denominacion_social }}
+                        {{ $entidad->denominacion_social }}
 
-                </option>
+                    </option>
 
-            @endforeach
+                    @endforeach
 
-        </select>
+                </select>
 
-        <button type="button"
-                onclick="agregarEntidad()"
-                class="btn-primary-custom">
+                <button type="button"
+                    onclick="agregarEntidad()"
+                    class="btn-primary-custom">
 
-            ➕
-        </button>
+                    ➕
+                </button>
 
-    </div>
+            </div>
 
-    <!-- Lista -->
-    <ul id="listaEntidades" style="margin-top:10px;"></ul>
+            <!-- Lista -->
+            <ul id="listaEntidades" style="margin-top:10px;"></ul>
 
-</div>
+        </div>
 
         <!-- BOTONES -->
         <div style="margin-top:20px;">
@@ -129,35 +185,34 @@
 </div>
 
 <script id="clientes-script">
+    let clientesSeleccionados = [];
 
-let clientesSeleccionados = [];
+    function agregarCliente() {
 
-function agregarCliente() {
+        const select = document.getElementById('clienteSelect');
+        const id = select.value;
+        const nombre = select.options[select.selectedIndex].text;
 
-    const select = document.getElementById('clienteSelect');
-    const id = select.value;
-    const nombre = select.options[select.selectedIndex].text;
+        if (!id) return;
 
-    if (!id) return;
+        // evitar duplicados
+        if (clientesSeleccionados.includes(id)) return;
 
-    // evitar duplicados
-    if (clientesSeleccionados.includes(id)) return;
+        clientesSeleccionados.push(id);
 
-    clientesSeleccionados.push(id);
+        const lista = document.getElementById('listaClientes');
 
-    const lista = document.getElementById('listaClientes');
+        const li = document.createElement('li');
 
-    const li = document.createElement('li');
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+        li.style.padding = "6px 10px";
+        li.style.background = "#f9fafb";
+        li.style.borderRadius = "6px";
+        li.style.marginBottom = "6px";
 
-    li.style.display = "flex";
-    li.style.justifyContent = "space-between";
-    li.style.alignItems = "center";
-    li.style.padding = "6px 10px";
-    li.style.background = "#f9fafb";
-    li.style.borderRadius = "6px";
-    li.style.marginBottom = "6px";
-
-    li.innerHTML = `
+        li.innerHTML = `
         <span>${nombre}</span>
 
         <div style="display:flex; align-items:center; gap:8px;">
@@ -173,47 +228,47 @@ function agregarCliente() {
         <input type="hidden" name="clientes[]" value="${id}">
     `;
 
-    lista.appendChild(li);
-}
+        lista.appendChild(li);
+    }
 
-function eliminarCliente(id, btn) {
-    clientesSeleccionados = clientesSeleccionados.filter(c => c != id);
-    btn.closest('li').remove();
-}
-
-
+    function eliminarCliente(id, btn) {
+        clientesSeleccionados = clientesSeleccionados.filter(c => c != id);
+        btn.closest('li').remove();
+    }
 
 
-let entidadesSeleccionadas = [];
 
-function agregarEntidad() {
 
-    const select = document.getElementById('entidadSelect');
+    let entidadesSeleccionadas = [];
 
-    const id = select.value;
+    function agregarEntidad() {
 
-    const nombre = select.options[select.selectedIndex].text;
+        const select = document.getElementById('entidadSelect');
 
-    if (!id) return;
+        const id = select.value;
 
-    // evitar duplicados
-    if (entidadesSeleccionadas.includes(id)) return;
+        const nombre = select.options[select.selectedIndex].text;
 
-    entidadesSeleccionadas.push(id);
+        if (!id) return;
 
-    const lista = document.getElementById('listaEntidades');
+        // evitar duplicados
+        if (entidadesSeleccionadas.includes(id)) return;
 
-    const li = document.createElement('li');
+        entidadesSeleccionadas.push(id);
 
-    li.style.display = "flex";
-    li.style.justifyContent = "space-between";
-    li.style.alignItems = "center";
-    li.style.padding = "6px 10px";
-    li.style.background = "#f9fafb";
-    li.style.borderRadius = "6px";
-    li.style.marginBottom = "6px";
+        const lista = document.getElementById('listaEntidades');
 
-    li.innerHTML = `
+        const li = document.createElement('li');
+
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+        li.style.padding = "6px 10px";
+        li.style.background = "#f9fafb";
+        li.style.borderRadius = "6px";
+        li.style.marginBottom = "6px";
+
+        li.innerHTML = `
         <span>${nombre}</span>
 
         <div style="display:flex; align-items:center; gap:8px;">
@@ -239,19 +294,16 @@ function agregarEntidad() {
                value="${id}">
     `;
 
-    lista.appendChild(li);
-}
+        lista.appendChild(li);
+    }
 
-function eliminarEntidad(id, btn) {
+    function eliminarEntidad(id, btn) {
 
-    entidadesSeleccionadas =
-        entidadesSeleccionadas.filter(e => e != id);
+        entidadesSeleccionadas =
+            entidadesSeleccionadas.filter(e => e != id);
 
-    btn.closest('li').remove();
-}
-
-
-
+        btn.closest('li').remove();
+    }
 </script>
 
 

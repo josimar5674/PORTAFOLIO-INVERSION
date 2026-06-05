@@ -95,6 +95,104 @@
 
             </select>
 
+            <div id="permisosContainer">
+
+    <div class="form-group">
+
+        <label class="form-label">
+
+            Inversiones Permitidas
+
+        </label>
+
+        @foreach($inversiones as $inversion)
+
+            @php
+                $permiso = $permisos[$inversion->id] ?? null;
+            @endphp
+
+            <div style="
+                border:1px solid #ddd;
+                padding:15px;
+                border-radius:8px;
+                margin-bottom:15px;
+            ">
+
+                <label>
+
+                    <input type="checkbox"
+                           name="inversiones[]"
+                           value="{{ $inversion->id }}"
+                           {{ in_array($inversion->id, $inversionesUsuario) ? 'checked' : '' }}>
+
+                    <strong>
+
+                        {{ $inversion->nombre }}
+
+                    </strong>
+
+                </label>
+
+                <div style="
+                    margin-top:10px;
+                    margin-left:25px;
+                    display:grid;
+                    grid-template-columns:repeat(3,1fr);
+                    gap:8px;
+                ">
+
+                    <label>
+                        <input type="checkbox"
+                               name="permisos[{{ $inversion->id }}][avaluos]"
+                               {{ $permiso && $permiso->avaluos ? 'checked' : '' }}>
+                        Avalúos
+                    </label>
+
+                    <label>
+                        <input type="checkbox"
+                               name="permisos[{{ $inversion->id }}][activos]"
+                               {{ $permiso && $permiso->activos ? 'checked' : '' }}>
+                        Activos
+                    </label>
+
+                    <label>
+                        <input type="checkbox"
+                               name="permisos[{{ $inversion->id }}][servicios]"
+                               {{ $permiso && $permiso->servicios ? 'checked' : '' }}>
+                        Servicios
+                    </label>
+
+                    <label>
+                        <input type="checkbox"
+                               name="permisos[{{ $inversion->id }}][comercial]"
+                               {{ $permiso && $permiso->comercial ? 'checked' : '' }}>
+                        Comercial
+                    </label>
+
+                    <label>
+                        <input type="checkbox"
+                               name="permisos[{{ $inversion->id }}][entidades]"
+                               {{ $permiso && $permiso->entidades ? 'checked' : '' }}>
+                        Entidades
+                    </label>
+
+                    <label>
+                        <input type="checkbox"
+                               name="permisos[{{ $inversion->id }}][estado_resultados]"
+                               {{ $permiso && $permiso->estado_resultados ? 'checked' : '' }}>
+                        Estado Resultados
+                    </label>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+</div>
+
         </div>
 
         <!-- ESTADO -->

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+
 
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
@@ -34,4 +36,33 @@ class User extends Authenticatable
 {
     return $this->role === 'admin';
 }
+
+public function inversiones()
+{
+    return $this->belongsToMany(
+        \App\Models\Inversion::class,
+        'user_inversion'
+    );
+}
+
+public function tienePermiso($inversionId, $modulo)
+{
+    if ($this->role == 'admin')
+    {
+        return true;
+    }
+
+    $permiso = DB::table('user_inversion_modulos')
+        ->where('user_id', $this->id)
+        ->where('inversion_id', $inversionId)
+        ->first();
+
+    if (!$permiso)
+    {
+        return false;
+    }
+
+    return (bool) ($permiso->$modulo ?? false);
+}
+
 }

@@ -6,22 +6,51 @@ use Illuminate\Http\Request;
 use App\Models\Inversion;
 use App\Models\Cliente;
 use App\Models\Entidad;
+use Illuminate\Support\Facades\Auth;
+
 
 class InversionController extends Controller
 {
-    public function index()
+
+
+
+public function index()
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    if ($user->role == 'admin')
     {
         $inversiones = Inversion::with([
             'clientes',
             'ultimoAvaluo',
             'servicios',
-            'comercial', // 👈 ESTE FALTABA
-            'entidades' // 👈 AGREGADO
+            'comercial',
+            'entidades',
+            'ultimoEstadoResultado',
+            'activosRegistrales'
         ])->get();
-
-
-        return view('inversiones.index', compact('inversiones'));
     }
+    else
+    {
+        $inversiones = $user->inversiones()
+            ->with([
+                'clientes',
+                'ultimoAvaluo',
+                'servicios',
+                'comercial',
+                'entidades',
+                'ultimoEstadoResultado',
+                'activosRegistrales'
+            ])
+            ->get();
+    }
+
+    return view(
+        'inversiones.index',
+        compact('inversiones')
+    );
+}
 
     public function create()
     {
@@ -48,12 +77,16 @@ class InversionController extends Controller
         ]);
 
         // Crear inversión
-        $inversion = Inversion::create([
-            'nombre' => $request->nombre,
-            'clave' => $request->clave,
-            'ubicacion' => $request->ubicacion,
-            'descripcion' => $request->descripcion,
-        ]);
+                $inversion = Inversion::create([
+                'nombre' => $request->nombre,
+                'clave' => $request->clave,
+                'ubicacion' => $request->ubicacion,
+                'descripcion' => $request->descripcion,
+
+                'tasa_descuento' => $request->tasa_descuento,
+                'tasa_impuestos' => $request->tasa_impuestos,
+                'tasa_crecimiento' => $request->tasa_crecimiento,
+            ]);
 
         // Guardar relación con clientes
         $inversion->clientes()->sync($request->clientes);
@@ -66,18 +99,7 @@ class InversionController extends Controller
 
 
 
-    public function porInversion($id)
-{
-    $inversion = \App\Models\Inversion::with('entidades')
-        ->findOrFail($id);
 
-    $entidades = $inversion->entidades;
-
-    return view('entidades.index', compact(
-        'entidades',
-        'inversion'
-    ));
-}
 
     public function edit($id)
     {
@@ -111,6 +133,12 @@ return view('inversiones.edit', compact(
     'nombre' => $request->nombre,
     'ubicacion' => $request->ubicacion,
     'descripcion' => $request->descripcion,
+
+    'tasa_descuento' => $request->tasa_descuento,
+
+    'tasa_impuestos' => $request->tasa_impuestos,
+
+    'tasa_crecimiento' => $request->tasa_crecimiento,
 ]);
 
         // Actualizar relación

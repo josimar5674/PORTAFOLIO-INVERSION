@@ -58,6 +58,73 @@
                    value="{{ old('ubicacion', $inversion->ubicacion) }}">
 
         </div>
+        <!-- CRITERIOS FINANCIEROS -->
+<div class="form-group">
+
+    <h4 style="margin-bottom:15px;">
+        📈 Criterios Financieros
+    </h4>
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:15px;
+    ">
+
+        <div>
+
+            <label class="form-label">
+                Tasa de Descuento (T/D) %
+            </label>
+
+            <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                name="tasa_descuento"
+                class="form-control"
+                value="{{ old('tasa_descuento', $inversion->tasa_descuento) }}">
+
+        </div>
+
+        <div>
+
+            <label class="form-label">
+                Tasa de Impuestos (T/I) %
+            </label>
+
+            <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                name="tasa_impuestos"
+                class="form-control"
+                value="{{ old('tasa_impuestos', $inversion->tasa_impuestos) }}">
+
+        </div>
+
+        <div>
+
+            <label class="form-label">
+                Tasa de Crecimiento %
+            </label>
+
+            <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                name="tasa_crecimiento"
+                class="form-control"
+                value="{{ old('tasa_crecimiento', $inversion->tasa_crecimiento) }}">
+
+        </div>
+
+    </div>
+
+</div>
 
         <!-- DESCRIPCIÓN -->
         <div class="form-group">

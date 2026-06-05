@@ -75,10 +75,15 @@
 
             <a href="/clientes">
                 Clientes
-            </a>
-               <a href="/entidades">
-                Entidades
-            </a>
+         @if(Auth::user()->role == 'admin')
+
+
+    <a href="/entidades">
+        Entidades
+    </a>
+
+
+@endif
 
             @auth
 

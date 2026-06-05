@@ -2,6 +2,8 @@
 
 @section('content')
 
+
+
 <div class="page-container">
 
     <h1 class="page-title">Inversiones</h1>
@@ -11,7 +13,7 @@
 </div>
 
 @if(session('success'))
-    <p style="color: green">{{ session('success') }}</p>
+<p style="color: green">{{ session('success') }}</p>
 @endif
 
 
@@ -19,150 +21,175 @@
 <hr>
 
 <div class="inversion-grid">
-@foreach($inversiones as $inv)
+    @foreach($inversiones as $inv)
 
 
-        <div class="inversion-card">
+    <div class="inversion-card">
 
-    <div class="inversion-title">{{ $inv->nombre }}</div>
+        <div class="inversion-title">{{ $inv->nombre }}</div>
 
-<div class="inversion-title">
-   Clave: {{ $inv->clave }} 
-</div>
+        <div class="inversion-title">
+            Clave: {{ $inv->clave }}
+        </div>
 
-<div class="inversion-info">
-    📍 {{ $inv->ubicacion ?? 'N/A' }}<br>
+        <div class="inversion-info">
+            📍 {{ $inv->ubicacion ?? 'N/A' }}<br>
 
-    👥 Personas relacionadas:
-    @if($inv->clientes->isEmpty())
-        N/A
-    @else
-        <div style="margin-top:5px;">
-            @foreach($inv->clientes as $cliente)
+            👥 Personas relacionadas:
+            @if($inv->clientes->isEmpty())
+            N/A
+            @else
+            <div style="margin-top:5px;">
+                @foreach($inv->clientes as $cliente)
                 <span style="background:#e5e7eb; padding:4px 8px; border-radius:12px; margin-right:5px;">
                     {{ $cliente->nombre }}
                 </span>
-            @endforeach
-        </div>
-    @endif
-</div>
-
-    <div class="divider"></div>
-
-    <div class="section-title">💰 Perfil Financiero</div>
- <div class="inversion-info">
-
-    @if($inv->ultimoAvaluo)
-
-    📅 Ultimo Avalúo: {{ $inv->ultimoAvaluo?->fecha_avaluo ?? 'Sin avalúo' }} <br>
-
-        🌱 Terreno: $
-
-        {{ number_format($inv->ultimoAvaluo->subtotal_terreno, 2) }} <br>
-
-        🏗️ Construcción: $
-
-        {{ number_format($inv->ultimoAvaluo->subtotal_construccion, 2) }} <br>
-
-        📉 Depreciación: 
-
-        {{ number_format($inv->ultimoAvaluo->depreciacion, 2) }} <br>
-
-        💰 Total: $
-
-        <strong>{{ number_format($inv->ultimoAvaluo->valor_total, 2) }}</strong>
-
-    @else
-
-        <span style="color:#9ca3af;">Sin avalúo registrado</span>
-
-    @endif
-    
-
-</div>
-
-    <div class="divider"></div>
-
-    <div class="section-title">⚙️ Perfil Operativo</div>
-    <div class="inversion-info">
-        Costo mensual: $ {{ number_format($inv->costo_operativo_mensual, 2) }}<br>
-        Costo anual: $ {{ number_format($inv->costo_operativo_anual, 2) }}
-    </div>
-
-    <div class="divider"></div>
-
-<div class="section-title">💰 Perfil Comercial</div>
-
-<div class="inversion-info">
-
-    @if($inv->comercial->isEmpty())
-
-        <span style="color:#9ca3af;">Sin registros comerciales</span>
-
-    @else
-
-        💵 Total ingresos: 
-        <strong>
-             {{ number_format($inv->comercial->sum('subtotal'), 2) }}
-        </strong>
-
-        <div style="margin-top:5px;">
-            @foreach($inv->comercial->take(3) as $item)
-                <div style="font-size:13px; color:#4b5563;">
-                    • {{ $item->producto }} 
-                    ($ {{ number_format($item->subtotal, 2) }})
-                </div>
-            @endforeach
-
-            @if($inv->comercial->count() > 3)
-                <small style="color:#6b7280;">
-                    +{{ $inv->comercial->count() - 3 }} más...
-                </small>
+                @endforeach
+            </div>
             @endif
         </div>
 
+@if(auth()->user()->tienePermiso($inv->id, 'avaluos'))
+
+<div class="divider"></div>
+
+<div class="section-title">💰 Perfil Financiero</div>
+
+<div class="inversion-info">
+
+    @if($inv->ultimoAvaluo)
+
+        📅 Ultimo Avalúo:
+        {{ $inv->ultimoAvaluo->fecha_avaluo }}
+        <br>
+
+        🌱 Terreno:
+        $ {{ number_format($inv->ultimoAvaluo->subtotal_terreno, 2) }}
+        <br>
+
+        🏗️ Construcción:
+        $ {{ number_format($inv->ultimoAvaluo->subtotal_construccion, 2) }}
+        <br>
+
+        📉 Depreciación:
+        {{ number_format($inv->ultimoAvaluo->depreciacion, 2) }}
+        <br>
+
+        💰 Total:
+        $ <strong>{{ number_format($inv->ultimoAvaluo->valor_total, 2) }}</strong>
+
+    @else
+
+        <span style="color:#9ca3af;">
+            Sin avalúo registrado
+        </span>
+
     @endif
 
 </div>
 
+@endif
+
+@if(auth()->user()->tienePermiso($inv->id, 'servicios'))
+
 <div class="divider"></div>
 
-<div class="section-title">🏢 Entidades Relacionadas</div>
+<div class="section-title">⚙️ Perfil Operativo</div>
 
 <div class="inversion-info">
 
-    @if($inv->entidades->isEmpty())
+    Costo mensual:
+    $ {{ number_format($inv->costo_operativo_mensual, 2) }}
 
-        <span style="color:#9ca3af;">
-            Sin entidades registradas
-        </span>
+    <br>
 
-    @else
+    Costo anual:
+    $ {{ number_format($inv->costo_operativo_anual, 2) }}
 
-        @foreach($inv->entidades->take(3) as $entidad)
+</div>
+
+@endif
+@if(auth()->user()->tienePermiso($inv->id, 'estado_resultados'))
+
+        <div class="divider"></div>
+
+        <div class="section-title">
+            📊 Estado de Resultados
+        </div>
+
+        <div class="inversion-info">
+
+            @if($inv->ultimoEstadoResultado)
+
+            Año:
+            {{ $inv->ultimoEstadoResultado->anio }}
+            <br>
+
+            Utilidad Neta:
+            <strong>
+                L {{ number_format($inv->ultimoEstadoResultado->utilidad_neta,2) }}
+            </strong>
+
+            @else
+
+            <span style="color:#9ca3af;">
+                Sin Estado de Resultados
+            </span>
+
+            @endif
+
+        </div>
+
+            @endif
+    
+            @if(auth()->user()->tienePermiso($inv->id, 'entidades'))
+        
+
+        <div class="divider"></div>
+
+        <div class="section-title">🏢 Entidades Relacionadas</div>
+
+        <div class="inversion-info">
+
+            @if($inv->entidades->isEmpty())
+
+            <span style="color:#9ca3af;">
+                Sin entidades registradas
+            </span>
+
+            @else
+
+            @foreach($inv->entidades->take(3) as $entidad)
 
             <div style="margin-bottom:5px;">
                 • {{ $entidad->denominacion_social }}
             </div>
 
-        @endforeach
+            @endforeach
 
-        @if($inv->entidades->count() > 3)
+            @if($inv->entidades->count() > 3)
 
             <small style="color:#6b7280;">
                 +{{ $inv->entidades->count() - 3 }} más...
             </small>
 
-        @endif
+            @endif
 
-    @endif
+            @endif
 
-</div>
+        </div>
 
+
+            @endif
+
+            
+@if(auth()->user()->tienePermiso($inv->id, 'activos_registrales'))
 
 <div class="divider"></div>
 
-<div class="section-title">📑 Perfil Registral</div>
+<div class="section-title">
+    📑 Perfil Registral
+</div>
 
 <div class="inversion-info">
 
@@ -197,60 +224,85 @@
 
 </div>
 
-    <div class="divider"></div>
+@endif
 
-<div class="actions">
+        <div class="divider"></div>
 
-    <a href="/inversiones/{{ $inv->id }}/avaluos">
-        📊 Avalúos
-    </a>
+        <div class="actions">
 
-    <a href="/inversiones/{{ $inv->id }}/assets">
-        🏢 Activos
-    </a>
+            @if(auth()->user()->tienePermiso($inv->id, 'avaluos'))
+            <a href="/inversiones/{{ $inv->id }}/avaluos">
+                📊 Avalúos
+            </a>
+            @endif
 
-    <a href="/inversiones/{{ $inv->id }}/servicios">
-        ⚙️ Servicios
-    </a>
+            @if(auth()->user()->tienePermiso($inv->id, 'activos'))
+            <a href="/inversiones/{{ $inv->id }}/assets">
+                🏢 Activos
+            </a>
+            @endif
 
-    <a href="/inversiones/{{ $inv->id }}/comercial">
-        💰 Comercial
-    </a>
+            @if(auth()->user()->tienePermiso($inv->id, 'servicios'))
+            <a href="/inversiones/{{ $inv->id }}/servicios">
+                ⚙️ Servicios
+            </a>
+            @endif
 
-    <a href="/inversiones/{{ $inv->id }}/entidades">
-        🏢 Entidades
-    </a>
+            @if(auth()->user()->tienePermiso($inv->id, 'comercial'))
+            <a href="/inversiones/{{ $inv->id }}/comercial">
+                💰 Comercial
+            </a>
+            @endif
 
-    <a href="/inversiones/{{ $inv->id }}/activos-registrales">
-        📑 Activos Registrales
-    </a>
+            @if(auth()->user()->tienePermiso($inv->id, 'entidades'))
+            <a href="/inversiones/{{ $inv->id }}/entidades">
+                🏢 Entidades
+            </a>
+            @endif
 
-    <a href="/inversiones/{{ $inv->id }}/edit">
-        ✏️ Editar
-    </a>
+        @if(auth()->user()->tienePermiso($inv->id, 'activos_registrales'))
 
-    <form action="/inversiones/{{ $inv->id }}"
-          method="POST"
-          style="display:inline;"
-          onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+<a href="/inversiones/{{ $inv->id }}/activos-registrales">
+    📑 Activos Registrales
+</a>
 
-        @csrf
-        @method('DELETE')
+@endif
+            @if(auth()->user()->tienePermiso($inv->id, 'estado_resultados'))
+            <a href="/inversiones/{{ $inv->id }}/estado-resultados">
+                📊 Estado Resultado
+            </a>
+            @endif
 
-        <button type="submit"
-                class="btn-danger">
+            @if(auth()->user()->role == 'admin')
 
-            🗑️ Eliminar
+            <a href="/inversiones/{{ $inv->id }}/edit">
+                ✏️ Editar
+            </a>
 
-        </button>
+            <form action="/inversiones/{{ $inv->id }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="event.preventDefault(); confirmarEliminacion(this)">
 
-    </form>
+                @csrf
+                @method('DELETE')
 
-</div>
+                <button type="submit"
+                    class="btn-danger">
 
-</div> {{-- ← cierre inversion-card --}}
+                    🗑️ Eliminar
 
-@endforeach
+                </button>
+
+            </form>
+
+            @endif
+
+        </div>
+
+    </div> {{-- ← cierre inversion-card --}}
+
+    @endforeach
 
 </div>
 

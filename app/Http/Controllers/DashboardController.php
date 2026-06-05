@@ -20,33 +20,55 @@ class DashboardController extends Controller
             'comercial'
         ])->get();
 
-        // 💰 TOTAL FINANCIERO
+        /*
+        |--------------------------------------------------------------------------
+        | TARJETAS DASHBOARD
+        |--------------------------------------------------------------------------
+        */
+
         $totalFinanciero = $inversiones->sum(function ($inv) {
-
-            return $inv->ultimoAvaluo->valor_total ?? 0;
-
+            return $inv->ultimoAvaluo?->valor_total ?? 0;
         });
 
-        // ⚙️ TOTAL OPERATIVO
         $totalOperativo = $inversiones->sum(function ($inv) {
-
             return $inv->costo_operativo_anual ?? 0;
-
         });
 
-        // 📈 TOTAL COMERCIAL
         $totalComercial = $inversiones->sum(function ($inv) {
-
             return $inv->comercial->sum('subtotal');
-
         });
 
-        return view('dashboard.dashboard', compact(
-            'clientes',
-            'entidades',
-            'totalFinanciero',
-            'totalOperativo',
-            'totalComercial'
-        ));
+        /*
+        |--------------------------------------------------------------------------
+        | TABLA CALIDAD DE INVERSIÓN
+        |--------------------------------------------------------------------------
+        */
+
+        $totalValorInversion = $inversiones->sum(function ($inv) {
+            return $inv->ultimoAvaluo?->valor_total ?? 0;
+        });
+
+        $totalIngresos = $inversiones->sum(function ($inv) {
+            return $inv->comercial->sum('subtotal');
+        });
+
+        $totalCostos = $inversiones->sum(function ($inv) {
+            return $inv->costo_operativo_anual ?? 0;
+        });
+
+        return view(
+            'dashboard.dashboard',
+            compact(
+                'clientes',
+                'entidades',
+                'inversiones',
+                'totalFinanciero',
+                'totalOperativo',
+                'totalComercial',
+                'totalValorInversion',
+                'totalIngresos',
+                'totalCostos'
+            )
+        );
     }
 }

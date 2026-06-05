@@ -7,92 +7,178 @@ use App\Models\Entidad;
 
 class EntidadController extends Controller
 {
-public function index()
+    /*
+    |--------------------------------------------------------------------------
+    | ENTIDADES DE UNA INVERSIÓN
+    |--------------------------------------------------------------------------
+    */
 
-{
+    public function porInversion($id)
+    {
+        $inversion = \App\Models\Inversion::with('entidades')
+            ->findOrFail($id);
 
-    $entidades = Entidad::all();
-
-    $inversion = null;
-
-    return view(
-        'entidades.index',
-        compact(
-            'entidades',
-            'inversion'
+        if (
+            !auth()->user()->tienePermiso(
+                $inversion->id,
+                'entidades'
+            )
         )
-    );
+        {
+            abort(403);
+        }
 
-}
+        $entidades = $inversion->entidades;
 
- public function create()
+        return view(
+            'entidades.index',
+            compact(
+                'entidades',
+                'inversion'
+            )
+        );
+    }
 
-{
+    /*
+    |--------------------------------------------------------------------------
+    | CATÁLOGO GENERAL (SOLO ADMIN)
+    |--------------------------------------------------------------------------
+    */
 
-    return view('entidades.create');
+    public function index()
+    {
+        if(auth()->user()->role != 'admin')
+        {
+            abort(403);
+        }
 
-}
+        $entidades = Entidad::all();
+
+        $inversion = null;
+
+        return view(
+            'entidades.index',
+            compact(
+                'entidades',
+                'inversion'
+            )
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE
+    |--------------------------------------------------------------------------
+    */
+
+    public function create()
+    {
+        if(auth()->user()->role != 'admin')
+        {
+            abort(403);
+        }
+
+        return view('entidades.create');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STORE
+    |--------------------------------------------------------------------------
+    */
 
     public function store(Request $request)
     {
-        $data = $request->all();
+        if(auth()->user()->role != 'admin')
+        {
+            abort(403);
+        }
 
-    
+        $data = $request->all();
 
         $data['es_entidad'] = $request->has('es_entidad');
         $data['es_apnfd'] = $request->has('es_apnfd');
 
         Entidad::create($data);
 
-return redirect('/entidades')
-    ->with('success', 'Entidad creada correctamente');
-          
+        return redirect('/entidades')
+            ->with(
+                'success',
+                'Entidad creada correctamente'
+            );
     }
 
-   public function edit($id)
-{
-    $entidad = Entidad::findOrFail($id);
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT
+    |--------------------------------------------------------------------------
+    */
 
-    return view('entidades.edit', compact('entidad'));
-}
-
-public function update(Request $request, $id)
-{
-    $entidad = Entidad::findOrFail($id);
-
-    $data = $request->all();
-
-    $data['es_entidad'] = $request->has('es_entidad');
-    $data['es_apnfd'] = $request->has('es_apnfd');
-
-    $entidad->update($data);
-
-    return redirect('/entidades')
-        ->with('success', 'Entidad actualizada');
-}
-
-  public function destroy($id)
+    public function edit($id)
     {
+        if(auth()->user()->role != 'admin')
+        {
+            abort(403);
+        }
+
+        $entidad = Entidad::findOrFail($id);
+
+        return view(
+            'entidades.edit',
+            compact('entidad')
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE
+    |--------------------------------------------------------------------------
+    */
+
+    public function update(Request $request, $id)
+    {
+        if(auth()->user()->role != 'admin')
+        {
+            abort(403);
+        }
+
+        $entidad = Entidad::findOrFail($id);
+
+        $data = $request->all();
+
+        $data['es_entidad'] = $request->has('es_entidad');
+        $data['es_apnfd'] = $request->has('es_apnfd');
+
+        $entidad->update($data);
+
+        return redirect('/entidades')
+            ->with(
+                'success',
+                'Entidad actualizada'
+            );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE
+    |--------------------------------------------------------------------------
+    */
+
+    public function destroy($id)
+    {
+        if(auth()->user()->role != 'admin')
+        {
+            abort(403);
+        }
+
         $entidad = Entidad::findOrFail($id);
 
         $entidad->delete();
 
-    return redirect('/entidades')
-    ->with('success', 'Entidad eliminada');
+        return redirect('/entidades')
+            ->with(
+                'success',
+                'Entidad eliminada'
+            );
     }
-
-    public function porInversion($id)
-{
-    $inversion = \App\Models\Inversion::with('entidades')
-        ->findOrFail($id);
-
-    $entidades = $inversion->entidades;
-
-    return view('entidades.index', compact(
-        'entidades',
-        'inversion'
-    ));
-}
-
-
 }

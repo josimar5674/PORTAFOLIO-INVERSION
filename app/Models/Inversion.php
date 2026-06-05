@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comercial;
+use App\Models\EstadoResultado;
 
 class Inversion extends Model
 {
@@ -17,7 +18,11 @@ protected $fillable = [
     'nombre',
     'clave',
     'ubicacion',
-    'descripcion'
+    'descripcion',
+    'tasa_descuento',
+    'tasa_impuestos',
+    'tasa_crecimiento'
+
 ];
 
 // Relación
@@ -109,6 +114,30 @@ public function entidades()
 public function activosRegistrales()
 {
     return $this->hasMany(ActivoRegistral::class);
+}
+
+
+public function estadosResultado()
+{
+    return $this->hasMany(EstadoResultado::class);
+}
+
+public function ultimoEstadoResultado()
+
+{
+
+    return $this->hasOne(EstadoResultado::class)
+
+        ->latestOfMany('anio');
+
+}
+
+public function usuarios()
+{
+    return $this->belongsToMany(
+        User::class,
+        'user_inversion'
+    );
 }
 
 }

@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Inversion;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+
+
+
     /*
     |--------------------------------------------------------------------------
     | INDEX
@@ -27,10 +32,15 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function create()
-    {
-        return view('usuarios.create');
-    }
+public function create()
+{
+    $inversiones = Inversion::all();
+
+    return view(
+        'usuarios.create',
+        compact('inversiones')
+    );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -38,39 +48,112 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function store(Request $request)
+public function store(Request $request)
+{
+    $request->validate([
+
+        'name' => 'required',
+
+        'email' => 'required|email|unique:users,email',
+
+        'password' => 'required|min:6',
+
+        'role' => 'required',
+
+        'estado' => 'required',
+
+    ]);
+
+    $usuario = User::create([
+
+        'name' => $request->name,
+
+        'email' => $request->email,
+
+        'password' => Hash::make($request->password),
+
+        'role' => $request->role,
+
+        'estado' => $request->estado,
+
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Si es usuario normal, guardar permisos
+    |--------------------------------------------------------------------------
+    */
+    if (
+        $request->role == 'user'
+        &&
+        $request->has('inversiones')
+    )
     {
-        $request->validate([
+        foreach ($request->inversiones as $inversionId)
+        {
+            /*
+            |--------------------------------------------------------------------------
+            | Relación Usuario - Inversión
+            |--------------------------------------------------------------------------
+            */
+            DB::table('user_inversion')->insert([
 
-            'name' => 'required',
+                'user_id' => $usuario->id,
 
-            'email' => 'required|email|unique:users,email',
+                'inversion_id' => $inversionId,
 
-            'password' => 'required|min:6',
+                'created_at' => now(),
 
-            'role' => 'required',
+                'updated_at' => now(),
 
-            'estado' => 'required',
+            ]);
 
-        ]);
+            /*
+            |--------------------------------------------------------------------------
+            | Permisos por módulo
+            |--------------------------------------------------------------------------
+            */
+            DB::table('user_inversion_modulos')->insert([
 
-        User::create([
+                'user_id' => $usuario->id,
 
-            'name' => $request->name,
+                'inversion_id' => $inversionId,
 
-            'email' => $request->email,
+                'avaluos' =>
+                    isset($request->permisos[$inversionId]['avaluos']),
 
-            'password' => Hash::make($request->password),
+                'activos' =>
+                    isset($request->permisos[$inversionId]['activos']),
 
-            'role' => $request->role,
+                'servicios' =>
+                    isset($request->permisos[$inversionId]['servicios']),
 
-            'estado' => $request->estado,
+                'comercial' =>
+                    isset($request->permisos[$inversionId]['comercial']),
 
-        ]);
+                'entidades' =>
+                    isset($request->permisos[$inversionId]['entidades']),
 
-        return redirect('/usuarios')
-            ->with('success', 'Usuario creado correctamente');
+                'estado_resultados' =>
+                    isset($request->permisos[$inversionId]['estado_resultados']),
+
+                'activos_registrales' =>
+    isset($request->permisos[$inversionId]['activos_registrales']),
+
+                'created_at' => now(),
+
+                'updated_at' => now(),
+
+            ]);
+        }
     }
+
+    return redirect('/usuarios')
+        ->with(
+            'success',
+            'Usuario creado correctamente'
+        );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -78,12 +161,32 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function edit($id)
-    {
-        $usuario = User::findOrFail($id);
+public function edit($id)
+{
+    $usuario = User::findOrFail($id);
 
-        return view('usuarios.edit', compact('usuario'));
-    }
+    $inversiones = \App\Models\Inversion::all();
+
+    $permisos = \DB::table('user_inversion_modulos')
+        ->where('user_id', $usuario->id)
+        ->get()
+        ->keyBy('inversion_id');
+
+    $inversionesUsuario = \DB::table('user_inversion')
+        ->where('user_id', $usuario->id)
+        ->pluck('inversion_id')
+        ->toArray();
+
+    return view(
+        'usuarios.edit',
+        compact(
+            'usuario',
+            'inversiones',
+            'permisos',
+            'inversionesUsuario'
+        )
+    );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -91,31 +194,107 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function update(Request $request, $id)
+  public function update(Request $request, $id)
+{
+    $usuario = User::findOrFail($id);
+
+    $request->validate([
+
+        'email' => 'required|email',
+
+        'role' => 'required',
+
+        'estado' => 'required',
+
+    ]);
+
+    $usuario->email = $request->email;
+
+    $usuario->role = $request->role;
+
+    $usuario->estado = $request->estado;
+
+    $usuario->save();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Limpiar permisos anteriores
+    |--------------------------------------------------------------------------
+    */
+    DB::table('user_inversion')
+        ->where('user_id', $usuario->id)
+        ->delete();
+
+    DB::table('user_inversion_modulos')
+        ->where('user_id', $usuario->id)
+        ->delete();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Guardar permisos nuevos
+    |--------------------------------------------------------------------------
+    */
+    if (
+        $request->role == 'user'
+        &&
+        $request->has('inversiones')
+    )
     {
-        $usuario = User::findOrFail($id);
+        foreach ($request->inversiones as $inversionId)
+        {
+            DB::table('user_inversion')->insert([
 
-        $request->validate([
+                'user_id' => $usuario->id,
 
-            'email' => 'required|email',
+                'inversion_id' => $inversionId,
 
-            'role' => 'required',
+                'created_at' => now(),
 
-            'estado' => 'required',
+                'updated_at' => now(),
 
-        ]);
+            ]);
 
-        $usuario->email = $request->email;
+            DB::table('user_inversion_modulos')->insert([
 
-        $usuario->role = $request->role;
+                'user_id' => $usuario->id,
 
-        $usuario->estado = $request->estado;
+                'inversion_id' => $inversionId,
 
-        $usuario->save();
+                'avaluos' =>
+                    isset($request->permisos[$inversionId]['avaluos']),
 
-        return redirect('/usuarios')
-            ->with('success', 'Usuario actualizado');
+                'activos' =>
+                    isset($request->permisos[$inversionId]['activos']),
+
+                'servicios' =>
+                    isset($request->permisos[$inversionId]['servicios']),
+
+                'comercial' =>
+                    isset($request->permisos[$inversionId]['comercial']),
+
+                'entidades' =>
+                    isset($request->permisos[$inversionId]['entidades']),
+'estado_resultados' =>
+    isset($request->permisos[$inversionId]['estado_resultados']),
+
+'activos_registrales' =>
+    isset($request->permisos[$inversionId]['activos_registrales']),
+
+'created_at' => now(),
+
+'updated_at' => now(),
+
+
+            ]);
+        }
     }
+
+    return redirect('/usuarios')
+        ->with(
+            'success',
+            'Usuario actualizado correctamente'
+        );
+}
 
     /*
     |--------------------------------------------------------------------------
