@@ -268,12 +268,11 @@
     <th>%</th>
 
     <th>Rend (%)</th>
-
-    <th>NOI ($)</th>
-
     <th>Costos ($)</th>
 
     <th>%</th>
+
+    <th>NOI ($)</th>
 
     <th>Cap Rate (%)</th>
 
@@ -350,6 +349,14 @@
 
                     <td>
                         {{ number_format($rendimiento, 2) }}%
+                    </td> 
+                    
+                    <td>
+                        {{ number_format($costos, 2) }}
+                    </td>
+
+                    <td>
+                        {{ number_format($participacionCostos, 2) }}%
                     </td>
 
                     <td style="
@@ -359,13 +366,7 @@
                         {{ number_format($noi, 2) }}
                     </td>
 
-                    <td>
-                        {{ number_format($costos, 2) }}
-                    </td>
-
-                    <td>
-                        {{ number_format($participacionCostos, 2) }}%
-                    </td>
+              
 
                     <td style="
                         font-weight:bold;
@@ -413,13 +414,6 @@
                     -
                 </td>
 
-                <td style="
-                    font-weight:bold;
-                    color:#2563eb;
-                ">
-                    {{ number_format($totalIngresos - $totalCostos, 2) }}
-                </td>
-
                 <td>
                     {{ number_format($totalCostos, 2) }}
                 </td>
@@ -427,6 +421,13 @@
                 <td>
                     100%
                 </td>
+                <td style="
+                    font-weight:bold;
+                    color:#2563eb;
+                ">
+                    {{ number_format($totalIngresos - $totalCostos, 2) }}
+                </td>
+
 
                 <td>
                     -
