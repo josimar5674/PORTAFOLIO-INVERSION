@@ -2,82 +2,180 @@
 
 @section('content')
 
-<h2 style="margin-left:15px;">🏢 Activos</h2>
+@php
 
-<h4 style="margin-left:15px; color:#555;">
-    Total activos: {{ count($assets) }}
-</h4>
+$totalActivos = $assets->count();
+
+$totalNiveles =
+$assets->max('level_number') ?? 0;
+
+$tipos =
+$assets->pluck('type')
+->unique()
+->count();
+
+@endphp
+
+<div class="investment-header">
+
+    <div>
+
+        <h1>
+            🏢 Activos
+        </h1>
+
+        <small>
+            {{ $inversion->nombre }} .
+            {{ $totalActivos }} registros
+
+        </small>
+
+    </div>
+
+    <div>
+
+        <a href="/inversiones/{{ $inversion->id }}"
+            class="btn-secondary">
+            ← Volver
+        </a>
+
+        <a href="/inversiones/{{ $inversion->id }}/assets/create"
+            class="btn-primary-custom">
+
+            + Nuevo Activo
+
+        </a>
+
+    </div>
+
+</div>
 
 @if(session('success'))
-    <div class="alert alert-success" style="margin-left:15px;">
-        {{ session('success') }}
-    </div>
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
 @endif
 
-<div style="margin-left:15px;">
-    <a href="/inversiones/{{ $investment_id }}/assets/create" class="btn-new">
-        + Nuevo Activo
-    </a>
+
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        🏢 Total Activos
+
+        <strong>
+            {{ $totalActivos }}
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        📦 Tipos
+
+        <strong>
+            {{ $tipos }}
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        🏗️ Niveles
+
+        <strong>
+            {{ $totalNiveles }}
+        </strong>
+
+    </div>
+
 </div>
 
-<div style="margin-left:15px; margin-bottom:10px;">
-    <a href="/inversiones" class="btn-secondary">← Volver a Inversiones</a>
-</div>
 
-<div class="card-grid">
+<div style="overflow-x:auto; margin-top:25px;">
 
-    @foreach($assets as $asset)
+    <table class="table-dashboard">
 
-        <div class="card">
+        <thead>
 
-            <div class="card-title">
-                {{ $asset->name }}
-            </div>
+            <tr>
 
-            <div class="card-info">
+                <th>Nombre</th>
 
-                📦 Tipo:
-                {{ $asset->type }}
+                <th>Tipo</th>
 
-                <br><br>
+                <th>Nivel</th>
 
-                🏢 Nivel:
-                {{ $asset->level_number }}
+                <th>Acciones</th>
 
-            </div>
+            </tr>
 
-            <div class="divider"></div>
+        </thead>
 
-            <div class="card-actions">
+        <tbody>
 
-                <a href="/inversiones/{{ $investment_id }}/assets/{{ $asset->id }}/edit">
+            @foreach($assets as $asset)
 
-                    ✏️ Editar
+            <tr>
 
-                </a>
+                <td>
 
-                <form action="/inversiones/{{ $investment_id }}/assets/{{ $asset->id }}"
-                      method="POST"
-                      style="display:inline;"
-                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+                    <strong>
+                        {{ $asset->name }}
+                    </strong>
 
-                    @csrf
-                    @method('DELETE')
+                </td>
 
-                    <button type="submit"
+                <td>
+
+                    {{ $asset->type }}
+
+                </td>
+
+                <td>
+
+                    {{ $asset->level_number }}
+
+                </td>
+                <td>
+
+                    <a href="/inversiones/{{ $inversion->id }}/assets/{{ $asset->id }}/edit"
+                        class="btn-secondary">
+
+                        Ver
+
+                    </a>
+
+                    <form action="/inversiones/{{ $inversion->id }}/assets/{{ $asset->id }}"
+                        method="POST"
+                        style="display:inline;"
+                        onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit"
                             class="btn-danger">
 
-                        🗑️ Eliminar
+                            🗑️
 
-                    </button>
+                        </button>
 
-                </form>
+                    </form>
 
-            </div>
+                </td>
 
-        </div>
+            </tr>
 
-    @endforeach
+            @endforeach
+
+        </tbody>
+
+    </table>
 
 </div>
 

@@ -7,9 +7,25 @@
 
 <!-- 🔙 -->
 <div style="margin-bottom:15px;">
-     <a href="/entidades" class="btn-secondary">
-        ← Volver a Entidades 
-    </a>
+@if(request('inversion_id'))
+
+<a href="/inversiones/{{ request('inversion_id') }}/entidades"
+   class="btn-secondary">
+
+    ← Volver
+
+</a>
+
+@else
+
+<a href="/entidades"
+   class="btn-secondary">
+
+    ← Volver
+
+</a>
+
+@endif
 </div>
 
 <div class="form-title" style="margin-bottom:20px;">
@@ -17,8 +33,7 @@
 </div>
 
 <form method="POST"
-      action="/inversiones/{{ $entidad->inversion_id }}/entidades/{{ $entidad->id }}">
-
+      action="/entidades/{{ $entidad->id }}">
     @csrf
     @method('PUT')
 
@@ -170,23 +185,41 @@
     </div>
 
     <!-- BOTONES -->
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        margin-top:20px;
-    ">
+<!-- BOTONES -->
+<div style="
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+">
 
-        <a href="/inversiones/{{ $entidad->inversion_id }}/entidades"
+    @if(request('inversion_id'))
+
+        <a href="/inversiones/{{ request('inversion_id') }}/entidades"
            class="btn-secondary">
+
             ← Cancelar
+
         </a>
 
-        <button type="submit"
-                class="btn-primary-custom">
-            💾 Actualizar
-        </button>
+    @else
 
-    </div>
+        <a href="/entidades"
+           class="btn-secondary">
+
+            ← Cancelar
+
+        </a>
+
+    @endif
+
+    <button type="submit"
+            class="btn-primary-custom">
+
+        💾 Actualizar
+
+    </button>
+
+</div>
 
 </form>
 

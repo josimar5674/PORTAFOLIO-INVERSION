@@ -2,85 +2,218 @@
 
 @section('content')
 
-<h2 style="margin-left:15px;">⚙️ Servicios</h2>
+@php
 
-<!-- 🔙 VOLVER -->
-<div style="margin-left:15px; margin-bottom:10px;">
-   <a href="/inversiones" class="btn-secondary">← Volver a Inversiones</a>
+$totalMensual =
+    $servicios->sum('costo_mensual');
+
+$totalAnual =
+    $servicios->sum('costo_anual');
+
+$totalServicios =
+    $servicios->count();
+
+$categorias =
+    $servicios->pluck('categoria')
+              ->filter()
+              ->unique()
+              ->count();
+
+@endphp
+
+<div class="investment-header">
+
+    <div>
+
+        <h1>
+            ⚙️ Servicios
+        </h1>
+
+        <small>
+
+            {{ $inversion->nombre }}
+
+            ·
+
+            {{ $totalServicios }} registros
+
+        </small>
+
+    </div>
+
+    <div>
+
+        <a href="/inversiones/{{ $inversion->id }}"
+           class="btn-secondary">
+
+            ← Volver
+
+        </a>
+
+        <a href="/inversiones/{{ $inversion->id }}/servicios/create"
+           class="btn-primary-custom">
+
+            + Nuevo Servicio
+
+        </a>
+
+    </div>
+
 </div>
 
-<div style="margin-left:15px;">
-    <a href="/inversiones/{{ $inversion_id }}/servicios/create" class="btn-new">
-        + Nuevo Servicio
-    </a>
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
 </div>
 
-<!-- 🔥 TOTAL -->
-<div style="margin:15px;">
-    <strong>
-        Total mensual: $ {{ number_format($servicios->sum('costo_mensual'), 2) }} <br>
-        Total anual: $ {{ number_format($servicios->sum('costo_anual'), 2) }}
-    </strong>
+@endif
+
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        ⚙️ Servicios
+
+        <strong>
+
+            {{ $totalServicios }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        📂 Categorías
+
+        <strong>
+
+            {{ $categorias }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        💰 Total Mensual
+
+        <strong>
+
+            $ {{ number_format($totalMensual, 2) }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        📆 Total Anual
+
+        <strong>
+
+            $ {{ number_format($totalAnual, 2) }}
+
+        </strong>
+
+    </div>
+
 </div>
 
-<!-- CONTENEDOR -->
-<!-- GRID -->
-<div class="card-grid">
+<div style="overflow-x:auto; margin-top:25px;">
+
+<table class="table-dashboard">
+
+    <thead>
+
+        <tr>
+
+            <th>Clave</th>
+
+            <th>Servicio</th>
+
+            <th>Prestador</th>
+
+            <th>Categoría</th>
+
+            <th>Relación</th>
+
+            <th>Mensual</th>
+
+            <th>Anual</th>
+
+            <th>Acciones</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
 
     @foreach($servicios as $servicio)
 
-        <div class="card">
+        <tr>
 
-            <!-- TITULO -->
-            <div class="card-title">
+            <td>
 
-                {{ $servicio->clave ?? 'N/A' }}
-                -
-                {{ $servicio->servicio ?? 'Sin nombre' }}
+                {{ $servicio->clave }}
 
-            </div>
+            </td>
 
-            <!-- INFO -->
-            <div class="card-info">
+            <td>
 
-                👤 Prestador:
-                {{ $servicio->prestador ?? 'N/A' }}
+                <strong>
 
-                <br><br>
+                    {{ $servicio->servicio }}
 
-                📂 Categoría:
-                {{ $servicio->categoria ?? 'N/A' }}
+                </strong>
 
-                <br><br>
+            </td>
 
-                🔗 Relación:
-                {{ $servicio->relacion ?? 'N/A' }}
+            <td>
 
-                <br><br>
+                {{ $servicio->prestador }}
 
-                💰 Mensual:
-                $ {{ number_format($servicio->costo_mensual, 2) }}
+            </td>
 
-                <br>
+            <td>
 
-                📆 Anual:
-                $ {{ number_format($servicio->costo_anual, 2) }}
+                {{ $servicio->categoria }}
 
-            </div>
+            </td>
 
-            <div class="divider"></div>
+            <td>
 
-            <!-- ACCIONES -->
-            <div class="card-actions">
+                {{ $servicio->relacion }}
 
-                <a href="/inversiones/{{ $inversion_id }}/servicios/{{ $servicio->id }}/edit">
+            </td>
 
-                    ✏️ Editar
+            <td>
+
+                $ {{ number_format($servicio->costo_mensual,2) }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($servicio->costo_anual,2) }}
+
+            </td>
+
+            <td>
+
+                <a href="/inversiones/{{ $inversion->id }}/servicios/{{ $servicio->id }}/edit"
+                   class="btn-secondary">
+
+                    Ver
 
                 </a>
 
                 <form method="POST"
-                      action="/inversiones/{{ $inversion_id }}/servicios/{{ $servicio->id }}"
+                      action="/inversiones/{{ $inversion->id }}/servicios/{{ $servicio->id }}"
                       style="display:inline;"
                       onsubmit="event.preventDefault(); confirmarEliminacion(this)">
 
@@ -90,17 +223,21 @@
                     <button type="submit"
                             class="btn-danger">
 
-                        🗑️ Eliminar
+                        🗑️
 
                     </button>
 
                 </form>
 
-            </div>
+            </td>
 
-        </div>
+        </tr>
 
     @endforeach
+
+    </tbody>
+
+</table>
 
 </div>
 

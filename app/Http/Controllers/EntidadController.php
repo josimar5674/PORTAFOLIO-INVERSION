@@ -116,10 +116,13 @@ class EntidadController extends Controller
 
     public function edit($id)
     {
-        if(auth()->user()->role != 'admin')
-        {
-            abort(403);
-        }
+       $entidad = Entidad::with('inversiones')
+    ->findOrFail($id);
+
+if(!$this->puedeEditarEntidad($entidad))
+{
+    abort(403);
+}
 
         $entidad = Entidad::findOrFail($id);
 
@@ -137,12 +140,13 @@ class EntidadController extends Controller
 
     public function update(Request $request, $id)
     {
-        if(auth()->user()->role != 'admin')
-        {
-            abort(403);
-        }
+       $entidad = Entidad::with('inversiones')
+    ->findOrFail($id);
 
-        $entidad = Entidad::findOrFail($id);
+if(!$this->puedeEditarEntidad($entidad))
+{
+    abort(403);
+}
 
         $data = $request->all();
 
@@ -163,22 +167,56 @@ class EntidadController extends Controller
     | DELETE
     |--------------------------------------------------------------------------
     */
-
-    public function destroy($id)
+public function destroy(Request $request, $id)
+{
+    if(auth()->user()->role != 'admin')
     {
-        if(auth()->user()->role != 'admin')
-        {
-            abort(403);
-        }
-
-        $entidad = Entidad::findOrFail($id);
-
-        $entidad->delete();
-
-        return redirect('/entidades')
-            ->with(
-                'success',
-                'Entidad eliminada'
-            );
+        abort(403);
     }
+
+    $entidad = Entidad::findOrFail($id);
+
+    $entidad->delete();
+
+    if($request->filled('inversion_id'))
+    {
+        return redirect(
+            '/inversiones/' .
+            $request->inversion_id .
+            '/entidades'
+        )->with(
+            'success',
+            'Entidad eliminada'
+        );
+    }
+
+    return redirect('/entidades')
+        ->with(
+            'success',
+            'Entidad eliminada'
+        );
+}
+
+private function puedeEditarEntidad($entidad)
+{
+    if(auth()->user()->role == 'admin')
+    {
+        return true;
+    }
+
+    foreach($entidad->inversiones as $inversion)
+    {
+        if(
+            auth()->user()->tienePermiso(
+                $inversion->id,
+                'entidades'
+            )
+        )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 }

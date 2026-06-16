@@ -4,14 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Servicio;
+use App\Models\Inversion;
 
 class ServicioController extends Controller
 {
-    public function index($inversion_id)
-    {
-        $servicios = Servicio::where('inversion_id', $inversion_id)->get();
-        return view('servicios.index', compact('servicios', 'inversion_id'));
-    }
+  public function index($inversion_id)
+
+{
+
+    $inversion = Inversion::findOrFail($inversion_id);
+
+    $servicios = Servicio::where(
+
+        'inversion_id',
+
+        $inversion_id
+
+    )->get();
+
+    return view(
+
+        'servicios.index',
+
+        compact(
+
+            'servicios',
+
+            'inversion'
+
+        )
+
+    );
+
+}
 
     public function create($inversion_id)
     {
@@ -52,11 +77,20 @@ class ServicioController extends Controller
         ->with('success', 'Servicios guardados correctamente');
 }
 
-    public function edit($inversion_id, $id)
-    {
-        $servicio = Servicio::findOrFail($id);
-        return view('servicios.edit', compact('servicio'));
-    }
+ public function edit($inversion_id, $id)
+{
+    $servicio = Servicio::findOrFail($id);
+
+    $inversion = Inversion::findOrFail($inversion_id);
+
+    return view(
+        'servicios.edit',
+        compact(
+            'servicio',
+            'inversion'
+        )
+    );
+}
 
 public function update(Request $request, $inversion_id, $id)
 {
@@ -80,12 +114,19 @@ public function update(Request $request, $inversion_id, $id)
         ->with('success', 'Servicio actualizado correctamente');
 }
 
-    public function destroy($inversion_id, $id)
-    {
-        $servicio = Servicio::findOrFail($id);
-        $servicio->delete();
+  public function destroy($inversion_id, $id)
+{
+    $servicio = Servicio::findOrFail($id);
 
-        return redirect('/inversiones/' . $inversion_id . '/servicios')
-            ->with('success', 'Servicio eliminado');
-    }
+    $servicio->delete();
+
+    return redirect(
+        '/inversiones/' .
+        $inversion_id .
+        '/servicios'
+    )->with(
+        'success',
+        'Servicio eliminado'
+    );
+}
 }

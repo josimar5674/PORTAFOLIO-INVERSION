@@ -10,19 +10,19 @@
 
     @if ($errors->any())
 
-        <div class="error-box">
+    <div class="error-box">
 
-            <ul>
+        <ul>
 
-                @foreach ($errors->all() as $error)
+            @foreach ($errors->all() as $error)
 
-                    <li>{{ $error }}</li>
+            <li>{{ $error }}</li>
 
-                @endforeach
+            @endforeach
 
-            </ul>
+        </ul>
 
-        </div>
+    </div>
 
     @endif
 
@@ -39,9 +39,27 @@
             </label>
 
             <input type="text"
-                   name="nombre"
-                   class="form-control"
-                   value="{{ old('nombre', $inversion->nombre) }}">
+                name="nombre"
+                class="form-control"
+                value="{{ old('nombre', $inversion->nombre) }}">
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Clave
+
+            </label>
+
+            <input type="text"
+
+                name="clave"
+
+                class="form-control"
+
+                value="{{ old('clave', $inversion->clave) }}">
 
         </div>
 
@@ -53,78 +71,108 @@
             </label>
 
             <input type="text"
-                   name="ubicacion"
-                   class="form-control"
-                   value="{{ old('ubicacion', $inversion->ubicacion) }}">
+                name="ubicacion"
+                class="form-control"
+                value="{{ old('ubicacion', $inversion->ubicacion) }}">
 
         </div>
         <!-- CRITERIOS FINANCIEROS -->
-<div class="form-group">
+        <div class="form-group">
 
-    <h4 style="margin-bottom:15px;">
-        📈 Criterios Financieros
-    </h4>
+            <h4 style="margin-bottom:15px;">
+                📈 Criterios Financieros
+            </h4>
 
-    <div style="
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:15px;
-    ">
+            <div style="
+                            display:grid;
+                    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+                            gap:15px;
+                         ">
 
-        <div>
+                <div>
 
-            <label class="form-label">
-                Tasa de Descuento (T/D) %
-            </label>
+                    <label class="form-label">
+                        Tasa de Descuento (T/D) %
+                    </label>
 
-            <input
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                name="tasa_descuento"
-                class="form-control"
-                value="{{ old('tasa_descuento', $inversion->tasa_descuento) }}">
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        name="tasa_descuento"
+                        class="form-control"
+                        value="{{ old('tasa_descuento', $inversion->tasa_descuento) }}">
+
+                </div>
+
+                <div>
+
+                    <label class="form-label">
+                        Tasa de Impuestos (T/I) %
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        name="tasa_impuestos"
+                        class="form-control"
+                        value="{{ old('tasa_impuestos', $inversion->tasa_impuestos) }}">
+
+                </div>
+
+                <div>
+
+                    <label class="form-label">
+                        Tasa de Crecimiento %
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        name="tasa_crecimiento"
+                        class="form-control"
+                        value="{{ old('tasa_crecimiento', $inversion->tasa_crecimiento) }}">
+
+                </div>
+
+                <div>
+
+                    <label class="form-label">
+                        Otros Gastos Anuales
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="otros_gastos"
+                        class="form-control"
+                        value="{{ old('otros_gastos', $inversion->otros_gastos) }}">
+
+                </div>
+
+                <div>
+
+                    <label class="form-label">
+                        Gasto Financiero Anual
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="gasto_financiero"
+                        class="form-control"
+                        value="{{ old('gasto_financiero', $inversion->gasto_financiero) }}">
+
+                </div>
+
+            </div>
 
         </div>
-
-        <div>
-
-            <label class="form-label">
-                Tasa de Impuestos (T/I) %
-            </label>
-
-            <input
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                name="tasa_impuestos"
-                class="form-control"
-                value="{{ old('tasa_impuestos', $inversion->tasa_impuestos) }}">
-
-        </div>
-
-        <div>
-
-            <label class="form-label">
-                Tasa de Crecimiento %
-            </label>
-
-            <input
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                name="tasa_crecimiento"
-                class="form-control"
-                value="{{ old('tasa_crecimiento', $inversion->tasa_crecimiento) }}">
-
-        </div>
-
-    </div>
-
-</div>
 
         <!-- DESCRIPCIÓN -->
         <div class="form-group">
@@ -134,7 +182,7 @@
             </label>
 
             <textarea name="descripcion"
-                      class="form-control">{{ old('descripcion', $inversion->descripcion) }}</textarea>
+                class="form-control">{{ old('descripcion', $inversion->descripcion) }}</textarea>
 
         </div>
 
@@ -148,7 +196,7 @@
             <div style="display:flex; gap:10px;">
 
                 <select id="clienteSelect"
-                        class="form-control">
+                    class="form-control">
 
                     <option value="">
                         -- Seleccionar Personas --
@@ -156,19 +204,19 @@
 
                     @foreach($clientes as $cliente)
 
-                        <option value="{{ $cliente->id }}">
+                    <option value="{{ $cliente->id }}">
 
-                            {{ $cliente->nombre }}
+                        {{ $cliente->nombre }}
 
-                        </option>
+                    </option>
 
                     @endforeach
 
                 </select>
 
                 <button type="button"
-                        onclick="agregarCliente()"
-                        class="btn-primary-custom">
+                    onclick="agregarCliente()"
+                    class="btn-primary-custom">
 
                     ➕
 
@@ -182,7 +230,7 @@
 
                 @foreach($inversion->clientes as $cliente)
 
-                    <li style="
+                <li style="
                         display:flex;
                         justify-content:space-between;
                         align-items:center;
@@ -192,28 +240,28 @@
                         margin-bottom:6px;
                     ">
 
-                        <span>
-                            {{ $cliente->nombre }}
-                        </span>
+                    <span>
+                        {{ $cliente->nombre }}
+                    </span>
 
-                        <button type="button"
-                            onclick="eliminarCliente('{{ $cliente->id }}', this)"
-                            style="
+                    <button type="button"
+                        onclick="eliminarCliente('{{ $cliente->id }}', this)"
+                        style="
                                 background:none;
                                 border:none;
                                 color:#ef4444;
                                 cursor:pointer;
                             ">
 
-                            🗑️
+                        🗑️
 
-                        </button>
+                    </button>
 
-                        <input type="hidden"
-                               name="clientes[]"
-                               value="{{ $cliente->id }}">
+                    <input type="hidden"
+                        name="clientes[]"
+                        value="{{ $cliente->id }}">
 
-                    </li>
+                </li>
 
                 @endforeach
 
@@ -231,7 +279,7 @@
             <div style="display:flex; gap:10px;">
 
                 <select id="entidadSelect"
-                        class="form-control">
+                    class="form-control">
 
                     <option value="">
                         -- Seleccionar Entidad --
@@ -239,19 +287,19 @@
 
                     @foreach($entidades as $entidad)
 
-                        <option value="{{ $entidad->id }}">
+                    <option value="{{ $entidad->id }}">
 
-                            {{ $entidad->denominacion_social }}
+                        {{ $entidad->denominacion_social }}
 
-                        </option>
+                    </option>
 
                     @endforeach
 
                 </select>
 
                 <button type="button"
-                        onclick="agregarEntidad()"
-                        class="btn-primary-custom">
+                    onclick="agregarEntidad()"
+                    class="btn-primary-custom">
 
                     ➕
 
@@ -265,7 +313,7 @@
 
                 @foreach($inversion->entidades as $entidad)
 
-                    <li style="
+                <li style="
                         display:flex;
                         justify-content:space-between;
                         align-items:center;
@@ -275,28 +323,28 @@
                         margin-bottom:6px;
                     ">
 
-                        <span>
-                            {{ $entidad->denominacion_social }}
-                        </span>
+                    <span>
+                        {{ $entidad->denominacion_social }}
+                    </span>
 
-                        <button type="button"
-                            onclick="eliminarEntidad('{{ $entidad->id }}', this)"
-                            style="
+                    <button type="button"
+                        onclick="eliminarEntidad('{{ $entidad->id }}', this)"
+                        style="
                                 background:none;
                                 border:none;
                                 color:#ef4444;
                                 cursor:pointer;
                             ">
 
-                            🗑️
+                        🗑️
 
-                        </button>
+                    </button>
 
-                        <input type="hidden"
-                               name="entidades[]"
-                               value="{{ $entidad->id }}">
+                    <input type="hidden"
+                        name="entidades[]"
+                        value="{{ $entidad->id }}">
 
-                    </li>
+                </li>
 
                 @endforeach
 
@@ -308,14 +356,14 @@
         <div style="margin-top:20px;">
 
             <button type="submit"
-                    class="btn-primary-custom">
+                class="btn-primary-custom">
 
                 💾 Actualizar
 
             </button>
 
             <a href="/inversiones"
-               class="btn-secondary">
+                class="btn-secondary">
 
                 ← Volver
 
@@ -328,45 +376,48 @@
 </div>
 
 <!-- SCRIPTS -->
+
+
 <script>
 
-let clientesSeleccionados = [
 
-    @foreach($inversion->clientes as $cliente)
+    let clientesSeleccionados = [
+
+        @foreach($inversion -> clientes as $cliente)
 
         "{{ $cliente->id }}",
 
-    @endforeach
+        @endforeach
 
-];
+    ];
 
-function agregarCliente() {
+    function agregarCliente() {
 
-    const select = document.getElementById('clienteSelect');
+        const select = document.getElementById('clienteSelect');
 
-    const id = select.value;
+        const id = select.value;
 
-    const nombre = select.options[select.selectedIndex].text;
+        const nombre = select.options[select.selectedIndex].text;
 
-    if (!id) return;
+        if (!id) return;
 
-    if (clientesSeleccionados.includes(id)) return;
+        if (clientesSeleccionados.includes(id)) return;
 
-    clientesSeleccionados.push(id);
+        clientesSeleccionados.push(id);
 
-    const lista = document.getElementById('listaClientes');
+        const lista = document.getElementById('listaClientes');
 
-    const li = document.createElement('li');
+        const li = document.createElement('li');
 
-    li.style.display = "flex";
-    li.style.justifyContent = "space-between";
-    li.style.alignItems = "center";
-    li.style.padding = "6px 10px";
-    li.style.background = "#f9fafb";
-    li.style.borderRadius = "6px";
-    li.style.marginBottom = "6px";
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+        li.style.padding = "6px 10px";
+        li.style.background = "#f9fafb";
+        li.style.borderRadius = "6px";
+        li.style.marginBottom = "6px";
 
-    li.innerHTML = `
+        li.innerHTML = `
         <span>${nombre}</span>
 
         <button type="button"
@@ -387,54 +438,54 @@ function agregarCliente() {
                value="${id}">
     `;
 
-    lista.appendChild(li);
-}
+        lista.appendChild(li);
+    }
 
-function eliminarCliente(id, btn) {
+    function eliminarCliente(id, btn) {
 
-    clientesSeleccionados =
-        clientesSeleccionados.filter(c => c != id);
+        clientesSeleccionados =
+            clientesSeleccionados.filter(c => c != id);
 
-    btn.closest('li').remove();
-}
+        btn.closest('li').remove();
+    }
 
-let entidadesSeleccionadas = [
+    let entidadesSeleccionadas = [
 
-    @foreach($inversion->entidades as $entidad)
+        @foreach($inversion -> entidades as $entidad)
 
         "{{ $entidad->id }}",
 
-    @endforeach
+        @endforeach
 
-];
+    ];
 
-function agregarEntidad() {
+    function agregarEntidad() {
 
-    const select = document.getElementById('entidadSelect');
+        const select = document.getElementById('entidadSelect');
 
-    const id = select.value;
+        const id = select.value;
 
-    const nombre = select.options[select.selectedIndex].text;
+        const nombre = select.options[select.selectedIndex].text;
 
-    if (!id) return;
+        if (!id) return;
 
-    if (entidadesSeleccionadas.includes(id)) return;
+        if (entidadesSeleccionadas.includes(id)) return;
 
-    entidadesSeleccionadas.push(id);
+        entidadesSeleccionadas.push(id);
 
-    const lista = document.getElementById('listaEntidades');
+        const lista = document.getElementById('listaEntidades');
 
-    const li = document.createElement('li');
+        const li = document.createElement('li');
 
-    li.style.display = "flex";
-    li.style.justifyContent = "space-between";
-    li.style.alignItems = "center";
-    li.style.padding = "6px 10px";
-    li.style.background = "#f9fafb";
-    li.style.borderRadius = "6px";
-    li.style.marginBottom = "6px";
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+        li.style.padding = "6px 10px";
+        li.style.background = "#f9fafb";
+        li.style.borderRadius = "6px";
+        li.style.marginBottom = "6px";
 
-    li.innerHTML = `
+        li.innerHTML = `
         <span>${nombre}</span>
 
         <button type="button"
@@ -455,17 +506,16 @@ function agregarEntidad() {
                value="${id}">
     `;
 
-    lista.appendChild(li);
-}
+        lista.appendChild(li);
+    }
 
-function eliminarEntidad(id, btn) {
+    function eliminarEntidad(id, btn) {
 
-    entidadesSeleccionadas =
-        entidadesSeleccionadas.filter(e => e != id);
+        entidadesSeleccionadas =
+            entidadesSeleccionadas.filter(e => e != id);
 
-    btn.closest('li').remove();
-}
-
+        btn.closest('li').remove();
+    }
 </script>
 
 @endsection

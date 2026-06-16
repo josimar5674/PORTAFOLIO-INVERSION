@@ -15,6 +15,8 @@
         'resources/js/app.js'
     ])
 
+        @include('layouts.css')
+
 </head>
 
 <!-- MODAL ELIMINAR -->
@@ -74,7 +76,13 @@
             </a>
 
             <a href="/clientes">
+                Personas
+            </a>
+
+
+            <a href="/business-customers">
                 Clientes
+            </a>
          @if(Auth::user()->role == 'admin')
 
 

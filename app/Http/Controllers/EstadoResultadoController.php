@@ -8,20 +8,27 @@ use App\Models\Inversion;
 
 class EstadoResultadoController extends Controller
 {
-    public function index($inversion_id)
-    {
-        $estados = EstadoResultado::where(
-            'inversion_id',
-            $inversion_id
-        )
-        ->orderBy('anio', 'desc')
-        ->get();
+   public function index($inversion_id)
+{
+    $inversion = Inversion::findOrFail(
+        $inversion_id
+    );
 
-        return view(
-            'estado_resultados.index',
-            compact('estados', 'inversion_id')
-        );
-    }
+    $estados = EstadoResultado::where(
+        'inversion_id',
+        $inversion_id
+    )
+    ->orderBy('anio', 'desc')
+    ->get();
+
+    return view(
+        'estado_resultados.index',
+        compact(
+            'estados',
+            'inversion'
+        )
+    );
+}
 
     public function create($inversion_id)
     {
@@ -104,15 +111,22 @@ class EstadoResultadoController extends Controller
         );
     }
 
-    public function edit($inversion_id, $id)
-    {
-        $estado = EstadoResultado::findOrFail($id);
+ public function edit($inversion_id, $id)
+{
+    $estado = EstadoResultado::findOrFail($id);
 
-        return view(
-            'estado_resultados.edit',
-            compact('estado')
-        );
-    }
+    $inversion = Inversion::findOrFail(
+        $inversion_id
+    );
+
+    return view(
+        'estado_resultados.edit',
+        compact(
+            'estado',
+            'inversion'
+        )
+    );
+}
 
     public function update(
         Request $request,

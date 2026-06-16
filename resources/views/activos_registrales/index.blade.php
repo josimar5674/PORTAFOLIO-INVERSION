@@ -2,102 +2,217 @@
 
 @section('content')
 
-<h2 style="margin-left:15px;">
-    🏢 Activos Registrales
-</h2>
+@php
 
-<div style="margin-left:15px; margin-bottom:15px;">
+$totalActivos = $activos->count();
 
-    <a href="/inversiones"
-       class="btn-secondary">
-        ← Volver
-    </a>
+$totalValor =
+    $activos->sum('valor_escrituracion');
 
-    <a href="/inversiones/{{ $inversion->id }}/activos-registrales/create"
-       class="btn-new">
-        + Nuevo Activo
-    </a>
+$totalInscripciones =
+    $activos->sum(function($a){
+        return $a->inscripciones->count();
+    });
 
-</div>
+@endphp
 
-<div style="
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
-    gap:20px;
-    padding:15px;
-">
+<div class="investment-header">
 
-@foreach($activos as $activo)
+    <div>
 
-<div style="
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-">
+        <h1>
+            📑 Activos Registrales
+        </h1>
 
-    <div style="font-size:18px; font-weight:600; margin-bottom:15px;">
-        Matrícula: {{ $activo->numero_matricula }}
-    </div>
+        <small>
 
-    <div style="font-size:14px; color:#4b5563;">
+            {{ $inversion->nombre }}
 
-        📍 {{ $activo->ubicacion_inmueble }}
-        <br><br>
+            ·
 
-        🏙️ {{ $activo->ciudad }}
-        <br><br>
+            {{ $totalActivos }} registros
 
-        💰 $ {{ number_format($activo->valor_escrituracion, 2) }}
-        <br><br>
-
-        🧾 {{ $activo->clave_catastral_municipal }}
-        <br><br>
-
-        🏘️ {{ $activo->zonificacion }}
-        <br><br>
-
-        📑 Inscripciones:
-        {{ $activo->inscripciones->count() }}
+        </small>
 
     </div>
 
-    <div style="
-        border-top:1px solid #e5e7eb;
-        margin:15px 0;
-    "></div>
+    <div>
 
-    <div style="display:flex; justify-content:space-between;">
+        <a href="/inversiones/{{ $inversion->id }}"
+           class="btn-secondary">
 
-        <a href="/activos-registrales/{{ $activo->id }}/edit">
-            ✏️ Editar
+            ← Volver
+
         </a>
 
-        <form method="POST"
-              action="/activos-registrales/{{ $activo->id }}"
-              onsubmit="return confirm('¿Eliminar activo?')">
+        <a href="/inversiones/{{ $inversion->id }}/activos-registrales/create"
+           class="btn-primary-custom">
 
-            @csrf
-            @method('DELETE')
+            + Nuevo Activo
 
-            <button type="submit"
-                    style="
-                        background:#ef4444;
-                        color:white;
-                        border:none;
-                        padding:5px 10px;
-                        border-radius:6px;
-                    ">
-                🗑️
-            </button>
-
-        </form>
+        </a>
 
     </div>
 
 </div>
 
-@endforeach
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
+@endif
+
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        📑 Activos
+
+        <strong>
+
+            {{ $totalActivos }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        💰 Valor Total
+
+        <strong>
+
+            $ {{ number_format($totalValor,2) }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        📋 Inscripciones
+
+        <strong>
+
+            {{ $totalInscripciones }}
+
+        </strong>
+
+    </div>
+
+</div>
+
+<div style="overflow-x:auto; margin-top:25px;">
+
+<table class="table-dashboard">
+
+    <thead>
+
+        <tr>
+
+            <th>Matrícula</th>
+
+            <th>Ubicación</th>
+
+            <th>Ciudad</th>
+
+            <th>Zonificación</th>
+
+            <th>Valor</th>
+
+            <th>Inscripciones</th>
+
+            <th>Acciones</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    @foreach($activos as $activo)
+
+        <tr>
+
+            <td>
+
+                <strong>
+
+                    {{ $activo->numero_matricula }}
+
+                </strong>
+
+            </td>
+
+            <td>
+
+                {{ $activo->ubicacion_inmueble }}
+
+            </td>
+
+            <td>
+
+                {{ $activo->ciudad }}
+
+            </td>
+
+            <td>
+
+                {{ $activo->zonificacion }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($activo->valor_escrituracion,2) }}
+
+            </td>
+
+            <td>
+
+                {{ $activo->inscripciones->count() }}
+
+            </td>
+
+            <td>
+
+                <a href="/activos-registrales/{{ $activo->id }}/edit"
+                   class="btn-secondary">
+
+                    Ver
+
+                </a>
+
+                <form method="POST"
+                      action="/activos-registrales/{{ $activo->id }}"
+                      style="display:inline;"
+                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit"
+                            class="btn-danger">
+
+                        🗑️
+
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+    @endforeach
+
+    </tbody>
+
+</table>
 
 </div>
 

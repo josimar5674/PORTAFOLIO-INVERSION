@@ -86,6 +86,8 @@ public function index()
                 'tasa_descuento' => $request->tasa_descuento,
                 'tasa_impuestos' => $request->tasa_impuestos,
                 'tasa_crecimiento' => $request->tasa_crecimiento,
+                'otros_gastos' => $request->otros_gastos,
+                'gasto_financiero' => $request->gasto_financiero,
             ]);
 
         // Guardar relación con clientes
@@ -94,7 +96,8 @@ public function index()
 
 );
 
-        return redirect('/inversiones')->with('success', 'Inversión creada');
+        return redirect('/inversiones/' . $inversion->id)
+    ->with('success', 'Inversión actualizada correctamente');
     }
 
 
@@ -118,37 +121,47 @@ return view('inversiones.edit', compact(
 ));
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nombre' => 'required',
-            'clientes' => 'required|array|min:1'
-        ]);
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'nombre' => 'required',
+        'clientes' => 'required|array|min:1'
+    ]);
 
-        $inversion = Inversion::findOrFail($id);
+    $inversion = Inversion::findOrFail($id);
 
-        // Actualizar datos
-     $inversion->update([
-        
-    'nombre' => $request->nombre,
-    'ubicacion' => $request->ubicacion,
-    'descripcion' => $request->descripcion,
+    $inversion->update([
 
-    'tasa_descuento' => $request->tasa_descuento,
+        'nombre' => $request->nombre,
 
-    'tasa_impuestos' => $request->tasa_impuestos,
+        'clave' => $request->clave,
 
-    'tasa_crecimiento' => $request->tasa_crecimiento,
-]);
+        'ubicacion' => $request->ubicacion,
 
-        // Actualizar relación
-        $inversion->clientes()->sync($request->clientes);
-        $inversion->entidades()->sync(
-    $request->entidades ?? []
-);
+        'descripcion' => $request->descripcion,
 
-        return redirect('/inversiones')->with('success', 'Inversión actualizada');
-    }
+        'tasa_descuento' => $request->tasa_descuento,
+
+        'tasa_impuestos' => $request->tasa_impuestos,
+
+        'tasa_crecimiento' => $request->tasa_crecimiento,
+
+        'otros_gastos' => $request->otros_gastos,
+
+        'gasto_financiero' => $request->gasto_financiero,
+
+    ]);
+
+    $inversion->clientes()->sync(
+        $request->clientes
+    );
+
+    $inversion->entidades()->sync(
+        $request->entidades ?? []
+    );
+return redirect('/inversiones/' . $inversion->id)
+    ->with('success', 'Inversión actualizada correctamente');
+}
 
     public function destroy($id)
     {
@@ -158,5 +171,33 @@ return view('inversiones.edit', compact(
         return redirect('/inversiones')->with('success', 'Inversión eliminada');
     }
 
+
+    public function show($id)
+{
+    $inversion = Inversion::with([
+        'clientes',
+        'entidades',
+        'ultimoAvaluo',
+        'ultimoEstadoResultado',
+        'activosRegistrales',
+        'comercial'
+    ])->findOrFail($id);
+
+    if (
+        auth()->user()->role != 'admin'
+        &&
+        !auth()->user()->inversiones()
+            ->where('inversiones.id', $id)
+            ->exists()
+    )
+    {
+        abort(403);
+    }
+
+    return view(
+        'inversiones.show',
+        compact('inversion')
+    );
+}
 
 }

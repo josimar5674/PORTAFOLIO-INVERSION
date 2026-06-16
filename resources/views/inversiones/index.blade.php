@@ -4,305 +4,205 @@
 
 
 
+
+
 <div class="page-container">
+<h1 class="page-title">
+    Inversiones
+</h1>
 
-    <h1 class="page-title">Inversiones</h1>
+@if(auth()->user()->role == 'admin')
 
-    <a href="/inversiones/create" class="btn-new">+ Nueva Inversión</a>
+    <a href="/inversiones/create"
+       class="btn-new">
+
+        + Nueva Inversión
+
+    </a>
+
+@endif
 
 </div>
 
-@if(session('success'))
-<p style="color: green">{{ session('success') }}</p>
-@endif
-
-
+<p style="color:green;">
+    {{ session('success') }}
+</p>
 
 <hr>
+<div style="overflow-x:auto;">
+<table class="table-dashboard">
+<thead>
 
-<div class="inversion-grid">
-    @foreach($inversiones as $inv)
+    <tr>
 
+        <th>Inversión</th>
 
-    <div class="inversion-card">
+        <th>Ubicación</th>
 
-        <div class="inversion-title">{{ $inv->nombre }}</div>
+        <th>Personas</th>
 
-        <div class="inversion-title">
-            Clave: {{ $inv->clave }}
-        </div>
+        <th>Entidades</th>
 
-        <div class="inversion-info">
-            📍 {{ $inv->ubicacion ?? 'N/A' }}<br>
+        @if(auth()->user()->role == 'admin')
+            <th>Valor</th>
+        @endif
 
-            👥 Personas relacionadas:
-            @if($inv->clientes->isEmpty())
-            N/A
-            @else
-            <div style="margin-top:5px;">
-                @foreach($inv->clientes as $cliente)
-                <span style="background:#e5e7eb; padding:4px 8px; border-radius:12px; margin-right:5px;">
-                    {{ $cliente->nombre }}
-                </span>
-                @endforeach
-            </div>
-            @endif
-        </div>
+        @if(auth()->user()->role == 'admin')
+            <th>NOI</th>
+        @endif
 
-@if(auth()->user()->tienePermiso($inv->id, 'avaluos'))
+        @if(auth()->user()->role == 'admin')
+            <th>Cap Rate</th>
+        @endif
 
-<div class="divider"></div>
+        <th>Módulos</th>
 
-<div class="section-title">💰 Perfil Financiero</div>
+        <th>Acciones</th>
 
-<div class="inversion-info">
+    </tr>
 
-    @if($inv->ultimoAvaluo)
+</thead>
 
-        📅 Ultimo Avalúo:
-        {{ $inv->ultimoAvaluo->fecha_avaluo }}
-        <br>
+<tbody>
 
-        🌱 Terreno:
-        $ {{ number_format($inv->ultimoAvaluo->subtotal_terreno, 2) }}
-        <br>
+@foreach($inversiones as $inv)
 
-        🏗️ Construcción:
-        $ {{ number_format($inv->ultimoAvaluo->subtotal_construccion, 2) }}
-        <br>
+    @php
 
-        📉 Depreciación:
-        {{ number_format($inv->ultimoAvaluo->depreciacion, 2) }}
-        <br>
+        $valor =
+            $inv->ultimoAvaluo?->valor_total ?? 0;
 
-        💰 Total:
-        $ <strong>{{ number_format($inv->ultimoAvaluo->valor_total, 2) }}</strong>
+        $ingresos =
+            $inv->comercial->sum('subtotal');
 
-    @else
+        $costos =
+            $inv->costo_operativo_anual ?? 0;
 
-        <span style="color:#9ca3af;">
-            Sin avalúo registrado
-        </span>
+        $noi =
+            $ingresos - $costos;
 
-    @endif
+        $capRate =
+            $valor > 0
+            ? ($noi / $valor) * 100
+            : 0;
 
-</div>
+    @endphp
 
-@endif
+    <tr>
 
-@if(auth()->user()->tienePermiso($inv->id, 'servicios'))
+        <td>
 
-<div class="divider"></div>
-
-<div class="section-title">⚙️ Perfil Operativo</div>
-
-<div class="inversion-info">
-
-    Costo mensual:
-    $ {{ number_format($inv->costo_operativo_mensual, 2) }}
-
-    <br>
-
-    Costo anual:
-    $ {{ number_format($inv->costo_operativo_anual, 2) }}
-
-</div>
-
-@endif
-@if(auth()->user()->tienePermiso($inv->id, 'estado_resultados'))
-
-        <div class="divider"></div>
-
-        <div class="section-title">
-            📊 Estado de Resultados
-        </div>
-
-        <div class="inversion-info">
-
-            @if($inv->ultimoEstadoResultado)
-
-            Año:
-            {{ $inv->ultimoEstadoResultado->anio }}
-            <br>
-
-            Utilidad Neta:
             <strong>
-                L {{ number_format($inv->ultimoEstadoResultado->utilidad_neta,2) }}
+                {{ $inv->nombre }}
             </strong>
 
-            @else
-
-            <span style="color:#9ca3af;">
-                Sin Estado de Resultados
-            </span>
-
-            @endif
-
-        </div>
-
-            @endif
-    
-            @if(auth()->user()->tienePermiso($inv->id, 'entidades'))
-        
-
-        <div class="divider"></div>
-
-        <div class="section-title">🏢 Entidades Relacionadas</div>
-
-        <div class="inversion-info">
-
-            @if($inv->entidades->isEmpty())
-
-            <span style="color:#9ca3af;">
-                Sin entidades registradas
-            </span>
-
-            @else
-
-            @foreach($inv->entidades->take(3) as $entidad)
-
-            <div style="margin-bottom:5px;">
-                • {{ $entidad->denominacion_social }}
-            </div>
-
-            @endforeach
-
-            @if($inv->entidades->count() > 3)
+            <br>
 
             <small style="color:#6b7280;">
-                +{{ $inv->entidades->count() - 3 }} más...
+                {{ $inv->clave }}
             </small>
 
-            @endif
+        </td>
 
-            @endif
+        <td>
 
-        </div>
+            {{ $inv->ubicacion }}
 
+        </td>
 
-            @endif
+        <td>
 
-            
-@if(auth()->user()->tienePermiso($inv->id, 'activos_registrales'))
+            👥 {{ $inv->clientes->count() }}
 
-<div class="divider"></div>
+        </td>
 
-<div class="section-title">
-    📑 Perfil Registral
-</div>
+        <td>
 
-<div class="inversion-info">
+            🏢 {{ $inv->entidades->count() }}
 
-    @if($inv->activosRegistrales->isEmpty())
+        </td>
 
-        <span style="color:#9ca3af;">
-            Sin activos registrales
-        </span>
+        @if(auth()->user()->role == 'admin')
 
-    @else
+            <td>
 
-        @foreach($inv->activosRegistrales->take(3) as $activo)
+                $ {{ number_format($valor,0) }}
 
-            <div style="margin-bottom:5px;">
+            </td>
 
-                • Matrícula:
-                {{ $activo->numero_matricula }}
+            <td>
 
-            </div>
+                $ {{ number_format($noi,0) }}
 
-        @endforeach
+            </td>
 
-        @if($inv->activosRegistrales->count() > 3)
+            <td>
 
-            <small style="color:#6b7280;">
-                +{{ $inv->activosRegistrales->count() - 3 }} más...
-            </small>
+                <span style="
+                    font-weight:bold;
+                    color:
+                    {{ $capRate >= 10
+                        ? '#16a34a'
+                        : ($capRate >= 5
+                            ? '#ca8a04'
+                            : '#dc2626') }};
+                ">
+                    {{ number_format($capRate,2) }}%
+                </span>
+
+            </td>
 
         @endif
 
-    @endif
+        <td>
 
-</div>
-
-@endif
-
-        <div class="divider"></div>
-
-        <div class="actions">
-
-            @if(auth()->user()->tienePermiso($inv->id, 'avaluos'))
-            <a href="/inversiones/{{ $inv->id }}/avaluos">
-                📊 Avalúos
-            </a>
+            @if(auth()->user()->tienePermiso($inv->id,'avaluos'))
+                📊
             @endif
 
-            @if(auth()->user()->tienePermiso($inv->id, 'activos'))
-            <a href="/inversiones/{{ $inv->id }}/assets">
-                🏢 Activos
-            </a>
+            @if(auth()->user()->tienePermiso($inv->id,'activos'))
+                🏢
             @endif
 
-            @if(auth()->user()->tienePermiso($inv->id, 'servicios'))
-            <a href="/inversiones/{{ $inv->id }}/servicios">
-                ⚙️ Servicios
-            </a>
+            @if(auth()->user()->tienePermiso($inv->id,'servicios'))
+                ⚙️
             @endif
 
-            @if(auth()->user()->tienePermiso($inv->id, 'comercial'))
-            <a href="/inversiones/{{ $inv->id }}/comercial">
-                💰 Comercial
-            </a>
+            @if(auth()->user()->tienePermiso($inv->id,'comercial'))
+                💰
             @endif
 
-            @if(auth()->user()->tienePermiso($inv->id, 'entidades'))
-            <a href="/inversiones/{{ $inv->id }}/entidades">
-                🏢 Entidades
-            </a>
+            @if(auth()->user()->tienePermiso($inv->id,'entidades'))
+                🏛️
             @endif
 
-        @if(auth()->user()->tienePermiso($inv->id, 'activos_registrales'))
+            @if(auth()->user()->tienePermiso($inv->id,'activos_registrales'))
+                📑
+            @endif
 
-<a href="/inversiones/{{ $inv->id }}/activos-registrales">
-    📑 Activos Registrales
+            @if(auth()->user()->tienePermiso($inv->id,'estado_resultados'))
+                📈
+            @endif
+
+        </td>
+
+        <td>
+
+        <a href="/inversiones/{{ $inv->id }}"
+   class="btn-secondary">
+
+    📂 Abrir
+
 </a>
+        </td>
 
-@endif
-            @if(auth()->user()->tienePermiso($inv->id, 'estado_resultados'))
-            <a href="/inversiones/{{ $inv->id }}/estado-resultados">
-                📊 Estado Resultado
-            </a>
-            @endif
+    </tr>
 
-            @if(auth()->user()->role == 'admin')
+@endforeach
 
-            <a href="/inversiones/{{ $inv->id }}/edit">
-                ✏️ Editar
-            </a>
+</tbody>
 
-            <form action="/inversiones/{{ $inv->id }}"
-                method="POST"
-                style="display:inline;"
-                onsubmit="event.preventDefault(); confirmarEliminacion(this)">
-
-                @csrf
-                @method('DELETE')
-
-                <button type="submit"
-                    class="btn-danger">
-
-                    🗑️ Eliminar
-
-                </button>
-
-            </form>
-
-            @endif
-
-        </div>
-
-    </div> {{-- ← cierre inversion-card --}}
-
-    @endforeach
+</table>
 
 </div>
 

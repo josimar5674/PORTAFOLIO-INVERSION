@@ -1,67 +1,242 @@
 @extends('layouts.app')
 
-
-
 @section('content')
 
-<h2 style="margin-left:15px;">👥 Personas</h2>
-<h4 style="margin-left:15px; color:#555;">
-    Total clientes: {{ count($clientes) }}
-</h4>
-@if(session('success'))
-    <div class="alert alert-success" style="margin-left:15px;">
-        {{ session('success') }}
+@php
+
+$totalPersonas =
+    $clientes->count();
+
+$naturales =
+    $clientes->where('tipo','Natural')->count();
+
+$juridicas =
+    $clientes->where('tipo','Jurídico')->count();
+
+@endphp
+
+<div class="investment-header">
+
+    <div>
+
+        <h1>
+            👥 Personas
+        </h1>
+
+        <small>
+
+            {{ $totalPersonas }} registros
+
+        </small>
+
     </div>
+
+    <div>
+
+        <a href="/clientes/create"
+           class="btn-primary-custom">
+
+            + Nueva Persona
+
+        </a>
+
+    </div>
+
+</div>
+
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
 @endif
 
-<div style="margin-left:15px;">
-    <a href="/clientes/create" class="btn-new">
-        + Nueva persona
-    </a>
+<div class="summary-grid">
+
+    <div class="summary-card">
+
+        👥 Total
+
+        <strong>
+
+            {{ $totalPersonas }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        🧑 Naturales
+
+        <strong>
+
+            {{ $naturales }}
+
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        🏢 Jurídicas
+
+        <strong>
+
+            {{ $juridicas }}
+
+        </strong>
+
+    </div>
+
 </div>
 
-<div class="card-grid">
+<div style="margin-top:20px;">
 
-    @foreach($clientes as $cliente)
+    <input
+        type="text"
+        id="buscadorPersonas"
+        class="form-control"
+        placeholder="🔍 Buscar por nombre, email o teléfono...">
 
-        <div class="cliente-card">
+</div>
 
-            <div class="cliente-title">
-                {{ $cliente->nombre }}
-            </div>
+<div style="overflow-x:auto; margin-top:20px;">
 
-            <div class="cliente-info">
-                🧾 Tipo: {{ $cliente->tipo }}
-            </div>
+<table class="table-dashboard">
 
-            <div class="divider"></div>
+    <thead>
 
-            <div class="cliente-actions">
+        <tr>
 
-                <a href="/clientes/{{ $cliente->id }}/edit">
-                    ✏️ Editar
+            <th>Nombre</th>
+
+            <th>Tipo</th>
+
+            <th>Email</th>
+
+            <th>Teléfono</th>
+
+            <th>Acciones</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody id="tablaPersonas">
+
+        @foreach($clientes as $cliente)
+
+     <tr
+
+    onclick="window.location='/clientes/{{ $cliente->id }}/edit'"
+
+    style="cursor:pointer;">
+
+            <td>
+
+                <strong>
+
+                    {{ $cliente->nombre }}
+
+                </strong>
+
+            </td>
+
+            <td>
+
+                {{ $cliente->tipo }}
+
+            </td>
+
+            <td>
+
+                {{ $cliente->email }}
+
+            </td>
+
+            <td>
+
+                {{ $cliente->telefono }}
+
+            </td>
+
+            <td>
+
+                <a href="/clientes/{{ $cliente->id }}/edit"
+                   class="btn-secondary">
+
+                    Editar
+
                 </a>
 
-            <form action="/clientes/{{ $cliente->id }}"
-      method="POST"
-      style="display:inline;"
-      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+                <form method="POST"
+                      action="/clientes/{{ $cliente->id }}"
+                      style="display:inline;"
+                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
 
-    @csrf
-    @method('DELETE')
+                    @csrf
+                    @method('DELETE')
 
-    <button type="submit">
-        🗑️ Eliminar
-    </button>
+                    <button
+                        type="submit"
+                        class="btn-danger">
 
-</form>
+                        🗑️
 
-            </div>
+                    </button>
 
-        </div>
+                </form>
 
-    @endforeach
+            </td>
+
+        </tr>
+
+        @endforeach
+
+    </tbody>
+
+</table>
 
 </div>
+
+<script>
+
+document
+    .getElementById(
+        'buscadorPersonas'
+    )
+    .addEventListener(
+        'keyup',
+        function()
+        {
+            let filtro =
+                this.value.toLowerCase();
+
+            let filas =
+                document.querySelectorAll(
+                    '#tablaPersonas tr'
+                );
+
+            filas.forEach(
+                fila =>
+                {
+                    let texto =
+                        fila.innerText
+                            .toLowerCase();
+
+                    fila.style.display =
+                        texto.includes(filtro)
+                        ? ''
+                        : 'none';
+                }
+            );
+        }
+    );
+
+</script>
 
 @endsection

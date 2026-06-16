@@ -28,14 +28,15 @@
     <form method="POST" action="/clientes">
         @csrf
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-
+<div style="
+    max-width:900px;
+">
             <!-- 🧑 PERFIL CLIENTE -->
             <div>
                 <h3>Perfil de persona</h3>
 
                 <div class="form-group">
-                    <label>Nombre del Cliente</label>
+                    <label>Nombre</label>
                     <input type="text" name="nombre" class="form-control"
                         value="{{ old('nombre') }}">
                 </div>
@@ -46,12 +47,37 @@
                         value="{{ old('email') }}">
                 </div>
 
-                <div class="form-group">
-                    <label>Identificador Tributario</label>
-                    <input type="text" name="identificacion" class="form-control"
-                        value="{{ old('identificacion') }}"
-                        inputmode="numeric" pattern="[0-9]*">
-                </div>
+             <div class="form-group">
+
+    <label>
+        Identificadores Tributarios
+    </label>
+
+    <div style="display:flex; gap:10px;">
+
+        <input
+            type="text"
+            id="identificacionInput"
+            class="form-control"
+            placeholder="Ingrese identificador">
+
+        <button
+            type="button"
+            onclick="agregarIdentificacion()"
+            class="btn-primary-custom">
+
+            ➕
+
+        </button>
+
+    </div>
+
+    <ul id="listaIdentificaciones"
+        style="margin-top:10px;">
+
+    </ul>
+
+</div>
 
                 <div class="form-group">
                     <label>Móvil</label>
@@ -61,11 +87,37 @@
                         placeholder="Ej: 99991234">
                 </div>
 
-                <div class="form-group">
-                    <label>Nacionalidad</label>
-                    <input type="text" name="nacionalidad" class="form-control"
-                        value="{{ old('nacionalidad') }}">
-                </div>
+              <div class="form-group">
+
+    <label>
+        Nacionalidades
+    </label>
+
+    <div style="display:flex; gap:10px;">
+
+        <input
+            type="text"
+            id="nacionalidadInput"
+            class="form-control"
+            placeholder="Ingrese nacionalidad">
+
+        <button
+            type="button"
+            onclick="agregarNacionalidad()"
+            class="btn-primary-custom">
+
+            ➕
+
+        </button>
+
+    </div>
+
+    <ul id="listaNacionalidades"
+        style="margin-top:10px;">
+
+    </ul>
+
+</div>
 
                 <div class="form-group">
                     <label>Tipo</label>
@@ -74,51 +126,64 @@
                         <option value="Natural" {{ old('tipo') == 'Natural' ? 'selected' : '' }}>Natural</option>
                         <option value="Jurídico" {{ old('tipo') == 'Jurídico' ? 'selected' : '' }}>Jurídico</option>
                     </select>
+                    
                 </div>
             </div>
 
             <!-- 🏢 AGENTE RESIDENTE -->
-            <div>
-                <h3>Agente Residente</h3>
-
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" name="agente_nombre" class="form-control"
-                        value="{{ old('agente_nombre') }}">
-                </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="agente_email" class="form-control"
-                        value="{{ old('agente_email') }}">
-                </div>
-
-                <div class="form-group">
-                    <label>Número ID</label>
-                    <input type="text" name="agente_numero_id" class="form-control"
-                        value="{{ old('agente_numero_id') }}"
-                        inputmode="numeric" pattern="[0-9]*">
-                </div>
-
-                <div class="form-group">
-                    <label>Móvil</label>
-                    <input type="text" name="agente_movil" class="form-control"
-                        value="{{ old('agente_movil') }}"
-                        inputmode="numeric" pattern="[0-9]*">
-                </div>
-                <div class="form-group">
-                    <label>Tipo</label>
-                    <select name="agente_tipo_id" class="form-control" required>
-                        <option value="">Seleccione</option>
-                        <option value="Natural" {{ old('agente_tipo_id') == 'Natural' ? 'selected' : '' }}>Natural</option>
-                        <option value="Jurídico" {{ old('agente_tipo_id') == 'Jurídico' ? 'selected' : '' }}>Jurídico</option>
-                    </select>
-                </div>
-            </div>
+       
 
         </div>
 
-        <!-- BOTONES -->
+     
+
+
+<!-- 🏢 ENTIDADES RELACIONADAS -->
+<div>
+
+    <h3>Entidades Relacionadas</h3>
+
+    <div style="display:flex; gap:10px;">
+
+        <select id="entidadSelect"
+                class="form-control">
+
+            <option value="">
+                -- Seleccionar Entidad --
+            </option>
+
+            @foreach($entidades as $entidad)
+
+                <option value="{{ $entidad->id }}">
+
+                    {{ $entidad->denominacion_social }}
+
+                </option>
+
+            @endforeach
+
+        </select>
+
+        
+
+        <button type="button"
+                onclick="agregarEntidad()"
+                class="btn-primary-custom">
+
+            ➕
+
+        </button>
+
+    </div>
+
+    <ul id="listaEntidades"
+        style="margin-top:10px;">
+
+    </ul>
+
+</div>
+
+   <!-- BOTONES -->
         <div style="margin-top:20px;">
             <button type="submit" class="btn-primary-custom">💾 Guardar</button>
             <a href="/clientes" class="btn-secondary">Cancelar</a>
@@ -127,5 +192,224 @@
     </form>
 
 </div>
+
+<script>
+
+let entidadesSeleccionadas = [];
+
+function agregarEntidad()
+{
+    const select =
+        document.getElementById('entidadSelect');
+
+    const id =
+        select.value;
+
+    const nombre =
+        select.options[
+            select.selectedIndex
+        ].text;
+
+    if(!id) return;
+
+    if(entidadesSeleccionadas.includes(id))
+    {
+        return;
+    }
+
+    entidadesSeleccionadas.push(id);
+
+    const lista =
+        document.getElementById(
+            'listaEntidades'
+        );
+
+    const li =
+        document.createElement('li');
+
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.padding = "6px 10px";
+    li.style.background = "#f9fafb";
+    li.style.borderRadius = "6px";
+    li.style.marginBottom = "6px";
+
+    li.innerHTML = `
+        <span>${nombre}</span>
+
+        <button
+            type="button"
+            onclick="eliminarEntidad('${id}', this)"
+            style="
+                background:none;
+                border:none;
+                color:#ef4444;
+                cursor:pointer;
+            ">
+            🗑️
+        </button>
+
+        <input
+            type="hidden"
+            name="entidades[]"
+            value="${id}">
+    `;
+
+    lista.appendChild(li);
+}
+
+function eliminarEntidad(id, btn)
+{
+    entidadesSeleccionadas =
+        entidadesSeleccionadas.filter(
+            e => e != id
+        );
+
+    btn.closest('li').remove();
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IDENTIFICACIONES
+|--------------------------------------------------------------------------
+*/
+
+let identificaciones = [];
+
+function agregarIdentificacion()
+{
+    const input =
+        document.getElementById(
+            'identificacionInput'
+        );
+
+    const valor =
+        input.value.trim();
+
+    if(!valor) return;
+
+    identificaciones.push(valor);
+
+    const lista =
+        document.getElementById(
+            'listaIdentificaciones'
+        );
+
+    const li =
+        document.createElement('li');
+
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.padding = "6px 10px";
+    li.style.background = "#f9fafb";
+    li.style.borderRadius = "6px";
+    li.style.marginBottom = "6px";
+
+    li.innerHTML = `
+        <span>${valor}</span>
+
+        <button
+            type="button"
+            onclick="eliminarIdentificacion(this)"
+            style="
+                background:none;
+                border:none;
+                color:#ef4444;
+                cursor:pointer;
+            ">
+            🗑️
+        </button>
+
+        <input
+            type="hidden"
+            name="identificaciones[]"
+            value="${valor}">
+    `;
+
+    lista.appendChild(li);
+
+    input.value = '';
+}
+
+function eliminarIdentificacion(btn)
+{
+    btn.closest('li').remove();
+}
+
+/*
+|--------------------------------------------------------------------------
+| NACIONALIDADES
+|--------------------------------------------------------------------------
+*/
+
+let nacionalidades = [];
+
+function agregarNacionalidad()
+{
+    const input =
+        document.getElementById(
+            'nacionalidadInput'
+        );
+
+    const valor =
+        input.value.trim();
+
+    if(!valor) return;
+
+    nacionalidades.push(valor);
+
+    const lista =
+        document.getElementById(
+            'listaNacionalidades'
+        );
+
+    const li =
+        document.createElement('li');
+
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.padding = "6px 10px";
+    li.style.background = "#f9fafb";
+    li.style.borderRadius = "6px";
+    li.style.marginBottom = "6px";
+
+    li.innerHTML = `
+        <span>${valor}</span>
+
+        <button
+            type="button"
+            onclick="eliminarNacionalidad(this)"
+            style="
+                background:none;
+                border:none;
+                color:#ef4444;
+                cursor:pointer;
+            ">
+            🗑️
+        </button>
+
+        <input
+            type="hidden"
+            name="nacionalidades[]"
+            value="${valor}">
+    `;
+
+    lista.appendChild(li);
+
+    input.value = '';
+}
+
+function eliminarNacionalidad(btn)
+{
+    btn.closest('li').remove();
+}
+
+</script>
+
+
 
 @endsection

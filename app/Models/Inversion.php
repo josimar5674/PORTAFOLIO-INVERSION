@@ -21,7 +21,9 @@ protected $fillable = [
     'descripcion',
     'tasa_descuento',
     'tasa_impuestos',
-    'tasa_crecimiento'
+    'tasa_crecimiento',
+    'otros_gastos',
+    'gasto_financiero'
 
 ];
 

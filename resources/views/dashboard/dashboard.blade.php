@@ -282,107 +282,83 @@
 
         <tbody>
 
-            @foreach($inversiones as $inv)
+           @foreach($inversiones as $inv)
 
-                @php
+    @php
 
-                    $valor =
-                        $inv->ultimoAvaluo?->valor_total ?? 0;
+        $valor =
+            $inv->ultimoAvaluo?->valor_total ?? 0;
 
-                    $ingresos =
-                        $inv->comercial->sum('subtotal');
+        $ingresos =
+            $inv->comercial->sum('subtotal');
 
-                    $costos =
-                        $inv->costo_operativo_anual ?? 0;
+        $costos =
+            $inv->costo_operativo_anual ?? 0;
 
-                    $noi =
-                        $ingresos - $costos;
+        $noi =
+            $ingresos - $costos;
 
-                    $participacion =
-                        $totalValorInversion > 0
-                        ? ($valor / $totalValorInversion) * 100
-                        : 0;
+        $participacion =
+            $totalValorInversion > 0
+            ? ($valor / $totalValorInversion) * 100
+            : 0;
 
-                    $participacionIngresos =
-                        $totalIngresos > 0
-                        ? ($ingresos / $totalIngresos) * 100
-                        : 0;
+        $participacionIngresos =
+            $totalIngresos > 0
+            ? ($ingresos / $totalIngresos) * 100
+            : 0;
 
-                    $participacionCostos =
-                        $totalCostos > 0
-                        ? ($costos / $totalCostos) * 100
-                        : 0;
+        $participacionCostos =
+            $totalCostos > 0
+            ? ($costos / $totalCostos) * 100
+            : 0;
 
-                    $rendimiento =
-                        $valor > 0
-                        ? ($ingresos / $valor) * 100
-                        : 0;
+        $rendimiento =
+            $valor > 0
+            ? ($ingresos / $valor) * 100
+            : 0;
 
-                    $capRate =
-                        $valor > 0
-                        ? ($noi / $valor) * 100
-                        : 0;
+        $capRate =
+            $valor > 0
+            ? ($noi / $valor) * 100
+            : 0;
 
-                @endphp
+    @endphp
 
-                <tr>
+    <tr
+        onclick="window.location='/inversiones/{{ $inv->id }}'"
+        style="cursor:pointer;">
 
-                    <td>
-                        {{ $inv->nombre }}
-                    </td>
+        <td>{{ $inv->nombre }}</td>
 
-                    <td>
-                        {{ number_format($valor, 2) }}
-                    </td>
+        <td>{{ number_format($valor, 2) }}</td>
 
-                    <td>
-                        {{ number_format($participacion, 2) }}%
-                    </td>
+        <td>{{ number_format($participacion, 2) }}%</td>
 
-                    <td>
-                        {{ number_format($ingresos, 2) }}
-                    </td>
+        <td>{{ number_format($ingresos, 2) }}</td>
 
-                    <td>
-                        {{ number_format($participacionIngresos, 2) }}%
-                    </td>
+        <td>{{ number_format($participacionIngresos, 2) }}%</td>
 
-                    <td>
-                        {{ number_format($rendimiento, 2) }}%
-                    </td> 
-                    
-                    <td>
-                        {{ number_format($costos, 2) }}
-                    </td>
+        <td>{{ number_format($rendimiento, 2) }}%</td>
 
-                    <td>
-                        {{ number_format($participacionCostos, 2) }}%
-                    </td>
+        <td>{{ number_format($costos, 2) }}</td>
 
-                    <td style="
-                        font-weight:bold;
-                        color:#2563eb;
-                    ">
-                        {{ number_format($noi, 2) }}
-                    </td>
+        <td>{{ number_format($participacionCostos, 2) }}%</td>
 
-              
+        <td style="font-weight:bold;color:#2563eb;">
+            {{ number_format($noi, 2) }}
+        </td>
 
-                    <td style="
-                        font-weight:bold;
-                        color:
-                        {{ $capRate >= 10
-                            ? '#16a34a'
-                            : ($capRate >= 5
-                                ? '#ca8a04'
-                                : '#dc2626') }};
-                    ">
-                        {{ number_format($capRate, 2) }}%
-                    </td>
+        <td style="
+            font-weight:bold;
+            color:{{ $capRate >= 10 ? '#16a34a' : ($capRate >= 5 ? '#ca8a04' : '#dc2626') }};
+        ">
+            {{ number_format($capRate, 2) }}%
+        </td>
 
-                </tr>
+    </tr>
 
-            @endforeach
+@endforeach
 
         </tbody>
 
@@ -507,125 +483,127 @@
 
         <tbody>
 
-            @foreach($inversiones as $inv)
+         @foreach($inversiones as $inv)
 
-                @php
+    @php
 
-                    $valor =
-                        $inv->ultimoAvaluo?->valor_total ?? 0;
+        $valor =
+            $inv->ultimoAvaluo?->valor_total ?? 0;
 
-                    $ingresos =
-                        $inv->comercial->sum('subtotal');
+        $ingresos =
+            $inv->comercial->sum('subtotal');
 
-                    $costos =
-                        $inv->costo_operativo_anual ?? 0;
+        $costos =
+            $inv->costo_operativo_anual ?? 0;
 
-                    $depreciacion =
-                        $inv->ultimoAvaluo?->depreciacion ?? 0;
+        $depreciacion =
+            $inv->ultimoAvaluo?->depreciacion ?? 0;
 
-                    $noi =
-                        $ingresos - $costos;
+        $noi =
+            $ingresos - $costos;
 
-                    $ebit =
-                        $noi - $depreciacion;
+        $ebit =
+            $noi - $depreciacion;
 
-                    $intereses = 0;
+        $intereses = 0;
 
-                    $ebt =
-                        $ebit - $intereses;
+        $ebt =
+            $ebit - $intereses;
 
-                    $impuestoHN =
-                        $ebt *
-                        (($inv->tasa_impuestos ?? 0) / 100);
+        $impuestoHN =
+            $ebt *
+            (($inv->tasa_impuestos ?? 0) / 100);
 
-                    $gp =
-                        $ebt - $impuestoHN;
+        $gp =
+            $ebt - $impuestoHN;
 
-                    $impuestoUS = 0;
+        $impuestoUS = 0;
 
-                    $net =
-                        $gp - $impuestoUS;
+        $net =
+            $gp - $impuestoUS;
 
-                @endphp
+    @endphp
 
-                <tr>
+    <tr
+        onclick="window.location='/inversiones/{{ $inv->id }}'"
+        style="cursor:pointer;">
 
-                    <td>
-                        {{ $inv->nombre }}
-                    </td>
+        <td>
+            {{ $inv->nombre }}
+        </td>
 
-                    <td>
-                        {{ number_format($depreciacion,2) }}
-                    </td>
+        <td>
+            {{ number_format($depreciacion,2) }}
+        </td>
 
-                    <td>
-                        {{ $valor > 0
-                            ? number_format(($depreciacion/$valor)*100,2)
-                            : 0 }}%
-                    </td>
+        <td>
+            {{ $valor > 0
+                ? number_format(($depreciacion/$valor)*100,2)
+                : 0 }}%
+        </td>
 
-                    <td>
-                        {{ number_format($ebit,2) }}
-                    </td>
+        <td>
+            {{ number_format($ebit,2) }}
+        </td>
 
-                    <td>
-                        {{ $ingresos > 0
-                            ? number_format(($ebit/$ingresos)*100,2)
-                            : 0 }}%
-                    </td>
+        <td>
+            {{ $ingresos > 0
+                ? number_format(($ebit/$ingresos)*100,2)
+                : 0 }}%
+        </td>
 
-                    <td>
-                        {{ number_format($intereses,2) }}
-                    </td>
+        <td>
+            {{ number_format($intereses,2) }}
+        </td>
 
-                    <td>
-                        0%
-                    </td>
+        <td>
+            0%
+        </td>
 
-                    <td>
-                        {{ number_format($ebt,2) }}
-                    </td>
+        <td>
+            {{ number_format($ebt,2) }}
+        </td>
 
-                    <td>
-                        {{ $ingresos > 0
-                            ? number_format(($ebt/$ingresos)*100,2)
-                            : 0 }}%
-                    </td>
+        <td>
+            {{ $ingresos > 0
+                ? number_format(($ebt/$ingresos)*100,2)
+                : 0 }}%
+        </td>
 
-                    <td>
-                        {{ number_format($impuestoHN,2) }}
-                    </td>
+        <td>
+            {{ number_format($impuestoHN,2) }}
+        </td>
 
-                    <td>
-                        {{ $ebt > 0
-                            ? number_format(($impuestoHN/$ebt)*100,2)
-                            : 0 }}%
-                    </td>
+        <td>
+            {{ $ebt > 0
+                ? number_format(($impuestoHN/$ebt)*100,2)
+                : 0 }}%
+        </td>
 
-                    <td>
-                        {{ number_format($gp,2) }}
-                    </td>
+        <td>
+            {{ number_format($gp,2) }}
+        </td>
 
-                    <td>
-                        {{ $ebt > 0
-                            ? number_format(($gp/$ebt)*100,2)
-                            : 0 }}%
-                    </td>
+        <td>
+            {{ $ebt > 0
+                ? number_format(($gp/$ebt)*100,2)
+                : 0 }}%
+        </td>
 
-                    <td>
-                        {{ number_format($impuestoUS,2) }}
-                    </td>
+        <td>
+            {{ number_format($impuestoUS,2) }}
+        </td>
 
-                    <td style="
-                        font-weight:bold;
-                        color:#16a34a;
-                    ">
-                        {{ number_format($net,2) }}
-                    </td>
+        <td style="
+            font-weight:bold;
+            color:#16a34a;
+        ">
+            {{ number_format($net,2) }}
+        </td>
 
-                </tr>
+    </tr>
 
-            @endforeach
+@endforeach
 
         </tbody>
 

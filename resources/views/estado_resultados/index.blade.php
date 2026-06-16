@@ -2,130 +2,257 @@
 
 @section('content')
 
-<h2 style="margin-left:15px;">
-    📊 Estado de Resultados
-</h2>
+@php
 
-<div style="margin-left:15px; margin-bottom:10px;">
+$totalEstados =
+    $estados->count();
 
-    <a href="/inversiones"
-       class="btn-secondary">
-        ← Volver a Inversiones
-    </a>
+$ultimaUtilidad =
+    $estados->first()?->utilidad_neta ?? 0;
 
-<button
-    type="button"
-    class="btn-new"
-    onclick="abrirModalGenerar()">
+$ultimoNOI =
+    $estados->first()?->noi ?? 0;
 
-    ⚙️ Generar Estado
+$ultimoEBIT =
+    $estados->first()?->ebit ?? 0;
 
-</button>
-</div>
+@endphp
 
-<div class="container custom-container">
+<div class="investment-header">
 
-@foreach($estados as $estado)
+    <div>
 
-<div class="inversion-card">
+        <h1>
+            📊 Estado de Resultados
+        </h1>
 
-    <div class="inversion-title">
+        <small>
 
-        Año {{ $estado->anio }}
+            {{ $inversion->nombre }}
+
+            ·
+
+            {{ $totalEstados }} registros
+
+        </small>
 
     </div>
 
-    @if($estados->count())
+    <div>
 
-<div style="
-    margin:15px;
-    padding:15px;
-    background:#f8fafc;
-    border-radius:10px;
-">
+        <a href="/inversiones/{{ $inversion->id }}"
+           class="btn-secondary">
 
-    <strong>
-        Última Utilidad Neta:
-    </strong>
+            ← Volver
 
-    $ {{ number_format($estados->first()->utilidad_neta,2) }}
+        </a>
+
+        <button
+            type="button"
+            class="btn-primary-custom"
+            onclick="abrirModalGenerar()">
+
+            ⚙️ Generar Estado
+
+        </button>
+
+    </div>
+
+</div>
+
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
 
 </div>
 
 @endif
 
-<div class="inversion-info">
+<div class="summary-grid">
 
-    💰 Ingresos:
-    $ {{ number_format($estado->ingresos,2) }}
-    <br>
+    <div class="summary-card">
 
-    📉 Costos:
-    $ {{ number_format($estado->costos,2) }}
-    <br>
+        📄 Estados
 
-    📦 Otros Gastos:
-    $ {{ number_format($estado->otros_gastos,2) }}
-    <br>
+        <strong>
 
-    📊 NOI:
-    $ {{ number_format($estado->noi,2) }}
-    <br>
+            {{ $totalEstados }}
 
-    📉 Depreciación:
-    $ {{ number_format($estado->depreciacion,2) }}
-    <br>
+        </strong>
 
-    📈 EBIT:
-    $ {{ number_format($estado->ebit,2) }}
-    <br>
+    </div>
 
-    💳 Gasto Financiero:
-    $ {{ number_format($estado->gasto_financiero,2) }}
-    <br>
+    <div class="summary-card">
 
-    🏦 EBT:
-    $ {{ number_format($estado->ebt,2) }}
-    <br>
+        📊 NOI
 
-    💸 Impuestos:
-    $ {{ number_format($estado->impuestos,2) }}
-    <br><br>
+        <strong>
 
-    <strong>
-        🏆 Utilidad Neta:
-        $ {{ number_format($estado->utilidad_neta,2) }}
-    </strong>
+            $ {{ number_format($ultimoNOI,2) }}
 
-</div>
+        </strong>
 
-    <div class="actions">
+    </div>
 
-        <a href="/inversiones/{{ $inversion_id }}/estado-resultados/{{ $estado->id }}/edit">
-            ✏️ Editar
-        </a>
+    <div class="summary-card">
 
-        <form method="POST"
-              action="/inversiones/{{ $inversion_id }}/estado-resultados/{{ $estado->id }}"
-              style="display:inline;">
+        📈 EBIT
 
-            @csrf
-            @method('DELETE')
+        <strong>
 
-            <button type="submit">
-                🗑️ Eliminar
-            </button>
+            $ {{ number_format($ultimoEBIT,2) }}
 
-        </form>
+        </strong>
+
+    </div>
+
+    <div class="summary-card">
+
+        🏆 Utilidad Neta
+
+        <strong>
+
+            $ {{ number_format($ultimaUtilidad,2) }}
+
+        </strong>
 
     </div>
 
 </div>
 
-@endforeach
+<div style="overflow-x:auto; margin-top:25px;">
+
+<table class="table-dashboard">
+
+    <thead>
+
+        <tr>
+
+            <th>Año</th>
+
+            <th>Ingresos</th>
+
+            <th>Costos</th>
+
+            <th>NOI</th>
+
+            <th>EBIT</th>
+
+            <th>EBT</th>
+
+            <th>Impuestos</th>
+
+            <th>Utilidad Neta</th>
+
+            <th>Acciones</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    @foreach($estados as $estado)
+
+        <tr>
+
+            <td>
+
+                <strong>
+
+                    {{ $estado->anio }}
+
+                </strong>
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($estado->ingresos,2) }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($estado->costos,2) }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($estado->noi,2) }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($estado->ebit,2) }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($estado->ebt,2) }}
+
+            </td>
+
+            <td>
+
+                $ {{ number_format($estado->impuestos,2) }}
+
+            </td>
+
+            <td>
+
+                <strong>
+
+                    $ {{ number_format($estado->utilidad_neta,2) }}
+
+                </strong>
+
+            </td>
+
+            <td>
+
+                <a href="/inversiones/{{ $inversion->id }}/estado-resultados/{{ $estado->id }}/edit"
+                   class="btn-secondary">
+
+                    Ver
+
+                </a>
+
+                <form method="POST"
+                      action="/inversiones/{{ $inversion->id }}/estado-resultados/{{ $estado->id }}"
+                      style="display:inline;"
+                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit"
+                            class="btn-danger">
+
+                        🗑️
+
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+    @endforeach
+
+    </tbody>
+
+</table>
 
 </div>
 
+<!-- MODAL GENERAR -->
 
 <div id="modalGenerar"
      style="
@@ -153,7 +280,7 @@
         </h3>
 
         <form method="POST"
-              action="/inversiones/{{ $inversion_id }}/estado-resultados/generar">
+              action="/inversiones/{{ $inversion->id }}/estado-resultados/generar">
 
             @csrf
 
@@ -161,12 +288,11 @@
 
                 <label>Año</label>
 
-                <input
-                    type="number"
-                    name="anio"
-                    class="form-control"
-                    value="{{ date('Y') }}"
-                    required>
+                <input type="number"
+                       name="anio"
+                       class="form-control"
+                       value="{{ date('Y') }}"
+                       required>
 
             </div>
 
@@ -174,12 +300,11 @@
 
                 <label>Otros Gastos</label>
 
-                <input
-                    type="number"
+                <input type="number"
                     step="0.01"
                     name="otros_gastos"
                     class="form-control"
-                    value="0">
+                    value="{{ $inversion->otros_gastos ?? 0 }}">
 
             </div>
 
@@ -187,12 +312,11 @@
 
                 <label>Gasto Financiero</label>
 
-                <input
-                    type="number"
-                    step="0.01"
-                    name="gasto_financiero"
-                    class="form-control"
-                    value="0">
+                <input type="number"
+       step="0.01"
+       name="gasto_financiero"
+       class="form-control"
+       value="{{ $inversion->gasto_financiero ?? 0 }}">
 
             </div>
 
@@ -203,18 +327,16 @@
                 margin-top:20px;
             ">
 
-                <button
-                    type="button"
-                    class="btn-secondary"
-                    onclick="cerrarModalGenerar()">
+                <button type="button"
+                        class="btn-secondary"
+                        onclick="cerrarModalGenerar()">
 
                     Cancelar
 
                 </button>
 
-                <button
-                    type="submit"
-                    class="btn-primary-custom">
+                <button type="submit"
+                        class="btn-primary-custom">
 
                     ⚙️ Generar
 
@@ -245,4 +367,5 @@ function cerrarModalGenerar()
 }
 
 </script>
+
 @endsection

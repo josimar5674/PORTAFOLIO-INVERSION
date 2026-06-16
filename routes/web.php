@@ -16,6 +16,7 @@ use App\Http\Controllers\ComercialController;
 use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EstadoResultadoController;
+use App\Http\Controllers\BusinessCustomerController;
 
 
 /*
@@ -71,18 +72,26 @@ Route::get('/', [DashboardController::class, 'index'])
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/inversiones', [InversionController::class, 'index']);
+Route::get('/inversiones',
+    [InversionController::class, 'index']);
 
-    Route::get('/inversiones/create', [InversionController::class, 'create']);
+Route::get('/inversiones/create',
+    [InversionController::class, 'create']);
 
-    Route::post('/inversiones', [InversionController::class, 'store']);
+Route::post('/inversiones',
+    [InversionController::class, 'store']);
 
-    Route::get('/inversiones/{id}/edit', [InversionController::class, 'edit']);
+Route::get('/inversiones/{id}/edit',
+    [InversionController::class, 'edit']);
 
-    Route::put('/inversiones/{id}', [InversionController::class, 'update']);
+Route::put('/inversiones/{id}',
+    [InversionController::class, 'update']);
 
-    Route::delete('/inversiones/{id}', [InversionController::class, 'destroy']);
+Route::delete('/inversiones/{id}',
+    [InversionController::class, 'destroy']);
 
+Route::get('/inversiones/{id}',
+    [InversionController::class, 'show']);
     /*
     |--------------------------------------------------------------------------
     | ACTIVOS
@@ -350,4 +359,37 @@ Route::post(
 );
 
 
+
+
 });
+
+
+Route::get(
+    '/business-customers',
+    [BusinessCustomerController::class,'index']
+);
+
+Route::get(
+    '/business-customers/create',
+    [BusinessCustomerController::class,'create']
+);
+
+Route::post(
+    '/business-customers',
+    [BusinessCustomerController::class,'store']
+);
+
+Route::get(
+    '/business-customers/{id}/edit',
+    [BusinessCustomerController::class,'edit']
+);
+
+Route::put(
+    '/business-customers/{id}',
+    [BusinessCustomerController::class,'update']
+);
+
+Route::delete(
+    '/business-customers/{id}',
+    [BusinessCustomerController::class,'destroy']
+);

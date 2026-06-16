@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comercial;
+use App\Models\Inversion;
 
 class ComercialController extends Controller
 {
-    public function index($inversion_id)
-    {
-        $items = Comercial::where('inversion_id', $inversion_id)->get();
+  public function index($inversion_id)
+{
+    $inversion = Inversion::findOrFail($inversion_id);
 
-        return view('comercial.index', compact('items', 'inversion_id'));
-    }
+    $items = Comercial::where(
+        'inversion_id',
+        $inversion_id
+    )->get();
+
+    return view(
+        'comercial.index',
+        compact(
+            'items',
+            'inversion'
+        )
+    );
+}
 
 public function create($inversion_id)
 {
