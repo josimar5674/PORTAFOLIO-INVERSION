@@ -46,8 +46,12 @@ public function store(Request $request, $inversion_id)
         'observaciones' => $request->observaciones,
     ]);
 
-    return redirect('/inversiones/' . $inversion_id . '/avaluos')
-        ->with('success', 'Avalúo guardado correctamente');
+   return redirect(
+    "/inversiones/{$avaluo->inversion_id}/avaluos/{$avaluo->id}/edit"
+)->with(
+    'success',
+    'Avalúo creado correctamente. Ahora puede cargar documentos.'
+);
 }
 public function edit($inversion_id, $id)
 {

@@ -72,6 +72,11 @@ input:focus, select:focus {
     ✏️ Editar Avalúo - {{ $avaluo->fecha_avaluo }}
 </div>
 
+   <a href="/inversiones/{{ $inversion_id ?? $avaluo->inversion_id }}/avaluos" class="btn-secondary">
+        ← Volver a Avalúos
+    </a>
+
+
 <form method="POST" action="/inversiones/{{ $avaluo->inversion_id }}/avaluos/{{ $avaluo->id }}">
     @csrf
     @method('PUT')
@@ -92,71 +97,154 @@ input:focus, select:focus {
         </div>
 
         <div class="grid-3">
-            <input type="number" step="0.01" id="area_terreno" name="area_terreno"
-                value="{{ old('area_terreno', $avaluo->area_terreno) }}" oninput="calcularTerreno()">
+         <div>
+    <label>Área Terreno</label>
+    <input
+        type="number"
+        step="0.01"
+        id="area_terreno"
+        name="area_terreno"
+        value="{{ old('area_terreno', $avaluo->area_terreno) }}"
+        oninput="calcularTerreno()">
+</div>
 
-            <input type="number" step="0.01" id="precio_terreno" name="precio_terreno"
-                value="{{ old('precio_terreno', $avaluo->precio_terreno) }}" oninput="calcularTerreno()">
+<div>
+    <label>Precio por m²</label>
+    <input
+        type="number"
+        step="0.01"
+        id="precio_terreno"
+        name="precio_terreno"
+        value="{{ old('precio_terreno', $avaluo->precio_terreno) }}"
+        oninput="calcularTerreno()">
+</div>
 
-            <input type="number" step="0.01" id="subtotal_terreno" name="subtotal_terreno"
-                value="{{ old('subtotal_terreno', $avaluo->subtotal_terreno) }}" readonly>
+<div>
+    <label>Subtotal Terreno</label>
+    <input
+        type="number"
+        step="0.01"
+        id="subtotal_terreno"
+        name="subtotal_terreno"
+        value="{{ old('subtotal_terreno', $avaluo->subtotal_terreno) }}"
+        readonly>
+</div>
         </div>
 
         <small id="conversionInfo" style="color:#2563eb;"></small>
     </div>
 
     <!-- 🏗️ CONSTRUCCIÓN -->
-    <div class="card-seccion">
-        <h4>🏗️ Construcción</h4>
+<div class="card-seccion">
 
-        <div class="grid-3">
-            <input type="number" step="0.01" name="area_construccion"
-                value="{{ old('area_construccion', $avaluo->area_construccion) }}" oninput="calcularConstruccion()">
+    <h4>🏗️ Edificios</h4>
 
-            <input type="number" step="0.01" name="precio_construccion"
-                value="{{ old('precio_construccion', $avaluo->precio_construccion) }}" oninput="calcularConstruccion()">
+    <div class="grid-3">
 
-            <input type="number" step="0.01" name="subtotal_construccion"
-                value="{{ old('subtotal_construccion', $avaluo->subtotal_construccion) }}" readonly>
+        <div>
+            <label>Área Construcción</label>
+
+            <input
+                type="number"
+                step="0.01"
+                name="area_construccion"
+                value="{{ old('area_construccion', $avaluo->area_construccion) }}"
+                oninput="calcularConstruccion()">
         </div>
+
+        <div>
+            <label>Precio por m²</label>
+
+            <input
+                type="number"
+                step="0.01"
+                name="precio_construccion"
+                value="{{ old('precio_construccion', $avaluo->precio_construccion) }}"
+                oninput="calcularConstruccion()">
+        </div>
+
+        <div>
+            <label>Subtotal Construcción</label>
+
+            <input
+                type="number"
+                step="0.01"
+                name="subtotal_construccion"
+                value="{{ old('subtotal_construccion', $avaluo->subtotal_construccion) }}"
+                readonly>
+        </div>
+
     </div>
 
-    <!-- 📉 DEPRECIACIÓN -->
-    <div class="card-seccion">
-        <h4>📉 Depreciación</h4>
+</div>
 
-        <div class="grid-2">
-            <input type="number" name="vida_util"
-                value="{{ old('vida_util', $avaluo->vida_util) }}" oninput="calcularDepreciacion()">
-
-            <input type="number" name="depreciacion"
-                value="{{ old('depreciacion', $avaluo->depreciacion) }}" readonly>
-        </div>
-    </div>
-
-    <!-- 📅 INFO -->
-    <div class="card-seccion">
-        <h4>📅 Información</h4>
-
-        <div class="grid-2">
-            <input type="date" name="fecha_avaluo"
-                value="{{ old('fecha_avaluo', $avaluo->fecha_avaluo) }}">
-
-            <input type="text" name="observaciones"
-                value="{{ old('observaciones', $avaluo->observaciones) }}">
-        </div>
-    </div>
 
     <!-- 💰 TOTAL -->
-    <div class="total-box">
-        💰 Total del inmueble  
-        <div style="font-size:28px; margin-top:5px;">
-            L <span id="totalGeneral">{{ number_format($avaluo->valor_total, 2) }}</span>
+  
+
+      <div class="total-box">
+            💰 Total del inmueble: $
+           <span id="totalGeneral">{{ number_format($avaluo->valor_total, 2) }}</span>
         </div>
-    </div>
 
     <input type="hidden" name="valor_total" id="valor_total"
         value="{{ old('valor_total', $avaluo->valor_total) }}">
+
+
+    <!-- 📉 DEPRECIACIÓN -->
+<div class="card-seccion">
+
+    <h4>📉 Depreciación</h4>
+
+    <div class="grid-2">
+
+        <div>
+            <label>Vida Útil (años)</label>
+
+            <input
+                type="number"
+                name="vida_util"
+                value="{{ old('vida_util', $avaluo->vida_util) }}"
+                oninput="calcularDepreciacion()">
+        </div>
+
+        <div>
+            <label>Depreciación Anual</label>
+
+            <input
+                type="number"
+                name="depreciacion"
+                value="{{ old('depreciacion', $avaluo->depreciacion) }}"
+                readonly>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card-seccion">
+
+    <h4>📅 Información</h4>
+
+    <div>
+        <label>Fecha del Avalúo</label>
+
+        <input
+            type="date"
+            name="fecha_avaluo"
+            value="{{ old('fecha_avaluo', $avaluo->fecha_avaluo) }}">
+    </div>
+
+    <div style="margin-top:15px;">
+        <label>Observaciones</label>
+
+        <textarea
+            name="observaciones"
+            rows="5"
+            class="form-control">{{ old('observaciones', $avaluo->observaciones) }}</textarea>
+    </div>
+
+</div>
 
     <!-- BOTONES -->
     <div style="margin-top:20px;">
@@ -165,8 +253,138 @@ input:focus, select:focus {
     </div>
 
 </form>
+<hr style="margin:30px 0;">
+
+<div class="card-seccion">
+
+    <h4>📄 Documentos del Avalúo</h4>
+
+    <form
+        method="POST"
+        action="/documentos"
+        enctype="multipart/form-data">
+
+        @csrf
+
+        <input
+            type="hidden"
+            name="documentable_type"
+            value="App\Models\Avaluo">
+
+        <input
+            type="hidden"
+            name="documentable_id"
+            value="{{ $avaluo->id }}">
+
+        <div class="grid-2">
+
+            <div>
+                <label>Nombre del Documento</label>
+
+                <input
+                    type="text"
+                    name="nombre"
+                    class="form-control"
+                    placeholder="Ej: Escritura, Croquis, Fotos, etc.">
+            </div>
+
+            <div>
+                <label>Archivo</label>
+
+                <input
+                    type="file"
+                    name="archivo"
+                    class="form-control">
+            </div>
+
+        </div>
+
+        <div style="margin-top:15px;">
+
+            <button
+                type="submit"
+                class="btn-primary-custom">
+
+                📤 Subir Documento
+
+            </button>
+
+        </div>
+
+    </form>
 
 </div>
+
+<div class="card-seccion">
+
+    <h4>📁 Archivos Cargados</h4>
+
+    @forelse($avaluo->documentos as $documento)
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:10px;
+            border:1px solid #e5e7eb;
+            border-radius:8px;
+            margin-bottom:10px;
+        ">
+
+            <div>
+
+                📄 {{ $documento->nombre }}
+
+            </div>
+
+            <div style="
+                display:flex;
+                gap:10px;
+            ">
+
+                <a
+                    href="{{ asset('storage/'.$documento->archivo) }}"
+                    target="_blank"
+                    class="btn-secondary">
+
+                    Ver
+
+                </a>
+
+                <form
+                    method="POST"
+                    action="/documentos/{{ $documento->id }}">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button
+                        type="submit"
+                        class="btn-danger">
+
+                        🗑️
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    @empty
+
+        <p style="color:#6b7280;">
+            No hay documentos cargados.
+        </p>
+
+    @endforelse
+
+</div>
+
+</div>
+
+
 
 @endsection
 

@@ -68,13 +68,36 @@ input {
         </select>
     </div>
 
-    <div class="grid-3">
-     <input type="number" id="area_terreno" name="area_terreno" oninput="calcularTerreno()">
+<div class="grid-3">
 
-<input type="number" id="precio_terreno" name="precio_terreno" oninput="calcularTerreno()">
-
-<input type="number" id="subtotal_terreno" name="subtotal_terreno" readonly>
+    <div>
+        <label>Área del Terreno</label>
+        <input
+            type="number"
+            id="area_terreno"
+            name="area_terreno"
+            oninput="calcularTerreno()">
     </div>
+
+    <div>
+        <label>Precio por m²</label>
+        <input
+            type="number"
+            id="precio_terreno"
+            name="precio_terreno"
+            oninput="calcularTerreno()">
+    </div>
+
+    <div>
+        <label>Subtotal Terreno</label>
+        <input
+            type="number"
+            id="subtotal_terreno"
+            name="subtotal_terreno"
+            readonly>
+    </div>
+
+</div>
 
 <small id="conversionInfo" style="
     color:#2563eb;
@@ -89,11 +112,36 @@ input {
         <div class="card-seccion">
             <h4>🏗️ Construcción</h4>
 
-            <div class="grid-3">
-                <input type="number" step="0.01" name="area_construccion" placeholder="Área" oninput="calcularConstruccion()">
-                <input type="number" step="0.01" name="precio_construccion" placeholder="Precio x M²" oninput="calcularConstruccion()">
-                <input type="number" step="0.01" name="subtotal_construccion" placeholder="Subtotal" readonly>
-            </div>
+           <div class="grid-3">
+
+    <div>
+        <label>Área Construcción</label>
+        <input
+            type="number"
+            step="0.01"
+            name="area_construccion"
+            oninput="calcularConstruccion()">
+    </div>
+
+    <div>
+        <label>Precio por m²</label>
+        <input
+            type="number"
+            step="0.01"
+            name="precio_construccion"
+            oninput="calcularConstruccion()">
+    </div>
+
+    <div>
+        <label>Subtotal Construcción</label>
+        <input
+            type="number"
+            step="0.01"
+            name="subtotal_construccion"
+            readonly>
+    </div>
+
+</div>
         </div>
 
         <!-- 🔹 TOTAL -->
@@ -110,10 +158,25 @@ input {
         <div class="card-seccion">
             <h4>📉 Depreciación</h4>
 
-            <div class="grid-2">
-                <input type="number" name="vida_util" placeholder="Vida útil (años)" oninput="calcularDepreciacion()">
-                <input type="number" name="depreciacion" placeholder="Depreciación anual" readonly>
-            </div>
+          <div class="grid-2">
+
+    <div>
+        <label>Vida Útil (años)</label>
+        <input
+            type="number"
+            name="vida_util"
+            oninput="calcularDepreciacion()">
+    </div>
+
+    <div>
+        <label>Depreciación Anual</label>
+        <input
+            type="number"
+            name="depreciacion"
+            readonly>
+    </div>
+
+</div>
 
         
         </div>
@@ -123,11 +186,29 @@ input {
         <div class="card-seccion">
     <h4>📅 Información del Avalúo</h4>
 
-    <div class="grid-2">
-        <input type="date" name="fecha_avaluo" value="{{ old('fecha_avaluo') }}">
-        <input type="text" name="observaciones" placeholder="Observaciones"
-               value="{{ old('observaciones') }}">
+ <div class="grid-2">
+
+    <div>
+        <label>Fecha del Avalúo</label>
+
+        <input
+            type="date"
+            name="fecha_avaluo"
+            value="{{ old('fecha_avaluo') }}">
     </div>
+
+</div>
+
+<div style="margin-top:15px;">
+
+    <label>Observaciones</label>
+
+    <textarea
+        name="observaciones"
+        rows="5"
+        class="form-control">{{ old('observaciones') }}</textarea>
+
+</div>
 </div>
 
 

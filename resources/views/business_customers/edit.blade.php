@@ -20,7 +20,7 @@
 
     </a>
 
-</div>
+</div>  
     <form method="POST"
           action="/business-customers/{{ $cliente->id }}">
 
@@ -157,7 +157,64 @@
 
     </form>
 
+
+
+<h3>📄 Documentos</h3>
+
+<form
+    method="POST"
+    action="/documentos"
+    enctype="multipart/form-data">
+
+    @csrf
+
+    <input
+        type="hidden"
+        name="documentable_type"
+        value="App\Models\BusinessCustomer">
+
+    <input
+        type="hidden"
+        name="documentable_id"
+        value="{{ $cliente->id }}">
+
+    <input
+        type="text"
+        name="nombre"
+        class="form-control"
+        placeholder="Nombre documento">
+
+    <input
+        type="file"
+        name="archivo"
+        class="form-control">
+
+    <button
+        class="btn-primary-custom">
+
+        Subir PDF
+
+    </button>
+
+</form>
+
+@foreach($cliente->documentos as $documento)
+
+<div class="card-item">
+
+    📄 {{ $documento->nombre }}
+
+    <a
+        href="{{ asset('storage/'.$documento->archivo) }}"
+        target="_blank">
+
+        Ver
+
+    </a>
+
 </div>
+
+@endforeach
 
 <script>
 
@@ -200,5 +257,5 @@ function agregarNota()
 }
 
 </script>
-
+</div>
 @endsection

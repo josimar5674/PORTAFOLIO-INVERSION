@@ -23,4 +23,12 @@ class BusinessCustomer extends Model
             'business_customer_id'
         );
     }
+
+    public function documentos()
+{
+    return $this->morphMany(
+        Document::class,
+        'documentable'
+    );
+}
 }

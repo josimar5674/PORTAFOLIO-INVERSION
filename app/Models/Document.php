@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Document extends Model
+{
+    protected $fillable = [
+
+        'nombre',
+        'archivo',
+        'tipo',
+        'descripcion'
+
+    ];
+
+    public function documentable()
+    {
+        return $this->morphTo();
+    }
+}

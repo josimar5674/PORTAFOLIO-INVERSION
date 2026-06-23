@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Inversion;
+
 
 class Avaluo extends Model
 {
@@ -34,4 +36,13 @@ protected $fillable = [
     {
         return $this->belongsTo(Inversion::class);
     }
+
+public function documentos()
+{
+    return $this->morphMany(
+        Document::class,
+        'documentable'
+    );
+}
+
 }

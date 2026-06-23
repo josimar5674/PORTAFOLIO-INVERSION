@@ -143,7 +143,7 @@
 
                 <th>Terreno</th>
 
-                <th>Construcción</th>
+                <th>Edificios</th>
 
                 <th>Depreciación</th>
 

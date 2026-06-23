@@ -42,6 +42,12 @@ class Cliente extends Model
             ClienteNacionalidad::class
         );
     }
-
+public function documentos()
+{
+    return $this->morphMany(
+        Document::class,
+        'documentable'
+    );
+}
     
 }

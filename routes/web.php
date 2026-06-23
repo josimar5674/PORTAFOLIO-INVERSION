@@ -17,6 +17,7 @@ use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EstadoResultadoController;
 use App\Http\Controllers\BusinessCustomerController;
+use App\Http\Controllers\DocumentController;
 
 
 /*
@@ -360,7 +361,15 @@ Route::post(
 
 
 
+Route::post(
+    '/documentos',
+    [DocumentController::class,'store']
+);
 
+Route::delete(
+    '/documentos/{id}',
+    [DocumentController::class,'destroy']
+);
 });
 
 

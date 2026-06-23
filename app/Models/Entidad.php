@@ -49,4 +49,11 @@ public function inversiones()
         'entidad_inversion'
     );
 }
+public function documentos()
+{
+    return $this->morphMany(
+        Document::class,
+        'documentable'
+    );
+}
 }
