@@ -29,7 +29,7 @@
         <a href="/business-customers/create"
            class="btn-primary-custom">
 
-            + Nueva Persona
+            + Nuevo cliente
 
         </a>
 
