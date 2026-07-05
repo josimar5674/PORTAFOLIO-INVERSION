@@ -21,135 +21,119 @@
     </a>
 
 </div>  
-    <form method="POST"
-          action="/business-customers/{{ $cliente->id }}">
+<form method="POST" action="/business-customers/{{ $cliente->id }}">
 
-   @csrf
-@method('PUT')
+    @csrf
+    @method('PUT')
 
-        <div class="form-group">
+    <!-- Todos los campos -->
 
-            <label>Nombre</label>
+    <div class="form-group">
+        <label>Nombre</label>
+        <input
+            type="text"
+            name="nombre"
+            class="form-control"
+            value="{{ old('nombre', $cliente->nombre) }}">
+    </div>
+
+    <div class="form-group">
+        <label>Identificador Tributario</label>
+        <input
+            type="text"
+            name="identificador_tributario"
+            class="form-control"
+            value="{{ old('identificador_tributario', $cliente->identificador_tributario) }}">
+    </div>
+
+    <div class="form-group">
+        <label>Correo</label>
+        <input
+            type="email"
+            name="email"
+            class="form-control"
+            value="{{ old('email', $cliente->email) }}">
+    </div>
+
+    <div class="form-group">
+        <label>Teléfono</label>
+        <input
+            type="text"
+            name="telefono"
+            class="form-control"
+            value="{{ old('telefono', $cliente->telefono) }}">
+    </div>
+
+    <div style="margin-top:20px;">
+
+        <button
+            type="submit"
+            class="btn-primary-custom">
+
+            💾 Actualizar
+
+        </button>
+
+    </div>
+
+</form>
+
+
+<hr>
+
+@include('components.notes',[
+    'modelo' => $cliente,
+    'modelClass' => 'App\Models\BusinessCustomer'
+])
+
+<hr>
+<hr>
+
+<div class="card-seccion">
+
+    <h3>📄 Documentos</h3>
+
+    <form
+        method="POST"
+        action="/documentos"
+        enctype="multipart/form-data">
+
+        @csrf
+
+        <input
+            type="hidden"
+            name="documentable_type"
+            value="App\Models\BusinessCustomer">
+
+        <input
+            type="hidden"
+            name="documentable_id"
+            value="{{ $cliente->id }}">
+
+        <div style="
+            display:flex;
+            gap:10px;
+            margin-bottom:15px;
+        ">
 
             <input
                 type="text"
                 name="nombre"
                 class="form-control"
-                value="{{ old('nombre', $cliente->nombre) }}"
-            >
-        </div>
-
-        <div class="form-group">
-
-            <label>Identificador Tributario</label>
+                placeholder="Nombre del documento..."
+                required>
 
             <input
-                type="text"
-                name="identificador_tributario"
+                type="file"
+                name="archivo"
                 class="form-control"
-                value="{{ old('identificador_tributario', $cliente->identificador_tributario) }}"
->
-        </div>
-
-        <div class="form-group">
-
-            <label>Correo</label>
-
-            <input
-                type="email"
-                name="email"
-                class="form-control"
-                value="{{ old('email', $cliente->email) }}"
->
-        </div>
-
-        <div class="form-group">
-
-            <label>Teléfono</label>
-
-            <input
-                type="text"
-                name="telefono"
-                class="form-control"
-                value="{{ old('telefono', $cliente->telefono) }}"
-            >
-        </div>
-
-        <hr>
-
-        <h4>
-            📝 Notas
-        </h4>
-
-        <div style="display:flex; gap:10px;">
-
-            <input
-                id="notaInput"
-                class="form-control">
+                required>
 
             <button
-                type="button"
-                class="btn-primary-custom"
-                onclick="agregarNota()">
-
-                ➕
-
-            </button>
-
-        </div>
-
-<ul id="listaNotas"
-    style="margin-top:15px;">
-
-    @foreach($cliente->notas as $nota)
-
-        <li style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:6px 10px;
-            background:#f9fafb;
-            border-radius:6px;
-            margin-bottom:6px;
-        ">
-
-            <span>
-
-                {{ $nota->nota }}
-
-            </span>
-
-            <button
-                type="button"
-                onclick="this.parentElement.remove()"
-                style="
-                    background:none;
-                    border:none;
-                    color:#ef4444;
-                    cursor:pointer;
-                ">
-
-                🗑️
-
-            </button>
-
-            <input
-                type="hidden"
-                name="notas[]"
-                value="{{ $nota->nota }}">
-
-        </li>
-
-    @endforeach
-
-</ul>
-
-        <div style="margin-top:20px;">
-
-            <button
+                type="submit"
                 class="btn-primary-custom">
 
-                💾 Actualizar
+                📤
 
             </button>
 
@@ -157,105 +141,92 @@
 
     </form>
 
+    @forelse($cliente->documentos()->latest()->get() as $documento)
 
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:15px;
+            padding:10px;
+            margin-bottom:10px;
+            border:1px solid #e5e7eb;
+            border-radius:8px;
+            background:#f9fafb;
+        ">
 
-<h3>📄 Documentos</h3>
+            <div style="flex:1;">
 
-<form
-    method="POST"
-    action="/documentos"
-    enctype="multipart/form-data">
+                <div>
 
-    @csrf
+                    📄 <strong>{{ $documento->nombre }}</strong>
 
-    <input
-        type="hidden"
-        name="documentable_type"
-        value="App\Models\BusinessCustomer">
+                </div>
 
-    <input
-        type="hidden"
-        name="documentable_id"
-        value="{{ $cliente->id }}">
+                <small style="color:#6b7280;">
 
-    <input
-        type="text"
-        name="nombre"
-        class="form-control"
-        placeholder="Nombre documento">
+                    {{ $documento->created_at->format('d/m/Y H:i') }}
 
-    <input
-        type="file"
-        name="archivo"
-        class="form-control">
+                </small>
 
-    <button
-        class="btn-primary-custom">
+            </div>
 
-        Subir PDF
+            <div style="
+                display:flex;
+                gap:10px;
+                align-items:center;
+            ">
 
-    </button>
+                <a
+                    href="{{ asset('storage/'.$documento->archivo) }}"
+                    target="_blank"
+                    class="btn-secondary">
 
-</form>
+                    Ver
 
-@foreach($cliente->documentos as $documento)
+                </a>
 
-<div class="card-item">
+                <form
+                    method="POST"
+                    action="/documentos/{{ $documento->id }}">
 
-    📄 {{ $documento->nombre }}
+                    @csrf
+                    @method('DELETE')
 
-    <a
-        href="{{ asset('storage/'.$documento->archivo) }}"
-        target="_blank">
+                    <button
+                        type="submit"
+                        style="
+                            border:none;
+                            background:none;
+                            color:#ef4444;
+                            cursor:pointer;
+                            font-size:16px;
+                        ">
 
-        Ver
+                        🗑️
 
-    </a>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    @empty
+
+        <div style="
+            color:#6b7280;
+            padding:10px;
+        ">
+
+            No hay documentos cargados.
+
+        </div>
+
+    @endforelse
 
 </div>
 
-@endforeach
-
-<script>
-
-function agregarNota()
-{
-    const input =
-        document.getElementById('notaInput');
-
-    const valor =
-        input.value.trim();
-
-    if(!valor) return;
-
-    const lista =
-        document.getElementById('listaNotas');
-
-    const li =
-        document.createElement('li');
-
-    li.innerHTML = `
-        ${valor}
-
-        <input
-            type="hidden"
-            name="notas[]"
-            value="${valor}">
-
-        <button
-            type="button"
-            onclick="this.parentElement.remove()">
-
-            🗑️
-
-        </button>
-    `;
-
-    lista.appendChild(li);
-
-    input.value='';
-}
-
-</script>
 </div>
 @endsection

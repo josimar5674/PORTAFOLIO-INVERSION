@@ -109,11 +109,15 @@
 
     </div>
 
+    
     <!-- DERECHA -->
-    <div class="topbar-right">
+ <div class="topbar-right">
 
-        @auth
+    <button id="themeToggle" class="theme-btn" title="Cambiar tema">
+        🌙
+    </button>
 
+    @auth
             <div class="user-box">
 
                 <div class="user-info">
@@ -202,5 +206,37 @@ document
         }
 
     });
+
+    // ===============================
+// TEMA CLARO / OSCURO
+// ===============================
+
+const themeBtn = document.getElementById('themeToggle');
+
+const savedTheme = localStorage.getItem('theme') || 'light';
+
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+themeBtn.innerHTML = savedTheme === 'dark'
+    ? '☀️'
+    : '🌙';
+
+themeBtn.addEventListener('click', () => {
+
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+
+    const newTheme = currentTheme === 'dark'
+        ? 'light'
+        : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+
+    localStorage.setItem('theme', newTheme);
+
+    themeBtn.innerHTML = newTheme === 'dark'
+        ? '☀️'
+        : '🌙';
+
+});
 
 </script>

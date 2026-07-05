@@ -10,19 +10,20 @@
     align-items:center;
     margin-bottom:25px;
     padding:20px;
-    background:#fff;
+    background:var(--surface);
     border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
 }
 
 .investment-header h1{
     margin:0;
     font-size:28px;
-    color:#111827;
+    color:var(--text);
 }
 
 .investment-header small{
-    color:#6b7280;
+    color:var(--text-secondary);
     font-size:14px;
 }
 
@@ -34,20 +35,21 @@
 }
 
 .summary-card{
-    background:white;
+    background:var(--surface);
     border-radius:12px;
     padding:20px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
     display:flex;
     flex-direction:column;
     gap:8px;
     font-size:14px;
-    color:#6b7280;
+    color:var(--text-secondary);
 }
 
 .summary-card strong{
     font-size:22px;
-    color:#111827;
+    color:var(--text);
 }
 
 .module-grid{
@@ -58,12 +60,13 @@
 
 .module-card{
     text-decoration:none;
-    background:white;
+    background:var(--surface);
     border-radius:14px;
     padding:25px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
     transition:.25s;
-    color:#111827;
+    color:var(--text);
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -74,7 +77,7 @@
 
 .module-card:hover{
     transform:translateY(-4px);
-    box-shadow:0 10px 25px rgba(0,0,0,.12);
+    box-shadow:0 10px 25px rgba(0,0,0,.20);
 }
 
 .module-card .icon{
@@ -84,19 +87,21 @@
 .module-card .title{
     font-size:16px;
     font-weight:600;
+    color:var(--text);
 }
 
 .module-card .action{
     font-size:13px;
-    color:#2563eb;
+    color:var(--primary);
 }
 
 .info-section{
     margin-top:40px;
-    background:white;
+    background:var(--surface);
     border-radius:12px;
     padding:25px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
 }
 
 .info-grid{
@@ -107,18 +112,18 @@
 
 .info-item{
     padding:12px;
-    border-bottom:1px solid #e5e7eb;
+    border-bottom:1px solid var(--border);
 }
 
 .info-label{
     font-size:13px;
-    color:#6b7280;
+    color:var(--text-secondary);
     margin-bottom:5px;
 }
 
 .info-value{
     font-weight:600;
-    color:#111827;
+    color:var(--text);
 }
 
 .metric-good{
@@ -130,7 +135,7 @@
 }
 
 .metric-danger{
-    color:#dc2626;
+    color:var(--danger);
 }
 
 @media(max-width:768px){
@@ -292,7 +297,7 @@
 
     <div class="summary-card">
 
-        📑 Activos Registrales
+        📑 Activos Inmoviliarios
 
         <strong>
             {{ $inversion->activosRegistrales->count() }}
@@ -338,10 +343,12 @@
 
 </div>
 
-<hr style="margin:30px 0;">
+<hr style="margin:30px 0;border-color:var(--border);">
 <h2 style="
-    margin-bottom:20px;
-    color:#111827;
+      margin-bottom:20px;
+
+    color:var(--text);
+
 ">
     🚀 Módulos Disponibles
 </h2>
@@ -373,11 +380,11 @@
    class="module-card">
 
     <div class="icon">
-        🏢
+        🚛
     </div>
 
     <div class="title">
-        Activos
+        Activos Moviliarios
     </div>
 
 </a>
@@ -442,11 +449,11 @@
    class="module-card">
 
     <div class="icon">
-        📑
+        🏢
     </div>
 
     <div class="title">
-        Activos Registrales
+        Activos Inmoviliarios
     </div>
 
 </a>

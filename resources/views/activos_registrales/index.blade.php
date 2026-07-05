@@ -21,7 +21,7 @@ $totalInscripciones =
     <div>
 
         <h1>
-            📑 Activos Registrales
+            📑 Activos Inmoviliarios
         </h1>
 
         <small>

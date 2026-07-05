@@ -29,4 +29,6 @@ class ActivoRegistral extends Model
     {
         return $this->hasMany(InscripcionActivo::class);
     }
+
+    
 }

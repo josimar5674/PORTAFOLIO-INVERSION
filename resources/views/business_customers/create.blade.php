@@ -78,29 +78,6 @@
 
         <hr>
 
-        <h4>
-            📝 Notas
-        </h4>
-
-        <div style="display:flex; gap:10px;">
-
-            <input
-                id="notaInput"
-                class="form-control">
-
-            <button
-                type="button"
-                class="btn-primary-custom"
-                onclick="agregarNota()">
-
-                ➕
-
-            </button>
-
-        </div>
-
-        <ul id="listaNotas"
-            style="margin-top:15px;"></ul>
 
         <div style="margin-top:20px;">
 
@@ -117,46 +94,6 @@
 
 </div>
 
-<script>
 
-function agregarNota()
-{
-    const input =
-        document.getElementById('notaInput');
-
-    const valor =
-        input.value.trim();
-
-    if(!valor) return;
-
-    const lista =
-        document.getElementById('listaNotas');
-
-    const li =
-        document.createElement('li');
-
-    li.innerHTML = `
-        ${valor}
-
-        <input
-            type="hidden"
-            name="notas[]"
-            value="${valor}">
-
-        <button
-            type="button"
-            onclick="this.parentElement.remove()">
-
-            🗑️
-
-        </button>
-    `;
-
-    lista.appendChild(li);
-
-    input.value='';
-}
-
-</script>
 
 @endsection

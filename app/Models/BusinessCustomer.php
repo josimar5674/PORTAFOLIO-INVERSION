@@ -16,19 +16,21 @@ class BusinessCustomer extends Model
 
     ];
 
-    public function notas()
-    {
-        return $this->hasMany(
-            BusinessCustomerNote::class,
-            'business_customer_id'
-        );
-    }
+
 
     public function documentos()
 {
     return $this->morphMany(
         Document::class,
         'documentable'
+    );
+}
+
+public function notas()
+{
+    return $this->morphMany(
+        Note::class,
+        'notable'
     );
 }
 }

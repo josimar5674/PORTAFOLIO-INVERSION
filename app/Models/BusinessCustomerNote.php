@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BusinessCustomer;
+use App\Models\Note;
 
 class BusinessCustomerNote extends Model
 {
@@ -21,4 +23,12 @@ class BusinessCustomerNote extends Model
             'business_customer_id'
         );
     }
+
+    public function notas()
+{
+    return $this->morphMany(
+        Note::class,
+        'notable'
+    );
+}
 }

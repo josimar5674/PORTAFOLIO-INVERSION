@@ -18,6 +18,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EstadoResultadoController;
 use App\Http\Controllers\BusinessCustomerController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\NoteController;
+
 
 
 /*
@@ -401,4 +403,15 @@ Route::put(
 Route::delete(
     '/business-customers/{id}',
     [BusinessCustomerController::class,'destroy']
+);
+
+
+Route::post(
+    '/notes',
+    [NoteController::class, 'store']
+);
+
+Route::delete(
+    '/notes/{id}',
+    [NoteController::class, 'destroy']
 );

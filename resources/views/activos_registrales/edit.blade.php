@@ -12,7 +12,7 @@
     </div>
 
     <div class="form-title">
-        ✏️ Editar Activo Registral
+        ✏️ Editar Activo inmoviliario
     </div>
 
     <form method="POST"

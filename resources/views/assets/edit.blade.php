@@ -2,6 +2,75 @@
 
 @section('content')
 
+
+<style>
+
+.card-seccion{
+    background:var(--surface);
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+.card-seccion h4{
+    margin-bottom:12px;
+    font-weight:600;
+    color:var(--text);
+}
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+    padding:10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--surface);
+    color:var(--text);
+    box-sizing:border-box;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:var(--primary);
+    outline:none;
+    box-shadow:0 0 0 2px rgba(234,207,51,.20);
+
+}
+
+label{
+
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    color:var(--text);
+
+}
+
+Select{
+
+    width:220px;
+    max-width:100%;
+    height: 35px;
+    border-radius: 10px;
+
+}
+
+</style>
+
+
 <div class="form-card">
 
     <!-- 🔙 VOLVER -->

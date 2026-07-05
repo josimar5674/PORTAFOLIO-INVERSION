@@ -12,7 +12,7 @@
     </div>
 
     <div class="form-title">
-        🏢 Nuevo Activo Registral
+        🏢 Nuevo Activo inmoviliarios
     </div>
 
     <form method="POST"

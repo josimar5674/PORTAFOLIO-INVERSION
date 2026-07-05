@@ -6,54 +6,86 @@
 <style>
 
 .card-seccion {
-    background: #ffffff;
+    background: var(--surface);
     padding: 18px;
     border-radius: 12px;
     margin-bottom: 18px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    border: 1px solid #f1f5f9;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
 }
 
 .card-seccion h4 {
     margin-bottom: 12px;
     font-weight: 600;
-    color: #111827;
+    color: var(--text);
 }
 
 .grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:12px;
 }
 
 .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
 }
 
-input, select {
-    padding: 10px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    transition: 0.2s;
-    width: 100%;
+input,
+select,
+textarea{
+
+    padding:10px;
+
+    border:1px solid var(--border);
+
+    border-radius:8px;
+
+    transition:.2s;
+
+    width:100%;
+
+    background:var(--surface);
+
+    color:var(--text);
+
 }
 
-input:focus, select:focus {
-    border-color: #2563eb;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:var(--primary);
+
+    outline:none;
+
+    box-shadow:0 0 0 2px rgba(234,207,51,.20);
+
 }
 
-.total-box {
-    background: linear-gradient(135deg, #111827, #1f2937);
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-    font-size: 20px;
-    text-align: right;
-    font-weight: 600;
+label{
+
+    color:var(--text);
+
+}
+
+.total-box{
+
+    background:linear-gradient(135deg,#111827,#1f2937);
+
+    color:white;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    font-size:20px;
+
+    text-align:right;
+
+    font-weight:600;
+
 }
 
 </style>
@@ -63,20 +95,23 @@ input:focus, select:focus {
     padding:25px;
     max-width:1100px;
     margin:auto;
-    background:#f9fafb;
+    background:var(--surface-2);
     border-radius:12px;
 ">
 
-
 <div class="form-title" style="margin-bottom:20px;">
-    ✏️ Editar Avalúo - {{ $avaluo->fecha_avaluo }}
+     Avalúo - {{ $avaluo->fecha_avaluo }} - {{ $avaluo->inversion->nombre }}
 </div>
 
-   <a href="/inversiones/{{ $inversion_id ?? $avaluo->inversion_id }}/avaluos" class="btn-secondary">
-        ← Volver a Avalúos
-    </a>
+<a href="/inversiones/{{ $inversion_id ?? $avaluo->inversion_id }}/avaluos"
 
+   class="btn-secondary"
 
+   style="display:inline-block; margin-bottom:20px;">
+
+    ← Volver
+
+</a>
 <form method="POST" action="/inversiones/{{ $avaluo->inversion_id }}/avaluos/{{ $avaluo->id }}">
     @csrf
     @method('PUT')
@@ -131,8 +166,13 @@ input:focus, select:focus {
 </div>
         </div>
 
-        <small id="conversionInfo" style="color:#2563eb;"></small>
-    </div>
+<small id="conversionInfo"
+       style="
+           display:block;
+           color:var(--primary);
+           margin-top:12px;
+       ">
+</small>   </div>
 
     <!-- 🏗️ CONSTRUCCIÓN -->
 <div class="card-seccion">
@@ -374,8 +414,8 @@ input:focus, select:focus {
 
     @empty
 
-        <p style="color:#6b7280;">
-            No hay documentos cargados.
+<p style="color:var(--text-secondary);">
+                No hay documentos cargados.
         </p>
 
     @endforelse

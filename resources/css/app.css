@@ -41,7 +41,7 @@ main {
 }
 
 .header a:hover {
-    color: #eacf33;
+    color: #338fea;
 }
 
 .header button {
@@ -75,7 +75,7 @@ main {
 ========================================================= */
 
 .btn-new {
-    background: #eacf33;
+    background: #497fcb;
     color: white;
     padding: 10px 18px;
     border-radius: 10px;
@@ -85,7 +85,7 @@ main {
 }
 
 .btn-new:hover {
-    background: #eacf33;
+    background: #2d2c26;
 }
 
 .btn-secondary {
@@ -98,17 +98,26 @@ main {
 }
 
 .btn-primary-custom {
-    background: #eacf33;
+    background: #2563eb;
     color: white;
     border: none;
     padding: 12px 20px;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
+    transition: .2s;
 }
 
 .btn-primary-custom:hover {
-    background: #eacf33;
+    background: #1d4ed8;
+}
+
+.btn-new{
+    background:#2563eb;
+}
+
+.btn-new:hover{
+    background:#1d4ed8;
 }
 
 /* =========================================================
@@ -211,7 +220,7 @@ main {
 
 .form-control:focus {
     outline: none;
-    border-color: #eacf33;
+    border-color: #5470b1;
     box-shadow: 0 0 0 3px rgba(234, 207, 51,0.15);
 }
 
@@ -330,7 +339,7 @@ td {
 
     font-weight: bold;
 
-    color: #eacf33;
+    color: #33c2ea;
 
 }
 
@@ -354,7 +363,7 @@ td {
 
 .menu a:hover {
 
-    color: #eacf33;
+    color: #5280cf;
 
 }
 

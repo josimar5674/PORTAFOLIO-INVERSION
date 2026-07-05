@@ -12,16 +12,33 @@ class Asset extends Model
         return $this->belongsTo(Inversion::class, 'investment_id');
     }
 
-    protected $fillable = [
-        'investment_id',
-        'name',
-        'level_number',
-        'type',
-        'area',
-        'units',
-        'description',
-        'status'
-    ];
+protected $fillable = [
+
+    'investment_id',
+
+    'name',
+
+    'category',
+
+    'brand',
+
+    'model',
+
+    'serial_number',
+
+    'asset_code',
+
+    'purchase_date',
+
+    'purchase_value',
+
+    'useful_life',
+
+    'description',
+
+    'status',
+
+];
 
 public function inversiones()
 {
