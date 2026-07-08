@@ -82,7 +82,9 @@
 
         </div>
 
-        <hr style="margin:30px 0;">
+
+
+
 
 <h3>📑 Inscripciones</h3>
 
@@ -210,6 +212,8 @@
 
 </table>
 
+
+
 <div style="margin-top:15px;">
 
     <button type="button"
@@ -231,7 +235,22 @@
 
     </form>
 
+    <hr>
+
+    @include('components.notes',[
+        'modelo' => $activo,
+        'modelClass' => 'App\Models\ActivoRegistral'
+    ])
+
+            <hr>
+@include('components.documents',[
+    'modelo' => $activo,
+    'modelClass' => 'App\Models\ActivoRegistral'
+])
+
 </div>
+
+
 
 <script>
 

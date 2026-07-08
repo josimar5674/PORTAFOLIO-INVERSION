@@ -45,17 +45,8 @@
 
     @forelse($modelo->notas()->latest()->get() as $nota)
 
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:flex-start;
-            gap:15px;
-            padding:10px;
-            margin-bottom:10px;
-            border:1px solid #e5e7eb;
-            border-radius:8px;
-            background:#f9fafb;
-        ">
+           <div class="card-info">
+
 
             <div style="flex:1;">
 

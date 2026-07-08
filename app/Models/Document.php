@@ -19,4 +19,20 @@ class Document extends Model
     {
         return $this->morphTo();
     }
+
+    public function documentos()
+{
+    return $this->morphMany(
+        Document::class,
+        'documentable'
+    );
+}
+
+public function notas()
+{
+    return $this->morphMany(
+        Note::class,
+        'notable'
+    );
+}
 }

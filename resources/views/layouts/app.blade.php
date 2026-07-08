@@ -16,6 +16,7 @@
     ])
 
         @include('layouts.css')
+        @include('layouts.theme-components')
 
 </head>
 

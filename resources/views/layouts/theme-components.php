@@ -205,10 +205,20 @@ td{
 .grid-2 {
 
     display:grid;
+    
 
     grid-template-columns:1fr 1fr;
 
     gap:10px;
+
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+    box-sizing:border-box;
 
 }
 
@@ -224,51 +234,7 @@ td{
 
 
 
-.btn-new {
-    background: #497fcb;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-weight: 600;
-    display: inline-block;
-    transition: .2s;
-}
 
-.btn-new:hover {
-    background: #2d2c26;
-}
-
-.btn-secondary {
-    background: #e5e7eb;
-    color: #111827;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    display: inline-block;
-}
-
-.btn-primary-custom {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: .2s;
-}
-
-.btn-primary-custom:hover {
-    background: #1d4ed8;
-}
-
-.btn-new{
-    background:#2563eb;
-}
-
-.btn-new:hover{
-    background:#1d4ed8;
-}
 
 
 </style>

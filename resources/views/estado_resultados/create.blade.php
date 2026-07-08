@@ -2,10 +2,29 @@
 
 @section('content')
 
-<div class="form-card">
+<style>
+.card-info{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    padding:10px;
+    margin-bottom:10px;
+
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+
+}
+    
+</style>
+
+<div class="form-card" style="width:100%; max-width:100%;">
+
 
     <div class="form-title">
-        📊 Nuevo Estado de Resultados
+        📊 Nuevo Estado de Resultado
     </div>
 
     <form method="POST" action="/inversiones/{{ $inversion_id }}/estado-resultados">

@@ -20,8 +20,7 @@
 
         @csrf
 
-        <div class="grid-2">
-
+        <div class="grid-2 ">
             <div class="form-group">
                 <label>Ubicación del Inmueble</label>
                 <input type="text"

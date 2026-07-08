@@ -84,7 +84,7 @@
                 justify-content:space-between;
                 align-items:center;
                 padding:6px 10px;
-                background:#f9fafb;
+                border:1px solid #e5e7eb;
                 border-radius:6px;
                 margin-bottom:6px;
             ">
@@ -160,7 +160,7 @@
                 justify-content:space-between;
                 align-items:center;
                 padding:6px 10px;
-                background:#f9fafb;
+                border:1px solid #e5e7eb;
                 border-radius:6px;
                 margin-bottom:6px;
             ">
@@ -267,7 +267,7 @@
             justify-content:space-between;
             align-items:center;
             padding:6px 10px;
-            background:#f9fafb;
+            border:1px solid #e5e7eb;
             border-radius:6px;
             margin-bottom:6px;
         ">
@@ -308,137 +308,18 @@
 
     <hr style="margin:30px 0;">
 
-<h3>
-    📄 Documentos
-</h3>
 
-<form
-    method="POST"
-    action="/documentos"
-    enctype="multipart/form-data">
 
-    @csrf
+@include('components.documents',[
+    'modelo' => $cliente,
+    'modelClass' => 'App\Models\Cliente'
+])
 
-    <input
-        type="hidden"
-        name="documentable_type"
-        value="App\Models\Cliente">
+@include('components.notes',[
+    'modelo' => $cliente,
+    'modelClass' => 'App\Models\Cliente'
+])  
 
-    <input
-        type="hidden"
-        name="documentable_id"
-        value="{{ $cliente->id }}">
-
-    <div class="form-group">
-
-        <label>
-            Nombre Documento
-        </label>
-
-        <input
-            type="text"
-            name="nombre"
-            class="form-control"
-            placeholder="Ej: Pasaporte">
-
-    </div>
-
-    <div class="form-group">
-
-        <label>
-            Archivo PDF
-        </label>
-
-        <input
-            type="file"
-            name="archivo"
-            accept=".pdf"
-            class="form-control">
-
-    </div>
-
-    <button
-        class="btn-primary-custom">
-
-        📤 Subir PDF
-
-    </button>
-
-</form>
-
-<div style="margin-top:20px;">
-
-    @forelse($cliente->documentos as $documento)
-
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:10px;
-            background:#f9fafb;
-            border-radius:6px;
-            margin-bottom:8px;
-        ">
-
-            <span>
-
-                📄 {{ $documento->nombre }}
-
-            </span>
-
-            <div style="display:flex; gap:10px;">
-
-                <a
-                    href="{{ asset('storage/'.$documento->archivo) }}"
-                    target="_blank">
-
-                    Ver
-
-                </a>
-
-                <form
-                    method="POST"
-                    action="/documentos/{{ $documento->id }}"
-                    style="display:inline;">
-
-                    @csrf
-                    @method('DELETE')
-
-                    <button
-                        type="submit"
-                        style="
-                            border:none;
-                            background:none;
-                            color:#ef4444;
-                            cursor:pointer;
-                        ">
-
-                        🗑️
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    @empty
-
-        <div style="
-            padding:10px;
-            color:#666;
-        ">
-
-            No hay documentos cargados.
-
-        </div>
-
-    @endforelse
-
-</div>
-
-</div>
 
 <script>
 

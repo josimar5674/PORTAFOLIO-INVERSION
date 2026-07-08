@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/entidades.css') }}">
 
 <div style="max-width:1200px; margin:auto; padding:20px;">
 
@@ -38,7 +37,7 @@
     @method('PUT')
 
     <!-- 🔹 INFORMACIÓN LEGAL -->
-    <div class="card-seccion">
+<div class="form-card" style="width:100%; max-width:100%;">
 
         <h4>📄 Información Legal</h4>
 
@@ -102,10 +101,10 @@
 
         </div>
 
-    </div>
+    
 
     <!-- 🔹 CAPITAL -->
-    <div class="card-seccion">
+    
 
         <h4>💰 Capital</h4>
 
@@ -147,10 +146,10 @@
 
         </div>
 
-    </div>
+    
 
     <!-- 🔹 REPRESENTANTES -->
-    <div class="card-seccion">
+   
 
         <h4>👔 Representantes</h4>
 
@@ -182,7 +181,7 @@
 
         </div>
 
-    </div>
+
 
     <!-- BOTONES -->
 <!-- BOTONES -->
@@ -221,9 +220,29 @@
 
 </div>
 
+<hr>
 </form>
 
+
+
+@include('components.notes',[
+    'modelo' => $entidad,
+    'modelClass' => 'App\Models\Entidad'
+])  
+
+<hr>
+
+@include('components.documents',[
+    'modelo' => $entidad,
+    'modelClass' => 'App\Models\Entidad'
+])
+
+
+
+
 </div>
+
+
 
 
 

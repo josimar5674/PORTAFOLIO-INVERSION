@@ -19,7 +19,9 @@
     --primary:#2563eb;
 
     --danger:#dc2626;
+--card-info:#f9fafb;
 
+    --card-info-border:#e5e7eb;
     --shadow:0 4px 12px rgba(0,0,0,.05);
 
 }
@@ -43,6 +45,9 @@ html[data-theme="dark"]{
     --primary:#2563eb;
 
     --danger:#ef4444;
+     --card-info:#334155;
+
+    --card-info-border:#475569;
 
     --shadow:0 8px 20px rgba(0,0,0,.45);
 
@@ -511,5 +516,18 @@ body{
     background:#1d4ed8;
 }
 
+.card-info{
 
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    padding:10px;
+    margin-bottom:10px;
+
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+
+}
 </style>

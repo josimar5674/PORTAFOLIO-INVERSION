@@ -350,7 +350,7 @@
     color:var(--text);
 
 ">
-    🚀 Módulos Disponibles
+    📁 Módulos Disponibles
 </h2>
 
 <div class="module-grid">

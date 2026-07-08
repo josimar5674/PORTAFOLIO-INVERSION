@@ -2,12 +2,20 @@
 @section('content')
 
 
+
+
 <div class="form-card" style="width:90%; max-width:90%;">
 
 <div class="form-title">
     💰 Perfil Comercial (Inversión #{{ $inversion_id }})
 </div>
 
+    <!-- 🔙 VOLVER -->
+    <div style="margin-bottom:10px;">
+        <a href="/inversiones/{{ $inversion_id }}/comercial" class="btn-secondary">
+            ← Volver a Comercial
+        </a>
+    </div>
 <form method="POST" action="/inversiones/{{ $inversion_id }}/comercial">
     @csrf
 

@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <link rel="stylesheet" href="{{ asset('css/entidades.css') }}">
 
 <div style="max-width:1200px; margin:auto; padding:20px;">
@@ -17,11 +18,13 @@
     🏢 Nueva Entidad
 </div>
 
+
+
 <form method="POST" action="/entidades">
     @csrf
 
     <!-- 🔹 INFORMACIÓN LEGAL -->
-    <div class="card-seccion">
+<div class="form-card" style="width:100%; max-width:100%;">
 
         <h4>📄 Información Legal</h4>
 
@@ -87,10 +90,12 @@
 
         </div>
 
-    </div>
+    
 
     <!-- 🔹 CAPITAL -->
-    <div class="card-seccion">
+  
+
+
 
         <h4>💰 Capital e Inscripción</h4>
 
@@ -140,10 +145,9 @@
 
         </div>
 
-    </div>
+
 
     <!-- 🔹 REPRESENTANTES -->
-    <div class="card-seccion">
 
         <h4>👔 Representantes</h4>
 
@@ -173,44 +177,16 @@
                        class="form-control">
             </div>
 
-            <div>
-                <label>Digitalización (PDF)</label>
-
-                <input type="text"
-                       name="digitalizacion"
-                       class="form-control">
-            </div>
-
+        
         </div>
 
-    </div>
+
 
     <!-- 🔹 CONFIG -->
-    <div class="card-seccion">
 
-        <h4>⚙️ Configuración</h4>
+  
 
-        <div class="checkbox-group">
 
-            <label>
-                <input type="checkbox"
-                       name="es_entidad"
-                       value="1">
-
-                Es Entidad
-            </label>
-
-            <label>
-                <input type="checkbox"
-                       name="es_apnfd"
-                       value="1">
-
-                Es APNFD
-            </label>
-
-        </div>
-
-    </div>
 
     <!-- 🔹 BOTONES -->
     <div style="

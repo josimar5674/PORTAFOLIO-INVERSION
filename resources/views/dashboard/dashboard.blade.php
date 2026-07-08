@@ -7,97 +7,115 @@
 
 
 <style>
-.table-dashboard tbody tr:hover{
-    background:#eff6ff;
-    transition:.2s;
-}
-
-.table-dashboard td{
-    white-space:nowrap;
-}
-
-.table-dashboard tfoot tr{
-    background:#f3f4f6;
-    font-size:15px;
-}
-
-.table-dashboard tbody tr:nth-child(even){
-    background:#fafafa;
-}
 .section-title-dashboard{
+
     font-size:24px;
     font-weight:700;
     margin-bottom:20px;
+    color:var(--text);
+
 }
 
 .table-container{
+
     overflow-x:auto;
     margin-top:20px;
+
 }
 
 .table-dashboard{
+
     width:100%;
     border-collapse:collapse;
-    background:#fff;
+    background:var(--surface);
+    color:var(--text);
     border-radius:12px;
     overflow:hidden;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
+    box-shadow:var(--shadow);
 
-.table-dashboard thead tr:first-child th{
-    background:#111827;
-    color:white;
-    font-size:15px;
-    padding:14px;
-}
-
-.table-dashboard thead tr:nth-child(2) th{
-    background:#374151;
-    color:white;
-    padding:12px;
-}
-
-.table-dashboard th{
-    text-align:center;
-}
-
-.table-dashboard td{
-    padding:12px;
-    border-bottom:1px solid #e5e7eb;
-    text-align:right;
-}
-
-.table-dashboard td:first-child{
-    text-align:left;
-    font-weight:600;
-}
-
-.table-dashboard tbody tr:hover{
-    background:#f9fafb;
-}
-
-.table-dashboard tfoot td{
-    background:#f3f4f6;
-    font-weight:bold;
-}
-
-.table-dashboard thead tr:first-child th{
-    background:#0f172a;
-    color:#fff;
-    text-align:center;
-    font-size:16px;
-    border-right:2px solid #475569;
-}
-
-.table-dashboard thead tr:nth-child(2) th{
-    background:#334155;
-    color:white;
-    text-align:center;
 }
 
 .table-dashboard th,
 .table-dashboard td{
-    border:1px solid #e5e7eb;
+
+    padding:12px;
+    border:1px solid var(--border);
+
+}
+
+.table-dashboard th{
+
+    text-align:center;
+
+}
+
+.table-dashboard td{
+
+    text-align:right;
+    white-space:nowrap;
+
+}
+
+.table-dashboard td:first-child{
+
+    text-align:left;
+    font-weight:600;
+
+}
+
+.table-dashboard thead tr:first-child th{
+
+    background:var(--surface-3);
+    color:var(--text);
+    font-size:16px;
+    font-weight:700;
+    border-bottom:2px solid var(--border);
+
+}
+
+.table-dashboard thead tr:nth-child(2) th{
+
+    background:var(--surface-2);
+    color:var(--text);
+    font-weight:600;
+
+}
+
+.table-dashboard tbody tr{
+
+    transition:.20s;
+
+}
+
+.table-dashboard tbody tr:nth-child(even){
+
+    background:var(--surface-2);
+
+}
+
+.table-dashboard tbody tr:hover{
+
+    background:rgba(37,99,235,.08);
+
+}
+
+.table-dashboard tbody tr:hover td:first-child{
+
+    color:var(--primary);
+
+}
+
+.table-dashboard tfoot{
+
+    background:var(--surface-3);
+    font-weight:700;
+
+}
+
+.table-dashboard tfoot td{
+
+    color:var(--text);
+
 }
 
 </style>

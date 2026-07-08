@@ -87,26 +87,27 @@ class EntidadController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function store(Request $request)
+public function store(Request $request)
+{
+    if(auth()->user()->role != 'admin')
     {
-        if(auth()->user()->role != 'admin')
-        {
-            abort(403);
-        }
-
-        $data = $request->all();
-
-        $data['es_entidad'] = $request->has('es_entidad');
-        $data['es_apnfd'] = $request->has('es_apnfd');
-
-        Entidad::create($data);
-
-        return redirect('/entidades')
-            ->with(
-                'success',
-                'Entidad creada correctamente'
-            );
+        abort(403);
     }
+
+    $data = $request->all();
+
+    $data['es_entidad'] = $request->has('es_entidad');
+    $data['es_apnfd'] = $request->has('es_apnfd');
+
+    $entidad = Entidad::create($data);
+
+    return redirect(
+        "/entidades/{$entidad->id}/edit"
+    )->with(
+        'success',
+        'Entidad creada correctamente'
+    );
+}
 
     /*
     |--------------------------------------------------------------------------

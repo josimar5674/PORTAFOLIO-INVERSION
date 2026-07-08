@@ -56,4 +56,12 @@ public function documentos()
         'documentable'
     );
 }
+
+public function notas()
+{
+    return $this->morphMany(
+        Note::class,
+        'notable'
+    );
+}
 }

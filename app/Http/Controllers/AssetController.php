@@ -187,19 +187,17 @@ class AssetController extends Controller
         );
     }
 
-    public function destroy($id)
-    {
-        $asset = Asset::findOrFail($id);
+  public function destroy($investment_id, $id)
+{
+    $asset = Asset::findOrFail($id);
 
-        $investment_id = $asset->investment_id;
+    $asset->delete();
 
-        $asset->delete();
-
-        return redirect(
-            "/inversiones/{$investment_id}/assets"
-        )->with(
-            'success',
-            'Activo eliminado correctamente.'
-        );
-    }
+    return redirect(
+        "/inversiones/{$investment_id}/assets"
+    )->with(
+        'success',
+        'Activo eliminado correctamente.'
+    );
+}
 }

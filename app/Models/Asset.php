@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Asset extends Model
 {
-    // Relación: un activo pertenece a una inversión
-    public function inversion()
-    {
-        return $this->belongsTo(Inversion::class, 'investment_id');
-    }
+
 
 protected $fillable = [
 
@@ -43,5 +39,21 @@ protected $fillable = [
 public function inversiones()
 {
     return $this->belongsTo(\App\Models\Inversion::class, 'investment_id');
+}
+
+public function documentos()
+{
+    return $this->morphMany(
+        Document::class,
+        'documentable'
+    );
+}
+
+public function notas()
+{
+    return $this->morphMany(
+        Note::class,
+        'notable'
+    );
 }
 }
