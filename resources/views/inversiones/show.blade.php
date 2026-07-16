@@ -479,6 +479,7 @@
 </div>
 @endif
 
+</div>
 <hr>
 
 <div class="grid-2">
@@ -487,7 +488,6 @@
     'modelo' => $inversion,
     'modelClass' => 'App\Models\Inversion'
 ])  
-
 
 
 @include('components.documents',[
