@@ -7,16 +7,30 @@ use App\Models\Avaluo;
 
 class AvaluoController extends Controller
 {
-    public function index($inversion_id)
-    {
-        $avaluos = Avaluo::where('inversion_id', $inversion_id)->get();
-        return view('avaluos.index', compact('avaluos', 'inversion_id'));
-    }
+public function index($inversion_id)
+{
+    $avaluos = Avaluo::where(
+        'inversion_id',
+        $inversion_id
+    )->get();
+    $edit = request('edit');
+    return view(
+        'avaluos.index',
+        compact(
+            'avaluos',
+            'inversion_id',
+            'edit'
+        )
+    );
+}
 
-    public function create($inversion_id)
-    {
-        return view('avaluos.create', compact('inversion_id'));
-    }
+   public function create($inversion_id)
+{
+    return view(
+        'avaluos._form',
+        compact('inversion_id')
+    );
+}
 
 public function store(Request $request, $inversion_id)
 {
@@ -46,21 +60,40 @@ public function store(Request $request, $inversion_id)
         'observaciones' => $request->observaciones,
     ]);
 
-   return redirect(
-    "/inversiones/{$avaluo->inversion_id}/avaluos/{$avaluo->id}/edit"
+return redirect(
+    "/inversiones/{$avaluo->inversion_id}/avaluos?edit={$avaluo->id}"
 )->with(
     'success',
-    'Avalúo creado correctamente. Ahora puede cargar documentos.'
+    'Avalúo creado correctamente.'
 );
 }
 public function edit($inversion_id, $id)
 {
-    $avaluo = Avaluo::findOrFail($id);
-    return view('avaluos.edit', compact('avaluo'));
+
+    
+    $avaluo = Avaluo::with([
+        'documentos',
+        'notas'
+    ])->findOrFail($id);
+
+    $returnUrl = "/inversiones/{$inversion_id}/avaluos?edit={$avaluo->id}";
+
+    return view(
+        'avaluos._form',
+        compact(
+            'avaluo',
+            'inversion_id',
+                    'returnUrl'
+        )
+    );
+
+    
 }
 
 public function update(Request $request, $inversion_id, $id)
 {
+
+   
     $request->validate([
         'area_terreno' => 'nullable|numeric',
         'precio_terreno' => 'nullable|numeric',
@@ -80,6 +113,8 @@ public function update(Request $request, $inversion_id, $id)
     $avaluo = Avaluo::findOrFail($id);
 
     $avaluo->update([
+
+        
         // TERRENO
         'area_terreno' => $request->area_terreno,
         'precio_terreno' => $request->precio_terreno,
@@ -103,8 +138,12 @@ public function update(Request $request, $inversion_id, $id)
         'observaciones' => $request->observaciones,
     ]);
 
-    return redirect('/inversiones/' . $inversion_id . '/avaluos')
-        ->with('success', 'Avalúo actualizado correctamente');
+return redirect(
+    '/inversiones/'.$inversion_id.'/avaluos?edit='.$avaluo->id
+)->with(
+    'success',
+    'Avalúo actualizado correctamente'
+);
 }
 
   public function destroy($inversion_id, $id)

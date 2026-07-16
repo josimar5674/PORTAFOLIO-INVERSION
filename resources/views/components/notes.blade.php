@@ -24,12 +24,18 @@
             margin-bottom:15px;
         ">
 
+
+
             <input
                 type="text"
                 name="note"
                 class="form-control"
                 placeholder="Escriba una nota..."
                 required>
+
+      
+
+
 
             <button
                 type="submit"
@@ -65,6 +71,8 @@
                 </small>
 
             </div>
+
+
 
             <form
                 method="POST"

@@ -529,5 +529,113 @@ body{
     border:1px solid var(--border);
     border-radius:8px;
 
+
+}
+
+
+/* ===========================
+   MODAL
+=========================== */
+
+.modal-overlay-custom{
+
+    position:fixed;
+
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:rgba(0,0,0,.45);
+
+    z-index:9999;
+
+    padding:25px;
+
+}
+
+.modal-overlay-custom.show{
+
+    display:flex;
+
+}
+
+.modal-window-custom{
+
+    width:95%;
+
+    max-width:1200px;
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+}
+
+.modal-header-custom{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 25px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.modal-body-custom{
+
+    padding:25px;
+
+}
+
+.modal-close-custom{
+
+    border:none;
+
+    background:none;
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    font-size:22px;
+
+}
+
+input,
+select,
+textarea{
+
+    padding:10px;
+
+    border:1px solid var(--border);
+
+    border-radius:8px;
+
+    transition:.2s;
+
+    width:100%;
+
+    background:var(--surface);
+
+    color:var(--text);
+
 }
 </style>

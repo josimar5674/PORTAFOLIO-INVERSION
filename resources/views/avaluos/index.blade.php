@@ -41,12 +41,17 @@
 
 </a>
 
-        <a href="/inversiones/{{ $inversion_id }}/avaluos/create"
-           class="btn-primary-custom">
+<button
+    type="button"
+    class="btn-primary-custom"
+    onclick="abrirModal(
+        'modalAvaluo',
+        '/inversiones/{{ $inversion_id }}/avaluos/create'
+    )">
 
-            + Nuevo Avalúo
+    + Nuevo Avalúo
 
-        </a>
+</button>
 
     </div>
 
@@ -204,12 +209,17 @@
 
                 <td>
 
-                    <a href="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}/edit"
-                       class="btn-secondary">
+           <button
+    type="button"
+    class="btn-secondary"
+    onclick="abrirModal(
+        'modalAvaluo',
+        '/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}/edit'
+    )">
 
-                        Ver
+    Ver
 
-                    </a>
+</button>
 
                     <form action="/inversiones/{{ $inversion_id }}/avaluos/{{ $avaluo->id }}"
                           method="POST"
@@ -239,5 +249,118 @@
     </table>
 
 </div>
+<x-modal
+    id="modalAvaluo"
+    title="Avalúo">
 
+    <div id="contenedorFormularioAvaluo">
+
+        <!-- Aquí se cargará el formulario -->
+
+    </div>
+
+</x-modal>
 @endsection
+
+
+
+<script>
+    let unidadActual = 'm2';
+
+    // 🔄 CAMBIAR UNIDAD
+    function cambiarUnidad(select) {
+        unidadActual = select.value;
+
+        document.getElementById('unidad_terreno').value = unidadActual;
+
+        // limpiar campos
+        document.getElementById('area_terreno').value = '';
+        document.getElementById('precio_terreno').value = '';
+        document.getElementById('subtotal_terreno').value = '';
+
+        document.getElementById('conversionInfo').innerText = '';
+
+        calcularTotal();
+    }
+
+    // 🌱 TERRENO (CONVERSIÓN AUTOMÁTICA)
+    function calcularTerreno() {
+        let area = parseFloat(document.getElementById('area_terreno').value) || 0;
+        let precio = parseFloat(document.getElementById('precio_terreno').value) || 0;
+
+        let areaEnM2 = area;
+
+        if (unidadActual === 'v2') {
+            areaEnM2 = area * 0.6987;
+
+            document.getElementById('conversionInfo').innerText =
+                `${area} v² ≈ ${areaEnM2.toFixed(2)} m²`;
+
+        } else {
+            const areaEnV2 = area * 1.43;
+
+            document.getElementById('conversionInfo').innerText =
+                `${area} m² ≈ ${areaEnV2.toFixed(2)} v²`;
+        }
+
+        const subtotal = areaEnM2 * precio;
+
+        document.getElementById('subtotal_terreno').value = subtotal.toFixed(2);
+
+        calcularTotal();
+    }
+
+
+    // 🏗️ CONSTRUCCIÓN
+    function calcularConstruccion() {
+        const area = parseFloat(document.querySelector('[name="area_construccion"]').value) || 0;
+        const precio = parseFloat(document.querySelector('[name="precio_construccion"]').value) || 0;
+
+        const subtotal = area * precio;
+
+        document.querySelector('[name="subtotal_construccion"]').value = subtotal.toFixed(2);
+
+        calcularTotal();
+    }
+
+    // 💰 TOTAL GENERAL
+    function calcularTotal() {
+
+        const terreno = parseFloat(document.getElementById('subtotal_terreno').value) || 0;
+        const construccion = parseFloat(document.querySelector('[name="subtotal_construccion"]').value) || 0;
+
+        const total = terreno + construccion;
+
+        document.getElementById('totalGeneral').innerText = total.toFixed(2);
+        document.getElementById('valor_total').value = total.toFixed(2);
+
+        calcularDepreciacion();
+    }
+
+    // 📉 DEPRECIACIÓN
+    function calcularDepreciacion() {
+        const totalConstruccion = parseFloat(document.querySelector('[name="subtotal_construccion"]').value) || 0;
+        const vida = parseFloat(document.querySelector('[name="vida_util"]').value) || 0;
+
+        const dep = vida > 0 ? totalConstruccion / vida : 0;
+
+        document.querySelector('[name="depreciacion"]').value = dep.toFixed(2);
+    }
+
+    
+</script>
+
+@if($edit)
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    abrirModal(
+        'modalAvaluo',
+        '/inversiones/{{ $inversion_id }}/avaluos/{{ $edit }}/edit'
+    );
+
+});
+</script>
+
+@endif

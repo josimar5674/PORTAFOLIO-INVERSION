@@ -70,6 +70,11 @@
 
             </div>
 
+            <input
+    type="hidden"
+    name="return_url"
+    value="{{ url()->full() }}">
+
             <div style="display:flex; gap:10px; align-items:center;">
 
                 <a

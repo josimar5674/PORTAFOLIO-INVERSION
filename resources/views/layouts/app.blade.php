@@ -76,9 +76,12 @@
                 Inversiones
             </a>
 
+                 @if(Auth::user()->role == 'admin')
+
             <a href="/clientes">
                 Personas
             </a>
+            @endif
 
 
             <a href="/business-customers">
@@ -237,6 +240,47 @@ themeBtn.addEventListener('click', () => {
     themeBtn.innerHTML = newTheme === 'dark'
         ? '☀️'
         : '🌙';
+
+});
+function abrirModal(id, url){
+
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+
+            document.getElementById('contenedorFormularioAvaluo').innerHTML = html;
+
+            document
+                .getElementById(id)
+                .classList
+                .add('show');
+
+        });
+
+}
+
+function cerrarModal(id){
+
+    document
+        .getElementById(id)
+        .classList
+        .remove('show');
+
+}
+
+document.addEventListener('keydown',function(e){
+
+    if(e.key==="Escape"){
+
+        document
+            .querySelectorAll('.modal-overlay-custom.show')
+            .forEach(function(modal){
+
+                modal.classList.remove('show');
+
+            });
+
+    }
 
 });
 

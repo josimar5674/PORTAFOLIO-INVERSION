@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ActivoRegistralController;
@@ -36,8 +36,8 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-Route::get('/', [DashboardController::class, 'index'])
-    ->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -60,6 +60,14 @@ Route::get('/', [DashboardController::class, 'index'])
     |--------------------------------------------------------------------------
     */
 
+/*
+|--------------------------------------------------------------------------
+| CLIENTES (SOLO ADMIN)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('admin')->group(function () {
+
     Route::get('/clientes', [ClienteController::class, 'index']);
     Route::get('/clientes/create', [ClienteController::class, 'create']);
     Route::post('/clientes', [ClienteController::class, 'store']);
@@ -69,32 +77,47 @@ Route::get('/', [DashboardController::class, 'index'])
 
     Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']);
 
+});
     /*
     |--------------------------------------------------------------------------
     | INVERSIONES
     |--------------------------------------------------------------------------
     */
 
-Route::get('/inversiones',
-    [InversionController::class, 'index']);
+    Route::get(
+        '/inversiones',
+        [InversionController::class, 'index']
+    );
 
-Route::get('/inversiones/create',
-    [InversionController::class, 'create']);
+    Route::get(
+        '/inversiones/create',
+        [InversionController::class, 'create']
+    );
 
-Route::post('/inversiones',
-    [InversionController::class, 'store']);
+    Route::post(
+        '/inversiones',
+        [InversionController::class, 'store']
+    );
 
-Route::get('/inversiones/{id}/edit',
-    [InversionController::class, 'edit']);
+    Route::get(
+        '/inversiones/{id}/edit',
+        [InversionController::class, 'edit']
+    );
 
-Route::put('/inversiones/{id}',
-    [InversionController::class, 'update']);
+    Route::put(
+        '/inversiones/{id}',
+        [InversionController::class, 'update']
+    );
 
-Route::delete('/inversiones/{id}',
-    [InversionController::class, 'destroy']);
+    Route::delete(
+        '/inversiones/{id}',
+        [InversionController::class, 'destroy']
+    );
 
-Route::get('/inversiones/{id}',
-    [InversionController::class, 'show']);
+    Route::get(
+        '/inversiones/{id}',
+        [InversionController::class, 'show']
+    );
     /*
     |--------------------------------------------------------------------------
     | ACTIVOS
@@ -239,45 +262,45 @@ Route::get('/inversiones/{id}',
         [ComercialController::class, 'destroy']
     );
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | ENTIDADES (SOLO ADMIN)
 |--------------------------------------------------------------------------
 */
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | ENTIDADES
 |--------------------------------------------------------------------------
 */
 
-Route::get('/entidades', [EntidadController::class, 'index']);
+    Route::get('/entidades', [EntidadController::class, 'index']);
 
-Route::get('/entidades/create', [EntidadController::class, 'create']);
+    Route::get('/entidades/create', [EntidadController::class, 'create']);
 
-Route::post('/entidades', [EntidadController::class, 'store']);
+    Route::post('/entidades', [EntidadController::class, 'store']);
 
-Route::get('/entidades/{id}/edit', [EntidadController::class, 'edit']);
+    Route::get('/entidades/{id}/edit', [EntidadController::class, 'edit']);
 
-Route::put('/entidades/{id}', [EntidadController::class, 'update']);
+    Route::put('/entidades/{id}', [EntidadController::class, 'update']);
 
-Route::delete('/entidades/{id}', [EntidadController::class, 'destroy']);
+    Route::delete('/entidades/{id}', [EntidadController::class, 'destroy']);
 
-Route::get(
-    '/inversiones/{id}/entidades',
-    [EntidadController::class, 'porInversion']
-);
+    Route::get(
+        '/inversiones/{id}/entidades',
+        [EntidadController::class, 'porInversion']
+    );
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | ENTIDADES POR INVERSIÓN
 |--------------------------------------------------------------------------
 */
 
-Route::get(
-    '/inversiones/{id}/entidades',
-    [EntidadController::class, 'porInversion']
-);
+    Route::get(
+        '/inversiones/{id}/entidades',
+        [EntidadController::class, 'porInversion']
+    );
 
     /*
     |--------------------------------------------------------------------------
@@ -322,87 +345,87 @@ Route::get(
 |--------------------------------------------------------------------------
 */
 
-Route::get('/usuarios', [UserController::class, 'index']);
+    Route::get('/usuarios', [UserController::class, 'index']);
 
-Route::get('/usuarios/create', [UserController::class, 'create']);
+    Route::get('/usuarios/create', [UserController::class, 'create']);
 
-Route::post('/usuarios', [UserController::class, 'store']);
+    Route::post('/usuarios', [UserController::class, 'store']);
 
-Route::get('/usuarios/{id}/edit', [UserController::class, 'edit']);
+    Route::get('/usuarios/{id}/edit', [UserController::class, 'edit']);
 
-Route::put('/usuarios/{id}', [UserController::class, 'update']);
-
-
+    Route::put('/usuarios/{id}', [UserController::class, 'update']);
 
 
 
 
-/*
+
+
+    /*
 |--------------------------------------------------------------------------
 | Estado de Resultados
 |--------------------------------------------------------------------------
 */
 
 
-Route::get('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'index']);
+    Route::get('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'index']);
 
-Route::get('/inversiones/{inversion_id}/estado-resultados/create', [EstadoResultadoController::class, 'create']);
+    Route::get('/inversiones/{inversion_id}/estado-resultados/create', [EstadoResultadoController::class, 'create']);
 
-Route::post('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'store']);
+    Route::post('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'store']);
 
-Route::get('/inversiones/{inversion_id}/estado-resultados/{id}/edit', [EstadoResultadoController::class, 'edit']);
+    Route::get('/inversiones/{inversion_id}/estado-resultados/{id}/edit', [EstadoResultadoController::class, 'edit']);
 
-Route::put('/inversiones/{inversion_id}/estado-resultados/{id}', [EstadoResultadoController::class, 'update']);
+    Route::put('/inversiones/{inversion_id}/estado-resultados/{id}', [EstadoResultadoController::class, 'update']);
 
-Route::delete('/inversiones/{inversion_id}/estado-resultados/{id}', [EstadoResultadoController::class, 'destroy']);
+    Route::delete('/inversiones/{inversion_id}/estado-resultados/{id}', [EstadoResultadoController::class, 'destroy']);
 
-Route::post(
-    '/inversiones/{inversion_id}/estado-resultados/generar',
-    [EstadoResultadoController::class, 'generar']
-);
+    Route::post(
+        '/inversiones/{inversion_id}/estado-resultados/generar',
+        [EstadoResultadoController::class, 'generar']
+    );
 
 
 
-Route::post(
-    '/documentos',
-    [DocumentController::class,'store']
-);
+    Route::post(
+        '/documentos',
+        [DocumentController::class, 'store']
+    );
 
-Route::delete(
-    '/documentos/{id}',
-    [DocumentController::class,'destroy']
-);
+    Route::delete(
+        '/documentos/{id}',
+        [DocumentController::class, 'destroy']
+    );
 });
 
 
 Route::get(
     '/business-customers',
-    [BusinessCustomerController::class,'index']
+    [BusinessCustomerController::class, 'index']
 );
 
 Route::get(
     '/business-customers/create',
-    [BusinessCustomerController::class,'create']
+    [BusinessCustomerController::class, 'create']
 );
 
 Route::post(
     '/business-customers',
-    [BusinessCustomerController::class,'store']
+    [BusinessCustomerController::class, 'store']
 );
 
 Route::get(
     '/business-customers/{id}/edit',
-    [BusinessCustomerController::class,'edit']
+    [BusinessCustomerController::class, 'edit']
 );
 
 Route::put(
     '/business-customers/{id}',
-    [BusinessCustomerController::class,'update']
+    [BusinessCustomerController::class, 'update']
 );
 
 Route::delete(
     '/business-customers/{id}',
-    [BusinessCustomerController::class,'destroy']
+    [BusinessCustomerController::class, 'destroy']
 );
 
 
