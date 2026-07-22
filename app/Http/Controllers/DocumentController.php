@@ -16,7 +16,7 @@ class DocumentController extends Controller
 
         'documentable_id' => 'required',
 
-        'archivo' => 'required|file|mimes:pdf|max:10240',
+        'archivo' => 'required|file|mimes:pdf|max:102400',
 
         'nombre' => 'required'
 
