@@ -177,7 +177,7 @@ $totalClientes =
 
             <td>
 
-                {{ $item->cliente }}
+          {{ $item->business_customer?->nombre ?? 'Sin cliente' }}
 
             </td>
 

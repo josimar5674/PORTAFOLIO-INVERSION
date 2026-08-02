@@ -178,11 +178,10 @@ class ClienteController extends Controller
                 'pais' => $pais
             ]);
         }
-
-        return redirect('/clientes')
-            ->with(
-                'success',
-                'Cliente actualizado correctamente'
-            );
+return redirect("/clientes/{$cliente->id}/edit")
+    ->with(
+        'success',
+        'Cliente actualizado correctamente.'
+    );
     }
 }

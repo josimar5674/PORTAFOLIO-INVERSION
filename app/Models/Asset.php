@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Comercial;
 
 class Asset extends Model
 {
@@ -11,6 +12,7 @@ class Asset extends Model
 protected $fillable = [
 
     'investment_id',
+        'producto_id',
 
     'name',
 
@@ -56,4 +58,12 @@ public function notas()
         'notable'
     );
 }
+
+public function producto()
+    {
+        return $this->belongsTo(Comercial::class, 'producto_id');
+    }
+
+
+    
 }

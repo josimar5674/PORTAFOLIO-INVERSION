@@ -2,76 +2,71 @@
 
 @section('content')
 
+
+
 <style>
+    .card-seccion {
+        background: var(--surface);
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 18px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+    }
 
-.card-seccion{
-    background:var(--surface);
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:18px;
-    box-shadow:var(--shadow);
-    border:1px solid var(--border);
-}
+    .card-seccion h4 {
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: var(--text);
+    }
 
-.card-seccion h4{
-    margin-bottom:12px;
-    font-weight:600;
-    color:var(--text);
-}
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
 
-.grid-2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-}
+    input,
+    select,
+    textarea {
 
-input,
-select,
-textarea{
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        box-sizing: border-box;
 
-    width:100%;
-    padding:10px;
-    border:1px solid var(--border);
-    border-radius:8px;
-    background:var(--surface);
-    color:var(--text);
-    box-sizing:border-box;
+    }
 
-}
+    input:focus,
+    select:focus,
+    textarea:focus {
 
-input:focus,
-select:focus,
-textarea:focus{
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(234, 207, 51, .20);
 
-    border-color:var(--primary);
-    outline:none;
-    box-shadow:0 0 0 2px rgba(234,207,51,.20);
+    }
 
-}
+    label {
 
-label{
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: var(--text);
 
-    display:block;
-    margin-bottom:6px;
-    font-weight:600;
-    color:var(--text);
+    }
 
-}
+    Select {
+        max-width: 100%;
+        height: 35px;
+        border-radius: 10px;
 
-Select{
-
-    width:220px;
-    max-width:100%;
-    height: 35px;
-    border-radius: 10px;
-
-}
-
+    }
 </style>
 
-<!-- ===================================== -->
-<!-- INFORMACIÓN GENERAL -->
-<!-- ===================================== -->
 <form method="POST"
       action="/inversiones/{{ $investment_id }}/assets">
 
@@ -81,6 +76,81 @@ Select{
         type="hidden"
         name="investment_id"
         value="{{ $investment_id }}">
+
+
+<!-- ===================================== -->
+<!-- IDENTIFICACIÓN -->
+<!-- ===================================== -->
+
+<div class="card-seccion">
+
+    <h4>🏷️ Identificación</h4>
+
+    <div class="grid-2">
+
+        <div>
+            <label>Código del Activo</label>
+
+            <input
+                type="text"
+                name="asset_code"
+                value="{{ old('asset_code') }}"
+                placeholder="Ej. ACT-0001">
+        </div>
+
+        <div>
+            <label>Número de Serie</label>
+
+            <input
+                type="text"
+                name="serial_number"
+                value="{{ old('serial_number') }}">
+        </div>
+
+        <div>
+            <label>Estado</label>
+
+            <select name="status">
+
+                <option value="1"
+                    {{ old('status',1)==1?'selected':'' }}>
+                    Activo
+                </option>
+
+                <option value="0"
+                    {{ old('status')==0?'selected':'' }}>
+                    Inactivo
+                </option>
+
+            </select>
+
+        </div>
+
+                <div class="mb-3">
+    <label class="form-label">Ubicación</label>
+
+    <select name="producto_id" class="form-select">
+        <option value="">Seleccione una ubicación</option>
+
+        @foreach($ubicaciones as $ubicacion)
+            <option value="{{ $ubicacion->id }}"
+                @selected(old('producto_id', $asset->producto_id ?? null) == $ubicacion->id)>
+                {{ $ubicacion->producto }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+    </div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- INFORMACIÓN GENERAL -->
+<!-- ===================================== -->
+
+
+
 
 
 <div class="card-seccion">
@@ -143,57 +213,7 @@ Select{
 
 </div>
 
-<!-- ===================================== -->
-<!-- IDENTIFICACIÓN -->
-<!-- ===================================== -->
 
-<div class="card-seccion">
-
-    <h4>🏷️ Identificación</h4>
-
-    <div class="grid-2">
-
-        <div>
-            <label>Código del Activo</label>
-
-            <input
-                type="text"
-                name="asset_code"
-                value="{{ old('asset_code') }}"
-                placeholder="Ej. ACT-0001">
-        </div>
-
-        <div>
-            <label>Número de Serie</label>
-
-            <input
-                type="text"
-                name="serial_number"
-                value="{{ old('serial_number') }}">
-        </div>
-
-        <div>
-            <label>Estado</label>
-
-            <select name="status">
-
-                <option value="1"
-                    {{ old('status',1)==1?'selected':'' }}>
-                    Activo
-                </option>
-
-                <option value="0"
-                    {{ old('status')==0?'selected':'' }}>
-                    Inactivo
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-</div>
 
 <!-- ===================================== -->
 <!-- INFORMACIÓN FINANCIERA -->

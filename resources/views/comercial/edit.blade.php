@@ -39,12 +39,22 @@
     </div>
 
     <!-- CLIENTE -->
-    <div class="form-group">
-        <label>Cliente</label>
-        <input type="text" name="cliente" class="form-control"
-            value="{{ old('cliente', $item->cliente) }}">
-    </div>
+<div class="form-group">
+    <label>Cliente</label>
 
+    <select name="cliente_id" class="form-select">
+
+        <option value="">Sin cliente</option>
+
+        @foreach($clientes as $cliente)
+            <option value="{{ $cliente->id }}"
+                @selected(old('cliente_id', $item->cliente_id) == $cliente->id)>
+                {{ $cliente->nombre }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
     <!-- CANTIDAD -->
     <div class="form-group">
         <label>Cantidad</label>

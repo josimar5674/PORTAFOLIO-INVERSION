@@ -230,15 +230,7 @@
 
                 @foreach($inversion->clientes as $cliente)
 
-                <li style="
-                        display:flex;
-                        justify-content:space-between;
-                        align-items:center;
-                        padding:6px 10px;
-                        background:#f9fafb;
-                        border-radius:6px;
-                        margin-bottom:6px;
-                    ">
+               <li class="cliente-item">
 
                     <span>
                         {{ $cliente->nombre }}
@@ -312,16 +304,8 @@
                 style="margin-top:10px;">
 
                 @foreach($inversion->entidades as $entidad)
-
-                <li style="
-                        display:flex;
-                        justify-content:space-between;
-                        align-items:center;
-                        padding:6px 10px;
-                        background:#f9fafb;
-                        border-radius:6px;
-                        margin-bottom:6px;
-                    ">
+                <li class="cliente-item">
+                 
 
                     <span>
                         {{ $entidad->denominacion_social }}
@@ -416,27 +400,29 @@
         li.style.background = "#f9fafb";
         li.style.borderRadius = "6px";
         li.style.marginBottom = "6px";
+li.innerHTML = `
+    <span style="color:#2563eb; font-weight:500;">
+        ${nombre}
+    </span>
 
-        li.innerHTML = `
-        <span>${nombre}</span>
+    <button type="button"
+        onclick="eliminarCliente('${id}', this)"
+        style="
+            background:none;
+            border:none;
+            color:#ef4444;
+            cursor:pointer;
+        ">
 
-        <button type="button"
-            onclick="eliminarCliente('${id}', this)"
-            style="
-                background:none;
-                border:none;
-                color:#ef4444;
-                cursor:pointer;
-            ">
+        🗑️
 
-            🗑️
+    </button>
 
-        </button>
-
-        <input type="hidden"
-               name="clientes[]"
-               value="${id}">
-    `;
+    <input
+        type="hidden"
+        name="clientes[]"
+        value="${id}">
+`;
 
         lista.appendChild(li);
     }
@@ -485,26 +471,28 @@
         li.style.borderRadius = "6px";
         li.style.marginBottom = "6px";
 
-        li.innerHTML = `
-        <span>${nombre}</span>
+   li.innerHTML = `
+    <span style="color:#2563eb; font-weight:500;">
+        ${nombre}
+    </span>
 
-        <button type="button"
-            onclick="eliminarEntidad('${id}', this)"
-            style="
-                background:none;
-                border:none;
-                color:#ef4444;
-                cursor:pointer;
-            ">
+    <button type="button"
+        onclick="eliminarEntidad('${id}', this)"
+        style="
+            background:none;
+            border:none;
+            color:#ef4444;
+            cursor:pointer;
+        ">
 
-            🗑️
+        🗑️
 
-        </button>
+    </button>
 
-        <input type="hidden"
-               name="entidades[]"
-               value="${id}">
-    `;
+    <input type="hidden"
+           name="entidades[]"
+           value="${id}">
+`;
 
         lista.appendChild(li);
     }

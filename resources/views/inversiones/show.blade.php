@@ -195,39 +195,9 @@
 
 <div class="summary-grid">
 
-    <div class="summary-card">
 
-        📍 Ubicación
 
-        <strong>
-            {{ $inversion->ubicacion ?? 'N/A' }}
-        </strong>
 
-    </div>
-
-    <div class="summary-card">
-
-        👥 Personas
-
-        <strong>
-            {{ $inversion->clientes->count() }}
-        </strong>
-
-    </div>
-
-    @if(auth()->user()->tienePermiso($inversion->id,'entidades'))
-
-    <div class="summary-card">
-
-        🏢 Entidades
-
-        <strong>
-            {{ $inversion->entidades->count() }}
-        </strong>
-
-    </div>
-
-    @endif
 
     @if(auth()->user()->tienePermiso($inversion->id,'avaluos'))
 
@@ -293,19 +263,6 @@
 
 @endif
 
-    @if(auth()->user()->tienePermiso($inversion->id,'activos_registrales'))
-
-    <div class="summary-card">
-
-        📑 Activos Inmoviliarios
-
-        <strong>
-            {{ $inversion->activosRegistrales->count() }}
-        </strong>
-
-    </div>
-
-    @endif
 
     @if(auth()->user()->role == 'admin')
 
@@ -384,7 +341,7 @@
     </div>
 
     <div class="title">
-        Activos Moviliarios
+        Activos Mobiliarios
     </div>
 
 </a>
@@ -453,7 +410,7 @@
     </div>
 
     <div class="title">
-        Activos Inmoviliarios
+        Activos Inmobiliarios
     </div>
 
 </a>

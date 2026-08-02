@@ -94,6 +94,78 @@
         @csrf
         @method('PUT')
 
+
+
+
+<div class="card-seccion">
+
+    <h4>🏷️ Identificación</h4>
+
+    <div class="grid-2">
+
+        <div>
+
+            <label>Código del Activo</label>
+
+            <input
+                type="text"
+                name="asset_code"
+                value="{{ old('asset_code',$asset->asset_code) }}">
+
+        </div>
+
+        <div>
+
+            <label>Número de Serie</label>
+
+            <input
+                type="text"
+                name="serial_number"
+                value="{{ old('serial_number',$asset->serial_number) }}">
+
+        </div>
+
+        <div>
+
+            <label>Estado</label>
+
+            <select name="status">
+
+                <option value="1"
+                    {{ old('status',$asset->status)==1?'selected':'' }}>
+                    Activo
+                </option>
+
+                <option value="0"
+                    {{ old('status',$asset->status)==0?'selected':'' }}>
+                    Inactivo
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+    <label class="form-label">Ubicación</label>
+
+    <select name="producto_id" class="form-select">
+        <option value="">Seleccione una ubicación</option>
+
+        @foreach($ubicaciones as $ubicacion)
+            <option value="{{ $ubicacion->id }}"
+                @selected(old('producto_id', $asset->producto_id ?? null) == $ubicacion->id)>
+                {{ $ubicacion->producto }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+    </div>
+
+    
+
+</div>
+
         <input
             type="hidden"
             name="investment_id"
@@ -198,58 +270,6 @@
 
         </div>
 
-
-<div class="card-seccion">
-
-    <h4>🏷️ Identificación</h4>
-
-    <div class="grid-2">
-
-        <div>
-
-            <label>Código del Activo</label>
-
-            <input
-                type="text"
-                name="asset_code"
-                value="{{ old('asset_code',$asset->asset_code) }}">
-
-        </div>
-
-        <div>
-
-            <label>Número de Serie</label>
-
-            <input
-                type="text"
-                name="serial_number"
-                value="{{ old('serial_number',$asset->serial_number) }}">
-
-        </div>
-
-        <div>
-
-            <label>Estado</label>
-
-            <select name="status">
-
-                <option value="1"
-                    {{ old('status',$asset->status)==1?'selected':'' }}>
-                    Activo
-                </option>
-
-                <option value="0"
-                    {{ old('status',$asset->status)==0?'selected':'' }}>
-                    Inactivo
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-</div>
 
 <div class="card-seccion">
 

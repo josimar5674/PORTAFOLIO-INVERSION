@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Asset;
 use App\Models\Inversion;
+use App\Models\Comercial;
 
 class AssetController extends Controller
 {
@@ -20,11 +21,9 @@ class AssetController extends Controller
                 'investment_id',
                 $investment_id
             )->get();
-
         } else {
 
             $assets = Asset::with('inversion')->get();
-
         }
 
         return view(
@@ -38,20 +37,29 @@ class AssetController extends Controller
 
     public function create($investment_id)
     {
+        $ubicaciones = Comercial::orderBy('producto')
+            ->get(['id', 'producto']);
+
         return view(
             'assets.create',
-            compact('investment_id')
+            compact(
+                'investment_id',
+                'ubicaciones'
+            )
         );
     }
 
     public function store(Request $request)
     {
+
         $request->validate([
 
             'investment_id' => 'required|exists:inversiones,id',
 
             'name' => 'required|string|max:255',
 
+
+            'producto_id' => 'nullable|exists:comercial,id',
             'category' => 'required|string|max:255',
 
             'brand' => 'nullable|string|max:255',
@@ -80,6 +88,8 @@ class AssetController extends Controller
 
             'name' => $request->name,
 
+            'producto_id' => $request->producto_id,
+
             'category' => $request->category,
 
             'brand' => $request->brand,
@@ -100,6 +110,8 @@ class AssetController extends Controller
 
             'status' => $request->status,
 
+
+
         ]);
 
         return redirect(
@@ -114,11 +126,15 @@ class AssetController extends Controller
     {
         $asset = Asset::findOrFail($id);
 
+        $ubicaciones = Comercial::orderBy('producto')
+            ->get(['id', 'producto']);
+
         return view(
             'assets.edit',
             compact(
                 'asset',
-                'investment_id'
+                'investment_id',
+                'ubicaciones'
             )
         );
     }
@@ -128,6 +144,8 @@ class AssetController extends Controller
         $request->validate([
 
             'name' => 'required|string|max:255',
+
+            'producto_id' => 'nullable|string|max:255',
 
             'category' => 'required|string|max:255',
 
@@ -149,6 +167,7 @@ class AssetController extends Controller
 
             'status' => 'required|boolean',
 
+
         ]);
 
         $asset = Asset::findOrFail($id);
@@ -156,6 +175,8 @@ class AssetController extends Controller
         $asset->update([
 
             'name' => $request->name,
+
+            'producto_id' => $request->producto_id,
 
             'category' => $request->category,
 
@@ -179,25 +200,23 @@ class AssetController extends Controller
 
         ]);
 
-        return redirect(
-            "/inversiones/{$investment_id}/assets"
-        )->with(
+        return back()->with(
             'success',
             'Activo actualizado correctamente.'
         );
     }
 
-  public function destroy($investment_id, $id)
-{
-    $asset = Asset::findOrFail($id);
+    public function destroy($investment_id, $id)
+    {
+        $asset = Asset::findOrFail($id);
 
-    $asset->delete();
+        $asset->delete();
 
-    return redirect(
-        "/inversiones/{$investment_id}/assets"
-    )->with(
-        'success',
-        'Activo eliminado correctamente.'
-    );
-}
+        return redirect(
+            "/inversiones/{$investment_id}/assets"
+        )->with(
+            'success',
+            'Activo eliminado correctamente.'
+        );
+    }
 }

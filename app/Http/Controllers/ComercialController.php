@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Comercial;
 use App\Models\Inversion;
+use App\Models\BusinessCustomer;
 
 class ComercialController extends Controller
 {
@@ -28,7 +29,7 @@ class ComercialController extends Controller
 
 public function create($inversion_id)
 {
-    $clientes = \App\Models\Cliente::orderBy('nombre')->get();
+    $clientes = BusinessCustomer::orderBy('nombre')->get();
 
     return view('comercial.create', compact(
         'inversion_id',
@@ -62,7 +63,7 @@ public function create($inversion_id)
             Comercial::create([
                 'inversion_id' => $inversion_id,
                 'producto' => $request->producto[$i] ?? null,
-                'cliente' => $request->cliente[$i] ?? null,
+                'cliente_id' => $request->cliente_id[$i] ?? null,
                 'cantidad' => $cantidad ?? 0,
                 'unidad' => $request->unidad[$i] ?? null,
                 'precio_unitario' => $precio,
@@ -74,13 +75,17 @@ public function create($inversion_id)
             ->with('success', 'Perfil comercial guardado correctamente');
     }
 
-    public function edit($inversion_id, $id)
-    {
-        $item = Comercial::findOrFail($id);
+ public function edit($inversion_id, $id)
+{
+    $item = Comercial::findOrFail($id);
 
-        return view('comercial.edit', compact('item'));
-    }
+    $clientes = BusinessCustomer::orderBy('nombre')->get();
 
+    return view(
+        'comercial.edit',
+        compact('item', 'clientes')
+    );
+}
     public function update(Request $request, $inversion_id, $id)
     {
         $request->validate([
@@ -94,7 +99,7 @@ public function create($inversion_id)
 
         $item->update([
             'producto' => $request->producto,
-            'cliente' => $request->cliente,
+            'cliente_id' => $request->cliente_id,
             'cantidad' => $request->cantidad,
             'unidad' => $request->unidad,
             'precio_unitario' => $request->precio,

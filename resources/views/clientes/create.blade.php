@@ -236,7 +236,8 @@ function agregarEntidad()
     li.style.marginBottom = "6px";
 
     li.innerHTML = `
-        <span>${nombre}</span>
+          <span style="color:#2563eb; font-weight:500;">
+        ${nombre}</span>
 
         <button
             type="button"
@@ -309,7 +310,8 @@ function agregarIdentificacion()
     li.style.marginBottom = "6px";
 
     li.innerHTML = `
-        <span>${valor}</span>
+        <span style="color:#2563eb; font-weight:500;">
+        ${valor}</span>
 
         <button
             type="button"
@@ -378,7 +380,9 @@ function agregarNacionalidad()
     li.style.marginBottom = "6px";
 
     li.innerHTML = `
-        <span>${valor}</span>
+        <span style="color:#2563eb; font-weight:500;">
+        ${valor}
+        </span>
 
         <button
             type="button"

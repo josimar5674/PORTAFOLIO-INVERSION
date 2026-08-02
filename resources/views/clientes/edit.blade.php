@@ -361,7 +361,8 @@ function agregarIdentificacion()
     li.style.marginBottom = "6px";
 
     li.innerHTML = `
-        <span>${valor}</span>
+            <span style="color:#2563eb; font-weight:500;">
+        ${valor}</span>
 
         <button
             type="button"
@@ -426,7 +427,8 @@ function agregarNacionalidad()
     li.style.marginBottom = "6px";
 
     li.innerHTML = `
-        <span>${valor}</span>
+        <span style="color:#2563eb; font-weight:500;">
+        ${valor}</span>
 
         <button
             type="button"
@@ -508,26 +510,28 @@ function agregarEntidad()
     li.style.borderRadius = "6px";
     li.style.marginBottom = "6px";
 
-    li.innerHTML = `
-        <span>${nombre}</span>
+li.innerHTML = `
+    <span style="color:#2563eb; font-weight:500;">
+        ${nombre}
+    </span>
 
-        <button
-            type="button"
-            onclick="eliminarEntidad('${id}', this)"
-            style="
-                background:none;
-                border:none;
-                color:#ef4444;
-                cursor:pointer;
-            ">
-            🗑️
-        </button>
+    <button
+        type="button"
+        onclick="eliminarEntidad('${id}', this)"
+        style="
+            background:none;
+            border:none;
+            color:#ef4444;
+            cursor:pointer;
+        ">
+        🗑️
+    </button>
 
-        <input
-            type="hidden"
-            name="entidades[]"
-            value="${id}">
-    `;
+    <input
+        type="hidden"
+        name="entidades[]"
+        value="${id}">
+`;
 
     lista.appendChild(li);
 

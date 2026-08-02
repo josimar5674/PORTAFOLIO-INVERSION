@@ -166,6 +166,50 @@
 </header>
 
 <!-- CONTENIDO -->
+
+@if(session('success'))
+
+    <div style="
+        max-width:1200px;
+        margin:20px auto;
+        padding:14px 18px;
+        border-radius:8px;
+        background:#dcfce7;
+        color:#166534;
+        border:1px solid #86efac;
+    ">
+        {{ session('success') }}
+    </div>
+
+@endif
+
+@if($errors->any())
+
+    <div style="
+        max-width:1200px;
+        margin:20px auto;
+        padding:14px 18px;
+        border-radius:8px;
+        background:#fee2e2;
+        color:#991b1b;
+        border:1px solid #fca5a5;
+    ">
+
+        <strong>Se encontraron los siguientes errores:</strong>
+
+        <ul style="margin-top:10px; margin-left:20px;">
+
+            @foreach($errors->all() as $error)
+
+                <li>{{ $error }}</li>
+
+            @endforeach
+
+        </ul>
+
+    </div>
+
+@endif
 <main class="main-content">
 
     @yield('content')

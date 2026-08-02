@@ -36,13 +36,9 @@
     <tr>
 
         <th>Inversión</th>
+  
 
-        <th>Ubicación</th>
-
-        <th>Personas</th>
-
-        <th>Entidades</th>
-
+      
         @if(auth()->user()->role == 'admin')
             <th>Valor</th>
         @endif
@@ -55,7 +51,10 @@
             <th>Cap Rate</th>
         @endif
 
+            @if(auth()->user()->role == 'user')
+
         <th>Módulos</th>
+        @endif
 
         <th>Acciones</th>
 
@@ -88,7 +87,8 @@
 
     @endphp
 
-    <tr>
+<tr onclick="window.location='{{ url('/inversiones/' . $inv->id) }}'">
+
 
         <td>
 
@@ -104,23 +104,9 @@
 
         </td>
 
-        <td>
+        
 
-            {{ $inv->ubicacion }}
-
-        </td>
-
-        <td>
-
-            👥 {{ $inv->clientes->count() }}
-
-        </td>
-
-        <td>
-
-            🏢 {{ $inv->entidades->count() }}
-
-        </td>
+    
 
         @if(auth()->user()->role == 'admin')
 
@@ -145,14 +131,18 @@
                         ? '#16a34a'
                         : ($capRate >= 5
                             ? '#ca8a04'
-                            : '#dc2626') }};
-                ">
+                            : '#dc2626') }};">
+
+
+
                     {{ number_format($capRate,2) }}%
                 </span>
 
             </td>
 
         @endif
+
+                @if(auth()->user()->role == 'user')
 
         <td>
 
@@ -185,6 +175,7 @@
             @endif
 
         </td>
+         @endif
 
         <td>
 

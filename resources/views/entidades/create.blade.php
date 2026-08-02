@@ -149,36 +149,40 @@
 
     <!-- 🔹 REPRESENTANTES -->
 
-        <h4>👔 Representantes</h4>
+      <h4>👥 Socios</h4>
 
-        <div class="grid-2">
+<div id="socios-container">
 
-            <div>
-                <label>Gerente General</label>
+</div>
 
-                <input type="text"
-                       name="gerente_general"
-                       class="form-control">
-            </div>
+<div style="margin-top:15px;">
 
-            <div>
-                <label>Sub Gerente General</label>
+    <button
+        type="button"
+        id="agregarSocio"
+        class="btn-secondary">
 
-                <input type="text"
-                       name="subgerente_general"
-                       class="form-control">
-            </div>
+        + Agregar Socio
 
-            <div>
-                <label>Comisario</label>
+    </button>
 
-                <input type="text"
-                       name="comisario"
-                       class="form-control">
-            </div>
+</div>
 
-        
-        </div>
+<div style="
+    margin-top:20px;
+    padding:12px;
+    border-radius:8px;
+    font-weight:bold;
+">
+
+    Total de participación:
+
+    <span id="totalPorcentaje"
+          style="color:#ca8a04;">
+        0%
+    </span>
+
+</div>
 
 
 
@@ -213,4 +217,58 @@
 
 </div>
 
+<template id="filaSocio">
+
+    <div class="fila-socio"
+         style="
+            display:grid;
+            grid-template-columns:2fr 120px 50px;
+            gap:12px;
+            margin-bottom:12px;
+         ">
+
+        <select
+            name=""
+            class="form-control">
+
+            <option value="">Seleccione un socio</option>
+
+            @foreach($clientes as $cliente)
+
+                <option value="{{ $cliente->id }}">
+                    {{ $cliente->nombre }}
+                </option>
+
+            @endforeach
+
+        </select>
+
+        <input
+            type="number"
+            class="form-control porcentaje"
+            name=""
+            min="0"
+            max="100"
+            step="0.01"
+            value="0">
+
+        <button
+            type="button"
+            class="btnEliminar btn-secondary">
+
+            🗑
+
+        </button>
+
+    </div>
+
+</template>
+
+<script>
+window.sociosActuales = [];
+</script>
+
+
+
 @endsection
+

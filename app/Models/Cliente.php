@@ -4,6 +4,8 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Inversion;
+use App\Models\Entidad;
 
 class Cliente extends Model
 {
@@ -58,5 +60,15 @@ public function notas()
         'notable'
     );
 }
+
+public function entidad()
+{
+    return $this->belongsToMany(
+        Entidad::class,
+        'entidad_socios'
+    )->withPivot('porcentaje')
+     ->withTimestamps();
+}
+
     
 }

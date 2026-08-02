@@ -38,11 +38,15 @@
             <tr>
                 <td><input type="text" name="producto[]" class="form-control"></td>
            <td>
-    <input
-        type="text"
-        name="cliente[]"
-        class="form-control"
-        placeholder="Nombre del cliente">
+  <select name="cliente_id[]" class="form-select">
+    <option value="">Seleccione un cliente</option>
+
+    @foreach($clientes as $cliente)
+        <option value="{{ $cliente->id }}">
+            {{ $cliente->nombre }}
+        </option>
+    @endforeach
+</select>
 </td>
 
                 <td>

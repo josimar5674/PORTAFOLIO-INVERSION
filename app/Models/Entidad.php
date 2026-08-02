@@ -64,4 +64,13 @@ public function notas()
         'notable'
     );
 }
+
+public function socios()
+{
+    return $this->belongsToMany(
+        Cliente::class,
+        'entidad_socios'
+    )->withPivot('porcentaje')
+     ->withTimestamps();
+}
 }
