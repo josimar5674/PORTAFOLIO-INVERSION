@@ -213,7 +213,11 @@
         li.style.marginBottom = "6px";
 
         li.innerHTML = `
-        <span>${nombre}</span>
+             <span style="color:#2563eb; font-weight:500;">
+             ${nombre}</span>
+
+  
+
 
         <div style="display:flex; align-items:center; gap:8px;">
             <button type="button"
@@ -269,7 +273,8 @@
         li.style.marginBottom = "6px";
 
         li.innerHTML = `
-        <span>${nombre}</span>
+                 <span style="color:#2563eb; font-weight:500;">
+        ${nombre}</span>
 
         <div style="display:flex; align-items:center; gap:8px;">
 

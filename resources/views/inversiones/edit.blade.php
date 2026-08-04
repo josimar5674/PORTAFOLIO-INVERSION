@@ -353,9 +353,35 @@
 
             </a>
 
+                 <button
+    type="button"
+    class="btn-danger"
+    onclick="document.getElementById('deleteForm').requestSubmit();">
+
+    🗑 Eliminar inversión
+
+</button>
+
         </div>
+   
 
     </form>
+
+
+
+<form method="POST"
+
+      action="/inversiones/{{ $inversion->id }}"
+
+      id="deleteForm"
+
+      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+    @csrf
+
+    @method('DELETE')
+
+</form>
 
 </div>
 

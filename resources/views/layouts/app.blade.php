@@ -235,13 +235,6 @@ function confirmarEliminacion(form) {
 
 }
 
-function cerrarModal() {
-
-    document
-        .getElementById('deleteModal')
-        .classList.remove('show');
-
-}
 
 document
     .getElementById('confirmDeleteBtn')
@@ -303,12 +296,13 @@ function abrirModal(id, url){
 
 }
 
-function cerrarModal(id){
+function cerrarModal(id = 'deleteModal') {
 
     document
         .getElementById(id)
-        .classList
-        .remove('show');
+        ?.classList.remove('show');
+
+    deleteForm = null;
 
 }
 

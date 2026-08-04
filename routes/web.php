@@ -339,11 +339,11 @@ Route::middleware('admin')->group(function () {
     );
 
 
-    /*
-|--------------------------------------------------------------------------
-| USUARIOS
-|--------------------------------------------------------------------------
-*/
+                /*
+            |--------------------------------------------------------------------------
+            | USUARIOS
+            |--------------------------------------------------------------------------
+            */
 
     Route::get('/usuarios', [UserController::class, 'index']);
 
@@ -360,11 +360,11 @@ Route::middleware('admin')->group(function () {
 
 
 
-    /*
-|--------------------------------------------------------------------------
-| Estado de Resultados
-|--------------------------------------------------------------------------
-*/
+                        /*
+                    |--------------------------------------------------------------------------
+                    | Estado de Resultados
+                    |--------------------------------------------------------------------------
+                    */
 
 
     Route::get('/inversiones/{inversion_id}/estado-resultados', [EstadoResultadoController::class, 'index']);
@@ -395,6 +395,9 @@ Route::middleware('admin')->group(function () {
         '/documentos/{id}',
         [DocumentController::class, 'destroy']
     );
+
+
+    Route::delete('/inversiones/{inversion}', [InversionController::class, 'destroy']);
 });
 
 
