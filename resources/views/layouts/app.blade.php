@@ -6,17 +6,17 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0">
 
     <title>Portafolio Inversión</title>
 
     @vite([
-        'resources/css/app.css',
-        'resources/js/app.js'
+    'resources/css/app.css',
+    'resources/js/app.js'
     ])
 
-        @include('layouts.css')
-        @include('layouts.theme-components')
+    @include('layouts.css')
+    @include('layouts.theme-components')
 
 </head>
 
@@ -37,16 +37,16 @@
         <div class="modal-actions">
 
             <button type="button"
-                    class="btn-secondary"
-                    onclick="cerrarModal()">
+                class="btn-secondary"
+                onclick="cerrarModal()">
 
                 Cancelar
 
             </button>
 
             <button type="button"
-                    class="btn-danger"
-                    id="confirmDeleteBtn">
+                class="btn-danger"
+                id="confirmDeleteBtn">
 
                 Eliminar
 
@@ -60,68 +60,75 @@
 
 <body>
 
-<!-- HEADER -->
-<header class="topbar">
+    <!-- HEADER -->
+    <header class="topbar">
 
-    <!-- IZQUIERDA -->
-    <div class="topbar-left">
+        <!-- IZQUIERDA -->
+        <div class="topbar-left">
 
-        <a href="/" class="logo">
-            💼 Portafolio
-        </a>
-
-        <nav class="menu">
-
-            <a href="/inversiones">
-                Inversiones
+            <a href="/" class="logo">
+                💼 Portafolio
             </a>
 
-                 @if(Auth::user()->role == 'admin')
+            <nav class="menu">
 
-            <a href="/clientes">
-                Personas
-            </a>
-            @endif
+                <a href="/inversiones">
+                    Inversiones
+                </a>
 
+                @if(Auth::user()->role == 'admin')
 
-            <a href="/business-customers">
-                Clientes
-            </a>
-         @if(Auth::user()->role == 'admin')
-
-
-    <a href="/entidades">
-        Entidades
-    </a>
+                <a href="/clientes">
+                    Personas
+                </a>
+                @endif
 
 
-@endif
+                <a href="/business-customers">
+                    Clientes
+                </a>
+                @if(Auth::user()->role == 'admin')
 
-            @auth
+
+                <a href="/entidades">
+                    Entidades
+                </a>
+
+
+                @endif
+
+                @auth
 
                 @if(auth()->user()->role === 'admin')
 
-                    <a href="/usuarios">
-                        Usuarios
+                <a href="/usuarios">
+                    Usuarios
+                </a>
+
+                @endif
+
+                @if(Auth::user()->role == 'admin')
+               <a href="/configuraciones">
+                        ⚙️ 
                     </a>
 
                 @endif
 
-            @endauth
+                @endauth
 
-        </nav>
+            </nav>
 
-    </div>
+        </div>
 
-    
-    <!-- DERECHA -->
- <div class="topbar-right">
 
-    <button id="themeToggle" class="theme-btn" title="Cambiar tema">
-        🌙
-    </button>
+        <!-- DERECHA -->
+        <div class="topbar-right">
 
-    @auth
+            <button id="themeToggle" class="theme-btn" title="Cambiar tema">
+                🌙
+            </button>
+
+            @auth
             <div class="user-box">
 
                 <div class="user-info">
@@ -137,19 +144,19 @@
                 </div>
 
                 <a href="/profile"
-                   class="profile-btn">
+                    class="profile-btn">
 
                     ⚙️ Mi Perfil
 
                 </a>
 
                 <form method="POST"
-                      action="{{ route('logout') }}">
+                    action="{{ route('logout') }}">
 
                     @csrf
 
                     <button type="submit"
-                            class="logout-btn">
+                        class="logout-btn">
 
                         Salir
 
@@ -159,15 +166,15 @@
 
             </div>
 
-        @endauth
+            @endauth
 
-    </div>
+        </div>
 
-</header>
+    </header>
 
-<!-- CONTENIDO -->
+    <!-- CONTENIDO -->
 
-@if(session('success'))
+    @if(session('success'))
 
     <div style="
         max-width:1200px;
@@ -181,9 +188,9 @@
         {{ session('success') }}
     </div>
 
-@endif
+    @endif
 
-@if($errors->any())
+    @if($errors->any())
 
     <div style="
         max-width:1200px;
@@ -201,7 +208,7 @@
 
             @foreach($errors->all() as $error)
 
-                <li>{{ $error }}</li>
+            <li>{{ $error }}</li>
 
             @endforeach
 
@@ -209,12 +216,12 @@
 
     </div>
 
-@endif
-<main class="main-content">
+    @endif
+    <main class="main-content">
 
-    @yield('content')
+        @yield('content')
 
-</main>
+    </main>
 
 </body>
 
@@ -222,104 +229,103 @@
 
 
 <script>
+    let deleteForm = null;
 
-let deleteForm = null;
+    function confirmarEliminacion(form) {
 
-function confirmarEliminacion(form) {
+        deleteForm = form;
 
-    deleteForm = form;
+        document
+            .getElementById('deleteModal')
+            .classList.add('show');
+
+    }
+
 
     document
-        .getElementById('deleteModal')
-        .classList.add('show');
+        .getElementById('confirmDeleteBtn')
+        .addEventListener('click', function() {
 
-}
+            if (deleteForm) {
 
+                deleteForm.submit();
 
-document
-    .getElementById('confirmDeleteBtn')
-    .addEventListener('click', function () {
-
-        if(deleteForm){
-
-            deleteForm.submit();
-
-        }
-
-    });
-
-    // ===============================
-// TEMA CLARO / OSCURO
-// ===============================
-
-const themeBtn = document.getElementById('themeToggle');
-
-const savedTheme = localStorage.getItem('theme') || 'light';
-
-document.documentElement.setAttribute('data-theme', savedTheme);
-
-themeBtn.innerHTML = savedTheme === 'dark'
-    ? '☀️'
-    : '🌙';
-
-themeBtn.addEventListener('click', () => {
-
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-
-    const newTheme = currentTheme === 'dark'
-        ? 'light'
-        : 'dark';
-
-    document.documentElement.setAttribute('data-theme', newTheme);
-
-    localStorage.setItem('theme', newTheme);
-
-    themeBtn.innerHTML = newTheme === 'dark'
-        ? '☀️'
-        : '🌙';
-
-});
-function abrirModal(id, url){
-
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-
-            document.getElementById('contenedorFormularioAvaluo').innerHTML = html;
-
-            document
-                .getElementById(id)
-                .classList
-                .add('show');
+            }
 
         });
 
-}
+    // ===============================
+    // TEMA CLARO / OSCURO
+    // ===============================
 
-function cerrarModal(id = 'deleteModal') {
+    const themeBtn = document.getElementById('themeToggle');
 
-    document
-        .getElementById(id)
-        ?.classList.remove('show');
+    const savedTheme = localStorage.getItem('theme') || 'light';
 
-    deleteForm = null;
+    document.documentElement.setAttribute('data-theme', savedTheme);
 
-}
+    themeBtn.innerHTML = savedTheme === 'dark' ?
+        '☀️' :
+        '🌙';
 
-document.addEventListener('keydown',function(e){
+    themeBtn.addEventListener('click', () => {
 
-    if(e.key==="Escape"){
+        const currentTheme = document.documentElement.getAttribute('data-theme');
 
-        document
-            .querySelectorAll('.modal-overlay-custom.show')
-            .forEach(function(modal){
+        const newTheme = currentTheme === 'dark' ?
+            'light' :
+            'dark';
 
-                modal.classList.remove('show');
+        document.documentElement.setAttribute('data-theme', newTheme);
+
+        localStorage.setItem('theme', newTheme);
+
+        themeBtn.innerHTML = newTheme === 'dark' ?
+            '☀️' :
+            '🌙';
+
+    });
+
+    function abrirModal(id, url) {
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+
+                document.getElementById('contenedorFormularioAvaluo').innerHTML = html;
+
+                document
+                    .getElementById(id)
+                    .classList
+                    .add('show');
 
             });
 
     }
 
-});
+    function cerrarModal(id = 'deleteModal') {
 
+        document
+            .getElementById(id)
+            ?.classList.remove('show');
+
+        deleteForm = null;
+
+    }
+
+    document.addEventListener('keydown', function(e) {
+
+        if (e.key === "Escape") {
+
+            document
+                .querySelectorAll('.modal-overlay-custom.show')
+                .forEach(function(modal) {
+
+                    modal.classList.remove('show');
+
+                });
+
+        }
+
+    });
 </script>

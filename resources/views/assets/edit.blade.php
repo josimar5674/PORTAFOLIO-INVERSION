@@ -310,6 +310,18 @@
                 value="{{ old('useful_life',$asset->useful_life) }}">
 
         </div>
+<div>
+
+    <label>Valor de Venta $</label>
+
+    <input
+        type="number"
+        step="0.01"
+        name="sale_value"
+        value="{{ old('sale_value', $asset->sale_value) }}"
+        placeholder="0.00">
+
+</div>
 
     </div>
 

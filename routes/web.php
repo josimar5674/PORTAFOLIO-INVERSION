@@ -19,7 +19,7 @@ use App\Http\Controllers\EstadoResultadoController;
 use App\Http\Controllers\BusinessCustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\NoteController;
-
+use App\Http\Controllers\ConfigurationOptionController;
 
 
 /*
@@ -398,6 +398,57 @@ Route::middleware('admin')->group(function () {
 
 
     Route::delete('/inversiones/{inversion}', [InversionController::class, 'destroy']);
+
+
+
+/*
+|--------------------------------------------------------------------------
+| CONFIGURACIONES
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/configuraciones',
+    [ConfigurationOptionController::class, 'index']
+);
+
+Route::post(
+    '/configuraciones',
+    [ConfigurationOptionController::class, 'store']
+);
+
+Route::put(
+    '/configuraciones/{id}',
+    [ConfigurationOptionController::class, 'update']
+);
+
+Route::patch(
+    '/configuraciones/{id}/toggle',
+    [ConfigurationOptionController::class, 'toggle']
+);
+
+Route::delete(
+    '/configuraciones/{id}',
+    [ConfigurationOptionController::class, 'destroy']
+);
+
+
+Route::get(
+    '/configuraciones/create',
+    [ConfigurationOptionController::class, 'create']
+);
+
+Route::post(
+    '/configuraciones/catalogos',
+    [ConfigurationOptionController::class, 'storeCatalog']
+);
+
+
+Route::post(
+    '/inversiones/{investment_id}/assets/{id}/duplicate',
+    [AssetController::class, 'duplicate']
+);
+
 });
 
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Asset;
 use App\Models\Inversion;
 use App\Models\Comercial;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AssetController extends Controller
 {
@@ -74,11 +76,14 @@ class AssetController extends Controller
 
             'purchase_value' => 'nullable|numeric',
 
+            'sale_value' => 'nullable|numeric',
+
             'useful_life' => 'nullable|integer',
 
             'description' => 'nullable|string',
 
             'status' => 'required|boolean',
+
 
         ]);
 
@@ -103,6 +108,8 @@ class AssetController extends Controller
             'purchase_date' => $request->purchase_date,
 
             'purchase_value' => $request->purchase_value,
+
+            'sale_value' => $request->sale_value,
 
             'useful_life' => $request->useful_life,
 
@@ -161,6 +168,8 @@ class AssetController extends Controller
 
             'purchase_value' => 'nullable|numeric',
 
+            'sale_value' => 'nullable|numeric',
+
             'useful_life' => 'nullable|integer',
 
             'description' => 'nullable|string',
@@ -192,6 +201,8 @@ class AssetController extends Controller
 
             'purchase_value' => $request->purchase_value,
 
+            'sale_value' => $request->sale_value,
+
             'useful_life' => $request->useful_life,
 
             'description' => $request->description,
@@ -219,4 +230,65 @@ class AssetController extends Controller
             'Activo eliminado correctamente.'
         );
     }
+
+
+    public function duplicate(Request $request, $investment_id, $id)
+{
+    $request->validate([
+
+        'quantity' => 'required|integer|min:1|max:500',
+
+    ]);
+
+    $asset = Asset::where('investment_id', $investment_id)
+        ->findOrFail($id);
+
+    DB::transaction(function () use ($asset, $request) {
+
+        for ($i = 0; $i < $request->quantity; $i++) {
+
+            $duplicado = $asset->replicate();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Identificador temporal
+            |--------------------------------------------------------------------------
+            */
+
+            $duplicado->asset_code =
+                'DUP-' .
+                $asset->id .
+                '-' .
+                strtoupper(Str::random(6));
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | El número de serie no se duplica
+            |--------------------------------------------------------------------------
+            */
+
+            $duplicado->serial_number = null;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Guardar
+            |--------------------------------------------------------------------------
+            */
+
+            $duplicado->save();
+
+        }
+
+    });
+
+    return redirect(
+        "/inversiones/{$investment_id}/assets"
+    )->with(
+        'success',
+        $request->quantity .
+        ' activo(s) duplicado(s) correctamente.'
+    );
+}
 }

@@ -12,7 +12,8 @@ class Asset extends Model
 protected $fillable = [
 
     'investment_id',
-        'producto_id',
+
+    'producto_id',
 
     'name',
 
@@ -30,11 +31,27 @@ protected $fillable = [
 
     'purchase_value',
 
+    'sale_value',
+
     'useful_life',
 
     'description',
 
     'status',
+
+];
+
+protected $casts = [
+
+    'purchase_date' => 'date',
+
+    'purchase_value' => 'decimal:2',
+
+    'sale_value' => 'decimal:2',
+
+    'useful_life' => 'integer',
+
+    'status' => 'boolean',
 
 ];
 
