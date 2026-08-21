@@ -284,7 +284,7 @@
             <input
                 type="date"
                 name="purchase_date"
-                value="{{ old('purchase_date',$asset->purchase_date) }}">
+                value="{{ old('purchase_date', $asset->purchase_date ? \Carbon\Carbon::parse($asset->purchase_date)->format('Y-m-d') : '') }}">
 
         </div>
 
