@@ -148,16 +148,30 @@
         <div class="mb-3">
     <label class="form-label">Ubicación</label>
 
-    <select name="producto_id" class="form-select">
-        <option value="">Seleccione una ubicación</option>
+<select name="producto_id" class="form-select">
 
-        @foreach($ubicaciones as $ubicacion)
-            <option value="{{ $ubicacion->id }}"
-                @selected(old('producto_id', $asset->producto_id ?? null) == $ubicacion->id)>
-                {{ $ubicacion->producto }}
-            </option>
-        @endforeach
-    </select>
+    <option value="">
+        Seleccione una ubicación
+    </option>
+
+    @foreach($ubicaciones as $ubicacion)
+
+        <option
+            value="{{ $ubicacion->id }}"
+            @selected(
+                old(
+                    'producto_id',
+                    $asset->producto_id ?? null
+                ) == $ubicacion->id
+            )>
+
+            {{ $ubicacion->producto }}
+
+        </option>
+
+    @endforeach
+
+</select>
 </div>
 
     </div>

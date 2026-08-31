@@ -11,45 +11,137 @@ use Illuminate\Support\Str;
 
 class AssetController extends Controller
 {
-    public function index($investment_id = null)
-    {
-        $inversion = null;
+    public function index(Request $request, $investment_id = null)
+{
+    $inversion = null;
 
-        if ($investment_id) {
+    /*
+    |--------------------------------------------------------------------------
+    | UBICACIÓN SELECCIONADA
+    |--------------------------------------------------------------------------
+    */
+$sessionKey = 'assets_producto_id_' . $investment_id;
 
-            $inversion = Inversion::findOrFail($investment_id);
+if ($request->has('producto_id')) {
 
-            $assets = Asset::where(
+    if ($request->producto_id !== '') {
+
+        session([
+            $sessionKey => $request->producto_id
+        ]);
+
+    } else {
+
+        session()->forget($sessionKey);
+
+    }
+
+}
+
+$productoId = session($sessionKey);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACTIVOS
+    |--------------------------------------------------------------------------
+    */
+
+    if ($investment_id) {
+
+        $inversion = Inversion::findOrFail(
+            $investment_id
+        );
+
+        $query = Asset::with('producto')
+            ->where(
                 'investment_id',
                 $investment_id
-            )->get();
-        } else {
+            );
 
-            $assets = Asset::with('inversion')->get();
-        }
+    } else {
 
-        return view(
-            'assets.index',
-            compact(
-                'assets',
-                'inversion'
-            )
-        );
+        $query = Asset::with('producto');
+
     }
 
-    public function create($investment_id)
-    {
-        $ubicaciones = Comercial::orderBy('producto')
-            ->get(['id', 'producto']);
 
-        return view(
-            'assets.create',
-            compact(
-                'investment_id',
-                'ubicaciones'
-            )
+    /*
+    |--------------------------------------------------------------------------
+    | FILTRAR POR UBICACIÓN
+    |--------------------------------------------------------------------------
+    */
+
+    if ($productoId) {
+
+        $query->where(
+            'producto_id',
+            $productoId
         );
+
     }
+
+
+    $assets = $query->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UBICACIONES
+    |--------------------------------------------------------------------------
+    */
+
+   $ubicaciones = collect();
+
+if ($investment_id) {
+
+    $productoIds = Asset::where(
+        'investment_id',
+        $investment_id
+    )
+    ->whereNotNull('producto_id')
+    ->distinct()
+    ->pluck('producto_id');
+
+    $ubicaciones = \App\Models\Comercial::whereIn(
+        'id',
+        $productoIds
+    )
+    ->orderBy('producto')
+    ->get();
+}
+
+
+    return view(
+        'assets.index',
+        compact(
+            'assets',
+            'inversion',
+            'ubicaciones',
+            'productoId'
+        )
+    );
+}
+
+public function create($investment_id)
+{
+    $inversion = Inversion::findOrFail($investment_id);
+
+    $ubicaciones = Comercial::where(
+        'inversion_id',
+        $investment_id
+    )
+    ->orderBy('producto')
+    ->get();
+
+    return view(
+        'assets.create',
+        compact(
+            'investment_id',
+            'ubicaciones'
+        )
+    );
+}
 
     public function store(Request $request)
     {
@@ -128,23 +220,26 @@ class AssetController extends Controller
             'Activo creado correctamente.'
         );
     }
+public function edit($investment_id, $id)
+{
+    $asset = Asset::findOrFail($id);
 
-    public function edit($investment_id, $id)
-    {
-        $asset = Asset::findOrFail($id);
+    $ubicaciones = Comercial::where(
+        'inversion_id',
+        $investment_id
+    )
+    ->orderBy('producto')
+    ->get();
 
-        $ubicaciones = Comercial::orderBy('producto')
-            ->get(['id', 'producto']);
-
-        return view(
-            'assets.edit',
-            compact(
-                'asset',
-                'investment_id',
-                'ubicaciones'
-            )
-        );
-    }
+    return view(
+        'assets.edit',
+        compact(
+            'asset',
+            'investment_id',
+            'ubicaciones'
+        )
+    );
+}
 
     public function update(Request $request, $investment_id, $id)
     {

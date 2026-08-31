@@ -105,13 +105,48 @@ $valorTotal = $assets->sum('purchase_value');
 
 </div>
 
-<div style="margin:20px 0;">
+<div
+    id="filtrosActivos"
+    style="
+        margin:20px 0;
+        display:grid;
+        grid-template-columns:2fr 1fr;
+        gap:10px;
+    ">
+
+    <!-- BUSCADOR -->
 
     <input
         type="text"
         id="buscadorActivos"
         class="form-control"
         placeholder="🔍 Buscar por nombre, categoría, marca, modelo o código...">
+
+
+    <!-- FILTRO UBICACIÓN -->
+
+    <select
+        id="filtroUbicacion"
+        class="form-control"
+        onchange="cambiarUbicacion(this.value)">
+
+        <option value="">
+            📍 Todas las ubicaciones
+        </option>
+
+        @foreach($ubicaciones as $ubicacion)
+
+            <option
+                value="{{ $ubicacion->id }}"
+                {{ $productoId == $ubicacion->id ? 'selected' : '' }}>
+
+                📍 {{ $ubicacion->producto }}
+
+            </option>
+
+        @endforeach
+
+    </select>
 
 </div>
 
@@ -134,6 +169,8 @@ $valorTotal = $assets->sum('purchase_value');
                 <th>Valor</th>
 
                 <th>Estado</th>
+
+                <th>Ubicación</th>
 
                 <th>Acciones</th>
 
@@ -238,6 +275,12 @@ $valorTotal = $assets->sum('purchase_value');
 
                 <td>
 
+                      {{ $asset->producto->producto ?? 'Sin ubicación' }}
+
+                </td>
+
+                <td>
+
                     <a href="/inversiones/{{ $inversion->id }}/assets/{{ $asset->id }}/edit"
                         class="btn-secondary">
 
@@ -305,6 +348,21 @@ $valorTotal = $assets->sum('purchase_value');
 
         });
 
+function cambiarUbicacion(productoId)
+{
+    const url = new URL(
+        window.location.href
+    );
+
+    url.searchParams.set(
+        'producto_id',
+        productoId
+    );
+
+    window.location.href =
+        url.toString();
+}
+
     function abrirModalDuplicar(assetId, assetName) {
         const modal =
             document.getElementById('modalDuplicar');
@@ -353,6 +411,8 @@ $valorTotal = $assets->sum('purchase_value');
         }
 
     });
+
+    
 </script>
 
 <!-- ===================================== -->
