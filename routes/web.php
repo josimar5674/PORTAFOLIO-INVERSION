@@ -531,3 +531,16 @@ Route::delete(
     '/notes/{id}',
     [NoteController::class, 'destroy']
 );
+
+
+use App\Services\GoogleGmailService;
+
+Route::get('/test-gmail', function (GoogleGmailService $gmail) {
+    $gmail->send(
+        'josimarherrera7@gmail.com',
+        'Prueba de Gmail API',
+        'Este es un correo de prueba enviado desde Laravel mediante Google Gmail API.'
+    );
+
+    return 'Correo enviado correctamente.';
+});
