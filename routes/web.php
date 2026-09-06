@@ -411,7 +411,7 @@ Route::middleware('admin')->group(function () {
 Route::get(
     '/configuraciones',
     [ConfigurationOptionController::class, 'index']
-);
+)->name('configuraciones');
 
 Route::post(
     '/configuraciones',
