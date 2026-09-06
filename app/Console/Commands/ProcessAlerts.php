@@ -27,7 +27,42 @@ class ProcessAlerts extends Command
                 ->get();
 
             foreach ($recipients as $recipient) {
+
+                // Marcamos como queued para evitar que otro
+                // proceso vuelva a ponerlo en la cola.
+                $recipient->update([
+                    'status' => 'queued',
+                ]);
+
                 SendAlertEmail::dispatch($recipient->id);
+            }
+
+            // Alerta de una sola ejecución
+            if ($alert->recurrencia === 'none') {
+
+                $alert->update([
+                    'active' => false,
+                    'next_run_at' => null,
+                ]);
+
+            } else {
+
+                // Calculamos la próxima ejecución
+                $nextRun = $alert->next_run_at->copy();
+
+                do {
+                    $nextRun = match ($alert->recurrencia) {
+                        'daily' => $nextRun->addDay(),
+                        'weekly' => $nextRun->addWeek(),
+                        'monthly' => $nextRun->addMonthNoOverflow(),
+                        'yearly' => $nextRun->addYearNoOverflow(),
+                        default => null,
+                    };
+                } while ($nextRun && $nextRun->lte(now()));
+
+                $alert->update([
+                    'next_run_at' => $nextRun,
+                ]);
             }
 
             $this->info(
