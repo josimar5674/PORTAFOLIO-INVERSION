@@ -3,6 +3,7 @@
 @section('content')
 
 
+
 <!-- ===================================== -->
 <!-- HEADER -->
 <!-- ===================================== -->
@@ -66,6 +67,13 @@
 
         </div>
 
+        <a
+    href="/configuraciones?section=google-workspace"
+    class="{{ request('section') === 'google-workspace' ? 'active' : '' }}"
+>
+    📧 Google Workspace
+</a>
+
 
         @forelse($catalogs as $catalogItem)
 
@@ -94,269 +102,282 @@
     </div>
 
 
-    <!-- ================================= -->
-    <!-- CONTENIDO -->
-    <!-- ================================= -->
+  
 
-    <div class="configuration-content">
 
+<!-- ================================= -->
+<!-- CONTENIDO -->
+<!-- ================================= -->
 
-        @if($catalogSelected)
+<div class="configuration-content">
 
 
-            <!-- ========================= -->
-            <!-- CATÁLOGO SELECCIONADO -->
-            <!-- ========================= -->
+    @if(request('section') === 'google-workspace')
 
-            <h3>
 
-                 {{ $catalogSelected->name }}
+        <!-- ========================= -->
+        <!-- GOOGLE WORKSPACE -->
+        <!-- ========================= -->
 
-            </h3>
+        @include('configurations.google-workspace')
 
 
-            @if($catalogSelected->description)
+    @elseif($catalogSelected)
 
-                <p style="
-                    color:var(--text-secondary);
-                    margin-top:-5px;
-                    margin-bottom:20px;
-                ">
 
-                    {{ $catalogSelected->description }}
+        <!-- ========================= -->
+        <!-- CATÁLOGO SELECCIONADO -->
+        <!-- ========================= -->
 
-                </p>
+        <h3>
 
-            @endif
+            {{ $catalogSelected->name }}
 
+        </h3>
 
-            <!-- ========================= -->
-            <!-- AGREGAR OPCIÓN -->
-            <!-- ========================= -->
 
-            <form
-                method="POST"
-                action="/configuraciones">
+        @if($catalogSelected->description)
 
-                @csrf
-
-                <input
-                    type="hidden"
-                    name="catalog_id"
-                    value="{{ $catalogSelected->id }}">
-
-
-                <div class="configuration-add">
-
-                    <input
-                        type="text"
-                        name="name"
-                        class="form-control"
-                        placeholder="Nueva opción..."
-                        required>
-
-
-                    <button
-                        type="submit"
-                        class="btn-primary-custom">
-
-                        ➕ Agregar
-
-                    </button>
-
-                </div>
-
-            </form>
-
-
-            <!-- ========================= -->
-            <!-- LISTADO DE OPCIONES -->
-            <!-- ========================= -->
-
-            @forelse($options as $option)
-
-                <div class="configuration-item">
-
-
-                    <div>
-
-                        <div class="configuration-item-name">
-
-                            {{ $option->name }}
-
-                        </div>
-
-
-                        @if($option->description)
-
-                            <div style="
-                                color:var(--text-secondary);
-                                font-size:13px;
-                                margin-top:3px;
-                            ">
-
-                                {{ $option->description }}
-
-                            </div>
-
-                        @endif
-
-                    </div>
-
-
-                    <div class="configuration-actions">
-
-
-                        <!-- ESTADO -->
-
-                        @if($option->active)
-
-                            <span class="configuration-status active">
-
-                                Activo
-
-                            </span>
-
-                        @else
-
-                            <span class="configuration-status inactive">
-
-                                Inactivo
-
-                            </span>
-
-                        @endif
-
-
-                        <!-- ================= -->
-                        <!-- TOGGLE -->
-                        <!-- ================= -->
-
-                        <form
-                            method="POST"
-                            action="/configuraciones/{{ $option->id }}/toggle">
-
-                            @csrf
-                            @method('PATCH')
-
-
-                            <button
-                                type="submit"
-                                class="btn-secondary">
-
-                                {{ $option->active
-                                    ? 'Desactivar'
-                                    : 'Activar'
-                                }}
-
-                            </button>
-
-                        </form>
-
-
-                        <!-- ================= -->
-                        <!-- ELIMINAR -->
-                        <!-- ================= -->
-
-                        <form
-                            method="POST"
-                            action="/configuraciones/{{ $option->id }}"
-
-                            onsubmit="
-                                event.preventDefault();
-                                confirmarEliminacion(this);
-                            ">
-
-                            @csrf
-                            @method('DELETE')
-
-
-                            <button
-                                type="submit"
-                                class="btn-danger">
-
-                                🗑️
-
-                            </button>
-
-                        </form>
-
-
-                    </div>
-
-                </div>
-
-
-            @empty
-
-                <div style="
-                    padding:20px;
-                    text-align:center;
-                    color:var(--text-secondary);
-                ">
-
-                    No hay opciones configuradas.
-
-                </div>
-
-            @endforelse
-
-
-        @else
-
-
-            <!-- ========================= -->
-            <!-- SIN CATÁLOGO -->
-            <!-- ========================= -->
-
-            <div style="
-                padding:40px 20px;
-                text-align:center;
+            <p style="
+                color:var(--text-secondary);
+                margin-top:-5px;
+                margin-bottom:20px;
             ">
 
-                <div style="
-                    font-size:45px;
-                    margin-bottom:15px;
-                ">
+                {{ $catalogSelected->description }}
 
-                    ⚙️
+            </p>
 
-                </div>
+        @endif
 
 
-                <h3>
+        <!-- ========================= -->
+        <!-- AGREGAR OPCIÓN -->
+        <!-- ========================= -->
 
-                    Configuración del sistema
+        <form
+            method="POST"
+            action="/configuraciones">
 
-                </h3>
+            @csrf
+
+            <input
+                type="hidden"
+                name="catalog_id"
+                value="{{ $catalogSelected->id }}">
 
 
-                <p style="
-                    color:var(--text-secondary);
-                ">
+            <div class="configuration-add">
 
-                    Seleccione un catálogo del menú
-                    para administrar sus opciones.
-
-                </p>
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="Nueva opción..."
+                    required>
 
 
                 <button
-                    type="button"
-                    class="btn-primary-custom"
-                    onclick="abrirModalCatalogo()">
+                    type="submit"
+                    class="btn-primary-custom">
 
-                    ➕ Crear catálogo
+                    ➕ Agregar
 
                 </button>
 
             </div>
 
+        </form>
 
-        @endif
+
+        <!-- ========================= -->
+        <!-- LISTADO DE OPCIONES -->
+        <!-- ========================= -->
+
+        @forelse($options as $option)
+
+            <div class="configuration-item">
 
 
-    </div>
+                <div>
+
+                    <div class="configuration-item-name">
+
+                        {{ $option->name }}
+
+                    </div>
+
+
+                    @if($option->description)
+
+                        <div style="
+                            color:var(--text-secondary);
+                            font-size:13px;
+                            margin-top:3px;
+                        ">
+
+                            {{ $option->description }}
+
+                        </div>
+
+                    @endif
+
+                </div>
+
+
+                <div class="configuration-actions">
+
+
+                    <!-- ESTADO -->
+
+                    @if($option->active)
+
+                        <span class="configuration-status active">
+
+                            Activo
+
+                        </span>
+
+                    @else
+
+                        <span class="configuration-status inactive">
+
+                            Inactivo
+
+                        </span>
+
+                    @endif
+
+
+                    <!-- ================= -->
+                    <!-- TOGGLE -->
+                    <!-- ================= -->
+
+                    <form
+                        method="POST"
+                        action="/configuraciones/{{ $option->id }}/toggle">
+
+                        @csrf
+                        @method('PATCH')
+
+
+                        <button
+                            type="submit"
+                            class="btn-secondary">
+
+                            {{ $option->active
+                                ? 'Desactivar'
+                                : 'Activar'
+                            }}
+
+                        </button>
+
+                    </form>
+
+
+                    <!-- ================= -->
+                    <!-- ELIMINAR -->
+                    <!-- ================= -->
+
+                    <form
+                        method="POST"
+                        action="/configuraciones/{{ $option->id }}"
+
+                        onsubmit="
+                            event.preventDefault();
+                            confirmarEliminacion(this);
+                        ">
+
+                        @csrf
+                        @method('DELETE')
+
+
+                        <button
+                            type="submit"
+                            class="btn-danger">
+
+                            🗑️
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+
+        @empty
+
+            <div style="
+                padding:20px;
+                text-align:center;
+                color:var(--text-secondary);
+            ">
+
+                No hay opciones configuradas.
+
+            </div>
+
+        @endforelse
+
+
+    @else
+
+
+        <!-- ========================= -->
+        <!-- SIN CATÁLOGO -->
+        <!-- ========================= -->
+
+        <div style="
+            padding:40px 20px;
+            text-align:center;
+        ">
+
+            <div style="
+                font-size:45px;
+                margin-bottom:15px;
+            ">
+
+                ⚙️
+
+            </div>
+
+
+            <h3>
+
+                Configuración del sistema
+
+            </h3>
+
+
+            <p style="
+                color:var(--text-secondary);
+            ">
+
+                Seleccione un catálogo del menú
+                para administrar sus opciones.
+
+            </p>
+
+
+            <button
+                type="button"
+                class="btn-primary-custom"
+                onclick="abrirModalCatalogo()">
+
+                ➕ Crear catálogo
+
+            </button>
+
+        </div>
+
+
+    @endif
+
+
+</div>
 
 </div>
 
@@ -497,80 +518,64 @@
         </form>
 
 
-    </div>
+   </div>
 
 </div>
-
 
 <script>
 
 function abrirModalCatalogo()
 {
-    const modal =
-        document.getElementById('modalCatalogo');
+    const modal = document.getElementById('modalCatalogo');
+
+    if (!modal) {
+        return;
+    }
 
     modal.style.display = 'flex';
 
-    const input =
-        modal.querySelector(
-            'input[name="name"]'
-        );
+    const input = modal.querySelector('input[name="name"]');
 
-    setTimeout(function(){
-
-        input.focus();
-
-    }, 100);
+    if (input) {
+        setTimeout(function () {
+            input.focus();
+        }, 100);
+    }
 }
-
 
 function cerrarModalCatalogo()
 {
-    document.getElementById(
-        'modalCatalogo'
-    ).style.display = 'none';
+    const modal = document.getElementById('modalCatalogo');
+
+    if (!modal) {
+        return;
+    }
+
+    modal.style.display = 'none';
 }
 
+const modalCatalogo = document.getElementById('modalCatalogo');
 
-/*
-|--------------------------------------------------------------------------
-| CERRAR AL HACER CLICK FUERA
-|--------------------------------------------------------------------------
-*/
+if (modalCatalogo) {
 
-document
-    .getElementById('modalCatalogo')
-    .addEventListener('click', function(e){
+    modalCatalogo.addEventListener('click', function(e) {
 
-        if(e.target === this){
-
+        if (e.target === this) {
             cerrarModalCatalogo();
-
         }
 
     });
 
+}
 
-/*
-|--------------------------------------------------------------------------
-| CERRAR CON ESC
-|--------------------------------------------------------------------------
-*/
+document.addEventListener('keydown', function(e) {
 
-document.addEventListener(
-    'keydown',
-    function(e){
-
-        if(e.key === 'Escape'){
-
-            cerrarModalCatalogo();
-
-        }
-
+    if (e.key === 'Escape') {
+        cerrarModalCatalogo();
     }
-);
+
+});
 
 </script>
-
 
 @endsection

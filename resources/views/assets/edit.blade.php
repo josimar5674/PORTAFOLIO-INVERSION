@@ -393,4 +393,9 @@
     'modelClass' => 'App\Models\Asset'
 ])
 
+@include('components.alerts',[
+    'modelo' => $asset,
+    'modelClass' => 'App\Models\Asset'
+])
+
 @endsection

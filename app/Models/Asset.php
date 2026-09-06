@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comercial;
+use App\Models\Alert;
 
 class Asset extends Model
 {
@@ -81,6 +82,12 @@ public function producto()
         return $this->belongsTo(Comercial::class, 'producto_id');
     }
 
-
+public function alertas()
+{
+    return $this->morphMany(
+        Alert::class,
+        'alertable'
+    );
+}
     
 }

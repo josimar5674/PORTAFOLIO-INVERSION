@@ -5,65 +5,101 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ConfigurationCatalog;
 use App\Models\ConfigurationOption;
+use App\Models\GoogleWorkspaceSetting;
 
 class ConfigurationOptionController extends Controller
 {
     /*
+|--------------------------------------------------------------------------
+| INDEX
+|--------------------------------------------------------------------------
+*/
+
+public function index(Request $request)
+{
+    $catalogId = $request->catalog;
+
+
+    /*
     |--------------------------------------------------------------------------
-    | INDEX
+    | TODOS LOS CATÁLOGOS
     |--------------------------------------------------------------------------
     */
 
-    public function index(Request $request)
-    {
-        $catalogId = $request->catalog;
-
-        /*
-        |--------------------------------------------------------------------------
-        | TODOS LOS CATÁLOGOS
-        |--------------------------------------------------------------------------
-        */
-
-        $catalogs = ConfigurationCatalog::where('active', true)
-            ->orderBy('name')
-            ->get();
+    $catalogs = ConfigurationCatalog::where('active', true)
+        ->orderBy('name')
+        ->get();
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CATÁLOGO SELECCIONADO
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | CATÁLOGO SELECCIONADO
+    |--------------------------------------------------------------------------
+    */
 
-        $catalogSelected = null;
+    $catalogSelected = null;
 
-        $options = collect();
-
-
-        if ($catalogId) {
-
-            $catalogSelected =
-                ConfigurationCatalog::findOrFail($catalogId);
+    $options = collect();
 
 
-            $options =
-                $catalogSelected->options()
-                    ->orderBy('sort_order')
-                    ->orderBy('name')
-                    ->get();
+    if ($catalogId) {
 
-        }
+        $catalogSelected =
+            ConfigurationCatalog::findOrFail($catalogId);
 
 
-        return view(
-            'configurations.index',
-            compact(
-                'catalogs',
-                'catalogSelected',
-                'options'
-            )
-        );
+        $options =
+            $catalogSelected->options()
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get();
+
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GOOGLE WORKSPACE
+    |--------------------------------------------------------------------------
+    */
+
+    $googleSetting = GoogleWorkspaceSetting::first();
+
+
+    $googleClientId =
+        $googleSetting?->client_id;
+
+
+    $googleEmail =
+        $googleSetting?->email;
+
+
+    $googleConnected =
+        $googleSetting?->active ?? false;
+
+
+    $googleAccount =
+        $googleSetting?->email;
+
+
+    $googleConnectedAt =
+        $googleSetting?->connected_at;
+
+
+    return view(
+        'configurations.index',
+        compact(
+            'catalogs',
+            'catalogSelected',
+            'options',
+            'googleClientId',
+            'googleEmail',
+            'googleConnected',
+            'googleAccount',
+            'googleConnectedAt'
+        )
+    );
+}
 
 
     /*

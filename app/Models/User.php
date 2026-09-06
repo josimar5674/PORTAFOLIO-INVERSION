@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use App\Models\Alert;
 
 
 #[Fillable(['name', 'email', 'password', 'role'])]
@@ -64,5 +65,15 @@ public function tienePermiso($inversionId, $modulo)
 
     return (bool) ($permiso->$modulo ?? false);
 }
-
+public function alertas()
+{
+    return $this->belongsToMany(
+        Alert::class,
+        'alert_user'
+    )->withPivot([
+        'sent_at',
+        'status',
+        'error',
+    ])->withTimestamps();
+}
 }

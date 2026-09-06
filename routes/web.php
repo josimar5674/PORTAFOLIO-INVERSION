@@ -20,7 +20,8 @@ use App\Http\Controllers\BusinessCustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ConfigurationOptionController;
-
+use App\Http\Controllers\AlertController;
+use App\Http\Controllers\GoogleWorkspaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -448,6 +449,44 @@ Route::post(
     '/inversiones/{investment_id}/assets/{id}/duplicate',
     [AssetController::class, 'duplicate']
 );
+
+
+/*
+|--------------------------------------------------------------------------
+| ALERTAS
+|--------------------------------------------------------------------------
+*/
+
+Route::post(
+    '/alerts',
+    [AlertController::class, 'store']
+)->name('alerts.store');
+
+Route::delete(
+    '/alerts/{alert}',
+    [AlertController::class, 'destroy']
+)->name('alerts.destroy');
+
+
+Route::post(
+    '/configuraciones/google',
+    [GoogleWorkspaceController::class, 'save']
+)->name('google.save');
+
+Route::get(
+    '/configuraciones/google/connect',
+    [GoogleWorkspaceController::class, 'connect']
+)->name('google.connect');
+
+Route::get(
+    '/configuraciones/google/callback',
+    [GoogleWorkspaceController::class, 'callback']
+)->name('google.callback');
+
+Route::post(
+    '/configuraciones/google/disconnect',
+    [GoogleWorkspaceController::class, 'disconnect']
+)->name('google.disconnect');
 
 });
 
