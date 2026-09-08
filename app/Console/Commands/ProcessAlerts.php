@@ -23,36 +23,23 @@ class ProcessAlerts extends Command
         foreach ($alerts as $alert) {
 
             /*
-             * Obtenemos los destinatarios originales de la alerta.
+             * Utilizamos los destinatarios que ya tiene la alerta.
              *
-             * Estos registros sirven como plantilla para las
-             * siguientes ejecuciones de una alerta recurrente.
+             * NO se crean nuevos registros.
              */
-            $destinatarios = $alert->destinatarios()
-                ->get();
+            $destinatarios = $alert->destinatarios()->get();
 
             foreach ($destinatarios as $destinatario) {
 
                 /*
-                 * Creamos un nuevo registro para esta ejecución.
-                 *
-                 * De esta manera cada envío conserva su propio
-                 * historial: pending → queued → sent.
+                 * Enviamos la alerta utilizando el mismo destinatario.
                  */
-                $nuevoDestinatario = $alert->destinatarios()->create([
-                    'type' => $destinatario->type,
-                    'recipient_id' => $destinatario->recipient_id,
-                    'name' => $destinatario->name,
-                    'email' => $destinatario->email,
-                    'status' => 'queued',
-                ]);
-
-                SendAlertEmail::dispatch($nuevoDestinatario->id);
+                SendAlertEmail::dispatch($destinatario->id);
             }
 
             /*
              * Si la alerta no tiene recurrencia,
-             * queda desactivada después de ejecutarse.
+             * se desactiva después de ejecutarse.
              */
             if ($alert->recurrencia === 'none') {
 
@@ -64,8 +51,7 @@ class ProcessAlerts extends Command
             } else {
 
                 /*
-                 * Calculamos la siguiente ejecución partiendo
-                 * de la fecha programada anterior.
+                 * Calculamos la siguiente ejecución.
                  */
                 $nextRun = $alert->next_run_at->copy();
 

@@ -26,37 +26,28 @@ class SendAlertEmail implements ShouldQueue
             return;
         }
 
-        if ($recipient->status === 'sent') {
+        $alerta = $recipient->alert;
+
+        if (!$alerta) {
             return;
         }
 
-        $alerta = $recipient->alert;
-
         try {
+
             $gmail->send(
                 $recipient->email,
                 $alerta->asunto,
                 $alerta->mensaje
             );
 
-            $recipient->update([
-                'status' => 'sent',
-                'sent_at' => now(),
-                'error' => null,
-            ]);
-
         } catch (\Throwable $e) {
-
-            $recipient->update([
-                'status' => 'failed',
-                'error' => $e->getMessage(),
-            ]);
 
             Log::error(
                 'Error enviando alerta por Gmail',
                 [
                     'alert_recipient_id' => $recipient->id,
                     'email' => $recipient->email,
+                    'alert_id' => $alerta->id,
                     'error' => $e->getMessage(),
                 ]
             );
