@@ -328,18 +328,7 @@
             margin-bottom:15px;
         ">
 
-            <input
-                type="checkbox"
-                name="active"
-                value="1"
-                checked
-                style="
-                    width:16px;
-                    height:16px;
-                    margin:0;
-                    flex:0 0 auto;
-                "
-            >
+          <input type="hidden" name="active" value="1">
 
             <span style="
                 color:var(--text);
@@ -488,37 +477,21 @@
                     <!-- ESTADO -->
                     <!-- ================================================= -->
 
-                    <div style="
-                        margin-top:6px;
-                    ">
+                 <div style="
+    margin-top:6px;
+">
 
+    <span
+        data-alert-status
+        style="
+            color:{{ $alerta->active ? '#16a34a' : '#6b7280' }};
+            font-size:13px;
+        "
+    >
+        {{ $alerta->active ? '🟢 Activa' : '⚪ Inactiva' }}
+    </span>
 
-                        @if($alerta->active)
-
-                            <span style="
-                                color:#16a34a;
-                                font-size:13px;
-                            ">
-
-                                🟢 Activa
-
-                            </span>
-
-                        @else
-
-                            <span style="
-                                color:#6b7280;
-                                font-size:13px;
-                            ">
-
-                                ⚪ Inactiva
-
-                            </span>
-
-                        @endif
-
-
-                    </div>
+</div>
 
 <!-- ================================================= -->
 <!-- DESTINATARIOS -->
@@ -625,6 +598,30 @@
 
                 </div>
 
+<form
+    action="{{ route('alerts.toggle', $alerta) }}"
+    method="POST"
+    style="display:inline;"
+    onsubmit="toggleAlert(event, this)"
+>
+    @csrf
+    @method('PATCH')
+
+  <button
+    type="submit"
+    style="
+        border:none;
+        background:none;
+        cursor:pointer;
+        font-size:13px;
+        color:{{ $alerta->active ? '#dc2626' : '#16a34a' }};
+        font-weight:500;
+    "
+>
+    {{ $alerta->active ? 'Desactivar' : 'Activar' }}
+</button>
+
+</form>
 
                 <!-- ================================================= -->
                 <!-- ELIMINAR -->
@@ -682,3 +679,83 @@
 
 
 </div>
+
+<script>
+async function toggleAlert(event, form) {
+    event.preventDefault();
+
+    const button = form.querySelector('button');
+    const originalText = button.textContent.trim();
+
+    button.disabled = true;
+    button.textContent = 'Procesando...';
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN':
+                    form.querySelector('input[name="_token"]').value,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type':
+                    'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: new URLSearchParams(new FormData(form))
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                'No se pudo cambiar el estado de la alerta.'
+            );
+        }
+
+        const data = await response.json();
+
+        /*
+         * Cambiar texto y color del botón
+         */
+        if (data.active) {
+
+            button.textContent = 'Desactivar';
+            button.style.color = '#dc2626';
+
+        } else {
+
+            button.textContent = 'Activar';
+            button.style.color = '#16a34a';
+        }
+
+        /*
+         * Cambiar estado visual
+         */
+        const card = form.closest('.card-info');
+
+        const status = card.querySelector('[data-alert-status]');
+
+        if (status) {
+
+            if (data.active) {
+
+                status.textContent = '🟢 Activa';
+                status.style.color = '#16a34a';
+
+            } else {
+
+                status.textContent = '⚪ Inactiva';
+                status.style.color = '#6b7280';
+            }
+        }
+
+    } catch (error) {
+
+        button.textContent = originalText;
+
+        alert(error.message);
+
+    } finally {
+
+        button.disabled = false;
+    }
+}
+</script>

@@ -222,4 +222,15 @@ class AlertController extends Controller
             'Alerta eliminada correctamente.'
         );
     }
+
+public function toggle(Alert $alert)
+{
+    $alert->update([
+        'active' => !$alert->active,
+    ]);
+
+    return response()->json([
+        'active' => $alert->active,
+    ]);
+}
 }

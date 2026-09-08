@@ -462,6 +462,9 @@ Route::post(
     [AlertController::class, 'store']
 )->name('alerts.store');
 
+Route::patch('/alerts/{alert}/toggle', [AlertController::class, 'toggle'])
+    ->name('alerts.toggle');
+
 Route::delete(
     '/alerts/{alert}',
     [AlertController::class, 'destroy']

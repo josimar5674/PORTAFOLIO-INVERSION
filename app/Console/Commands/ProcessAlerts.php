@@ -22,22 +22,38 @@ class ProcessAlerts extends Command
 
         foreach ($alerts as $alert) {
 
-            $recipients = $alert->destinatarios()
-                ->where('status', 'pending')
+            /*
+             * Obtenemos los destinatarios originales de la alerta.
+             *
+             * Estos registros sirven como plantilla para las
+             * siguientes ejecuciones de una alerta recurrente.
+             */
+            $destinatarios = $alert->destinatarios()
                 ->get();
 
-            foreach ($recipients as $recipient) {
+            foreach ($destinatarios as $destinatario) {
 
-                // Marcamos como queued para evitar que otro
-                // proceso vuelva a ponerlo en la cola.
-                $recipient->update([
+                /*
+                 * Creamos un nuevo registro para esta ejecución.
+                 *
+                 * De esta manera cada envío conserva su propio
+                 * historial: pending → queued → sent.
+                 */
+                $nuevoDestinatario = $alert->destinatarios()->create([
+                    'type' => $destinatario->type,
+                    'recipient_id' => $destinatario->recipient_id,
+                    'name' => $destinatario->name,
+                    'email' => $destinatario->email,
                     'status' => 'queued',
                 ]);
 
-                SendAlertEmail::dispatch($recipient->id);
+                SendAlertEmail::dispatch($nuevoDestinatario->id);
             }
 
-            // Alerta de una sola ejecución
+            /*
+             * Si la alerta no tiene recurrencia,
+             * queda desactivada después de ejecutarse.
+             */
             if ($alert->recurrencia === 'none') {
 
                 $alert->update([
@@ -47,17 +63,32 @@ class ProcessAlerts extends Command
 
             } else {
 
-                // Calculamos la próxima ejecución
+                /*
+                 * Calculamos la siguiente ejecución partiendo
+                 * de la fecha programada anterior.
+                 */
                 $nextRun = $alert->next_run_at->copy();
 
                 do {
+
                     $nextRun = match ($alert->recurrencia) {
-                        'daily' => $nextRun->addDay(),
-                        'weekly' => $nextRun->addWeek(),
-                        'monthly' => $nextRun->addMonthNoOverflow(),
-                        'yearly' => $nextRun->addYearNoOverflow(),
-                        default => null,
+
+                        'daily' =>
+                            $nextRun->addDay(),
+
+                        'weekly' =>
+                            $nextRun->addWeek(),
+
+                        'monthly' =>
+                            $nextRun->addMonthNoOverflow(),
+
+                        'yearly' =>
+                            $nextRun->addYearNoOverflow(),
+
+                        default =>
+                            null,
                     };
+
                 } while ($nextRun && $nextRun->lte(now()));
 
                 $alert->update([
@@ -67,7 +98,8 @@ class ProcessAlerts extends Command
 
             $this->info(
                 "Alerta #{$alert->id}: "
-                . "{$recipients->count()} destinatario(s) enviado(s) a la cola."
+                . "{$destinatarios->count()} destinatario(s) "
+                . "enviado(s) a la cola."
             );
         }
 
