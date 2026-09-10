@@ -27,6 +27,198 @@
 <p style="color:green;">
     {{ session('success') }}
 </p>
+@php
+
+    $totalValor = 0;
+    $totalNOI = 0;
+    $totalCostoOperativo = 0;
+    $totalComercial = 0;
+
+    $cantidadInversiones = $inversiones->count();
+
+    foreach ($inversiones as $inv) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALOR AVALÚO
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            auth()->user()->role === 'admin' ||
+            auth()->user()->tienePermiso($inv->id, 'avaluos')
+        ) {
+
+            $totalValor +=
+                $inv->ultimoAvaluo?->valor_total ?? 0;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | COMERCIAL
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            auth()->user()->role === 'admin' ||
+            auth()->user()->tienePermiso($inv->id, 'comercial')
+        ) {
+
+            $totalComercial +=
+                $inv->comercial->sum('subtotal');
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | COSTO OPERATIVO
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            auth()->user()->role === 'admin' ||
+            auth()->user()->tienePermiso($inv->id, 'servicios')
+        ) {
+
+            $totalCostoOperativo +=
+                $inv->costo_operativo_anual ?? 0;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOI
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            auth()->user()->role === 'admin' ||
+            (
+                auth()->user()->tienePermiso($inv->id, 'avaluos') &&
+                auth()->user()->tienePermiso($inv->id, 'comercial') &&
+                auth()->user()->tienePermiso($inv->id, 'servicios')
+            )
+        ) {
+
+            $ingresos =
+                $inv->comercial->sum('subtotal');
+
+            $costos =
+                $inv->costo_operativo_anual ?? 0;
+
+            $totalNOI +=
+                $ingresos - $costos;
+
+        }
+
+    }
+
+@endphp
+
+
+<div class="summary-grid">
+
+    <!-- ================================================= -->
+    <!-- TOTAL INVERSIONES -->
+    <!-- ================================================= -->
+
+    <div class="summary-card">
+
+        🏢 Inversiones
+
+        <strong>
+            {{ $cantidadInversiones }}
+        </strong>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- VALOR TOTAL -->
+    <!-- ================================================= -->
+
+    @if(auth()->user()->role === 'admin' || $totalValor > 0)
+
+        <div class="summary-card">
+
+            💰 Valor Avalúos
+
+            <strong>
+                $
+                {{ number_format($totalValor, 0) }}
+            </strong>
+
+        </div>
+
+    @endif
+
+
+    <!-- ================================================= -->
+    <!-- NOI -->
+    <!-- ================================================= -->
+
+    @if(auth()->user()->role === 'admin' || $totalNOI != 0)
+
+        <div class="summary-card">
+
+            📈 NOI Total
+
+            <strong>
+                $
+                {{ number_format($totalNOI, 0) }}
+            </strong>
+
+        </div>
+
+    @endif
+
+
+    <!-- ================================================= -->
+    <!-- COSTO OPERATIVO -->
+    <!-- ================================================= -->
+
+    @if(auth()->user()->role === 'admin' || $totalCostoOperativo > 0)
+
+        <div class="summary-card">
+
+            ⚙️ Costo Operativo
+
+            <strong>
+                $
+                {{ number_format($totalCostoOperativo, 0) }}
+            </strong>
+
+        </div>
+
+    @endif
+
+
+    <!-- ================================================= -->
+    <!-- COMERCIAL -->
+    <!-- ================================================= -->
+
+    @if(auth()->user()->role === 'admin' || $totalComercial > 0)
+
+        <div class="summary-card">
+
+            💵 Comercial
+
+            <strong>
+                $
+                {{ number_format($totalComercial, 0) }}
+            </strong>
+
+        </div>
+
+    @endif
+
+</div>
+
+
 
 <hr>
 <div style="overflow-x:auto;">
