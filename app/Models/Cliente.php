@@ -70,5 +70,14 @@ public function entidad()
      ->withTimestamps();
 }
 
-    
+
+public function alertas()
+{
+    return $this->morphMany(
+        Alert::class,
+        'alertable'
+    );
+}    
+
+
 }

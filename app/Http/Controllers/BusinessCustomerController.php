@@ -9,9 +9,19 @@ class BusinessCustomerController extends Controller
 {
     public function index()
     {
-        $clientes = BusinessCustomer::orderBy(
-            'nombre'
-        )->get();
+        $usuario = auth()->user();
+
+        if ($usuario->role === 'admin') {
+
+            $clientes = BusinessCustomer::orderBy('nombre')->get();
+
+        } else {
+
+            $clientes = $usuario->businessCustomers()
+                ->orderBy('nombre')
+                ->get();
+
+        }
 
         return view(
             'business_customers.index',
@@ -26,55 +36,56 @@ class BusinessCustomerController extends Controller
         );
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-
-        'nombre' => 'required',
-
-        'identificador_tributario'
-            => 'nullable',
-
-        'email'
-            => 'nullable|email',
-
-        'telefono'
-            => 'nullable',
-
-    ]);
-
-    $cliente = BusinessCustomer::create([
-
-        'nombre'
-            => $request->nombre,
-
-        'identificador_tributario'
-            => $request->identificador_tributario,
-
-        'email'
-            => $request->email,
-
-        'telefono'
-            => $request->telefono,
-
-    ]);
-
-    foreach($request->notas ?? [] as $nota)
+    public function store(Request $request)
     {
-        $cliente->notas()->create([
+        $request->validate([
 
-            'nota' => $nota
+            'nombre' => 'required',
+
+            'identificador_tributario'
+                => 'nullable',
+
+            'email'
+                => 'nullable|email',
+
+            'telefono'
+                => 'nullable',
 
         ]);
+
+        $cliente = BusinessCustomer::create([
+
+            'nombre'
+                => $request->nombre,
+
+            'identificador_tributario'
+                => $request->identificador_tributario,
+
+            'email'
+                => $request->email,
+
+            'telefono'
+                => $request->telefono,
+
+        ]);
+
+        foreach ($request->notas ?? [] as $nota)
+        {
+            $cliente->notas()->create([
+
+                'nota' => $nota
+
+            ]);
+        }
+
+        return redirect(
+            '/business-customers'
+        )->with(
+            'success',
+            'Cliente creado correctamente'
+        );
     }
 
-    return redirect(
-        '/business-customers'
-    )->with(
-        'success',
-        'Cliente creado correctamente'
-    );
-}
     public function edit($id)
     {
         $cliente =
@@ -88,65 +99,66 @@ public function store(Request $request)
         );
     }
 
-   public function update(
-    Request $request,
-    $id
-)
-{
-    $request->validate([
-
-        'nombre' => 'required',
-
-        'identificador_tributario'
-            => 'nullable',
-
-        'email'
-            => 'nullable|email',
-
-        'telefono'
-            => 'nullable',
-
-    ]);
-
-    $cliente =
-        BusinessCustomer::findOrFail(
-            $id
-        );
-
-    $cliente->update([
-
-        'nombre'
-            => $request->nombre,
-
-        'identificador_tributario'
-            => $request->identificador_tributario,
-
-        'email'
-            => $request->email,
-
-        'telefono'
-            => $request->telefono,
-
-    ]);
-
-    $cliente->notas()->delete();
-
-    foreach($request->notas ?? [] as $nota)
+    public function update(
+        Request $request,
+        $id
+    )
     {
-        $cliente->notas()->create([
+        $request->validate([
 
-            'nota' => $nota
+            'nombre' => 'required',
+
+            'identificador_tributario'
+                => 'nullable',
+
+            'email'
+                => 'nullable|email',
+
+            'telefono'
+                => 'nullable',
 
         ]);
+
+        $cliente =
+            BusinessCustomer::findOrFail(
+                $id
+            );
+
+        $cliente->update([
+
+            'nombre'
+                => $request->nombre,
+
+            'identificador_tributario'
+                => $request->identificador_tributario,
+
+            'email'
+                => $request->email,
+
+            'telefono'
+                => $request->telefono,
+
+        ]);
+
+        $cliente->notas()->delete();
+
+        foreach ($request->notas ?? [] as $nota)
+        {
+            $cliente->notas()->create([
+
+                'nota' => $nota
+
+            ]);
+        }
+
+        return redirect(
+            '/business-customers'
+        )->with(
+            'success',
+            'Cliente actualizado'
+        );
     }
 
-    return redirect(
-        '/business-customers'
-    )->with(
-        'success',
-        'Cliente actualizado'
-    );
-}
     public function destroy($id)
     {
         $cliente =

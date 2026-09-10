@@ -34,9 +34,85 @@ class SendAlertEmail implements ShouldQueue
 
         try {
 
+            /*
+            |--------------------------------------------------------------------------
+            | ASUNTO DEL CORREO
+            |--------------------------------------------------------------------------
+            */
+
+            $asunto = $alerta->asunto;
+
+            /*
+            |--------------------------------------------------------------------------
+            | REFERENCIA ADICIONAL
+            |--------------------------------------------------------------------------
+            */
+
+            if (!empty($alerta->metadata)) {
+
+                $metadata = is_string($alerta->metadata)
+                    ? json_decode($alerta->metadata, true)
+                    : $alerta->metadata;
+
+                if (
+                    is_array($metadata)
+                    && !empty($metadata['referencia'])
+                    && isset($metadata['valor'])
+                    && $metadata['valor'] !== ''
+                ) {
+
+                    $nombreReferencia =
+                        $metadata['referencia'];
+
+                    $valorReferencia =
+                        $metadata['valor'];
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Convertir nombres técnicos a nombres amigables
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $nombreReferencia = match ($nombreReferencia) {
+
+                        'matricula' =>
+                            'Matrícula',
+
+                        'codigo' =>
+                            'Código',
+
+                        'identificador_tributario' =>
+                            'Identificador tributario',
+
+                        default =>
+                            ucfirst(
+                                str_replace(
+                                    '_',
+                                    ' ',
+                                    $nombreReferencia
+                                )
+                            ),
+                    };
+
+                    $asunto =
+                        $asunto
+                        . ' | '
+                        . $nombreReferencia
+                        . ': '
+                        . $valorReferencia;
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ENVIAR CORREO
+            |--------------------------------------------------------------------------
+            */
+
             $gmail->send(
                 $recipient->email,
-                $alerta->asunto,
+                $asunto,
                 $alerta->mensaje
             );
 
@@ -45,10 +121,17 @@ class SendAlertEmail implements ShouldQueue
             Log::error(
                 'Error enviando alerta por Gmail',
                 [
-                    'alert_recipient_id' => $recipient->id,
-                    'email' => $recipient->email,
-                    'alert_id' => $alerta->id,
-                    'error' => $e->getMessage(),
+                    'alert_recipient_id' =>
+                        $recipient->id,
+
+                    'email' =>
+                        $recipient->email,
+
+                    'alert_id' =>
+                        $alerta->id,
+
+                    'error' =>
+                        $e->getMessage(),
                 ]
             );
 

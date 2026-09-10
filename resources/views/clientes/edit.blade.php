@@ -320,6 +320,11 @@
     'modelClass' => 'App\Models\Cliente'
 ])  
 
+@include('components.alerts',[
+    'modelo' => $cliente,
+    'modelClass' => 'App\Models\Cliente'
+])  
+
 
 <script>
 

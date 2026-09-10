@@ -917,4 +917,68 @@ textarea{
     }
 
 }
+.permission-tabs {
+
+    display:flex;
+
+    gap:5px;
+
+    border-bottom:
+
+        1px solid var(--border-color, #555);
+
+    margin-bottom:20px;
+
+}
+
+.permission-tab {
+
+    appearance:none;
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--text-secondary);
+
+    padding:12px 20px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    font-size:14px;
+
+    border-bottom:
+
+        3px solid transparent;
+
+    transition:
+
+        color .2s ease,
+
+        border-color .2s ease,
+
+        background .2s ease;
+
+}
+
+.permission-tab:hover {
+
+    color:var(--text-primary);
+
+}
+
+.permission-tab.active {
+
+    color:var(--text-primary);
+
+    border-bottom-color:
+
+        var(--accent-color, #3b82f6);
+
+}
+
+
+
 </style>

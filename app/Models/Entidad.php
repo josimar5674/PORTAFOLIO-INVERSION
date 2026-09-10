@@ -73,4 +73,15 @@ public function socios()
     )->withPivot('porcentaje')
      ->withTimestamps();
 }
+
+public function alertas()
+{
+    return $this->morphMany(
+        Alert::class,
+        'alertable'
+    );
+}    
+
+
+
 }

@@ -76,4 +76,12 @@ public function alertas()
         'error',
     ])->withTimestamps();
 }
+
+public function businessCustomers()
+{
+    return $this->belongsToMany(
+        \App\Models\BusinessCustomer::class,
+        'user_business_customer'
+    )->withTimestamps();
+}
 }

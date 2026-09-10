@@ -93,5 +93,11 @@
     'modelClass' => 'App\Models\BusinessCustomer'
 ])
 
+@include('components.alerts',[
+    'modelo' => $cliente,
+    'modelClass' => 'App\Models\BusinessCustomer'
+])
+
+
 </div>
 @endsection

@@ -174,6 +174,8 @@
                 📈
             @endif
 
+            
+
         </td>
          @endif
 

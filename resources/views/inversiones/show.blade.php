@@ -383,7 +383,7 @@
 
 @endif
 
-@if(auth()->user()->tienePermiso($inversion->id,'entidades'))
+@if(false) //se quita temporalmente el módulo de entidades
 
 <a href="/inversiones/{{ $inversion->id }}/entidades"
    class="module-card">
@@ -428,9 +428,28 @@
     </div>
 
     <div class="title">
-        Estado de Resultados
+        Estado de Resultado
     </div>
 </a>
+
+
+@endif
+@if(auth()->user()->tienePermiso($inversion->id,'bitacoras'))
+
+<a href="/inversiones/{{ $inversion->id }}/bitacoras"
+   class="module-card">
+
+    <div class="icon">
+        📋
+    </div>
+
+    <div class="title">
+        Bitácoras
+    </div>
+
+</a>
+
+
 
 
 </div>

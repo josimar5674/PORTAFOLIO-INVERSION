@@ -17,15 +17,7 @@
 
 </div>
 
-@if(session('success'))
 
-    <div class="success-box">
-
-        {{ session('success') }}
-
-    </div>
-
-@endif
 
 <div class="card-grid">
 

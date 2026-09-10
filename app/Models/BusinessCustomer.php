@@ -33,4 +33,21 @@ public function notas()
         'notable'
     );
 }
+
+
+public function users()
+{
+    return $this->belongsToMany(
+        \App\Models\User::class,
+        'user_business_customer'
+    )->withTimestamps();
+}
+
+public function alertas()
+{
+    return $this->morphMany(
+        Alert::class,
+        'alertable'
+    );
+}    
 }

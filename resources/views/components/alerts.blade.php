@@ -25,11 +25,19 @@
             value="{{ $modelClass }}"
         >
 
+                    <input
+                type="hidden"
+                name="referencia"
+                value="{{ $referencia ?? '' }}"
+            >
+
         <input
             type="hidden"
             name="alertable_id"
             value="{{ $modelo->id }}"
         >
+
+  
 
 
         <!-- ================================================= -->
@@ -38,13 +46,13 @@
 
         <div style="
             display:flex;
-            gap:10px;
-            margin-bottom:15px;
+            gap:6px;
+            margin-bottom:8px;
         ">
 
             <!-- FECHA -->
 
-            <div style="flex:1;">
+            <div style="flex:0.5;">
 
                 <label>
                     Fecha de alerta
@@ -62,7 +70,7 @@
 
             <!-- HORA -->
 
-            <div style="flex:1;">
+            <div style="flex:0.5;">
 
                 <label>
                     Hora de alerta
@@ -80,7 +88,7 @@
 
             <!-- RECURRENCIA -->
 
-            <div style="flex:1;">
+                <div style="flex:0.5;">
 
                 <label>
                     Recurrencia
@@ -335,8 +343,7 @@
                 cursor:pointer;
             ">
 
-                Alerta activa
-
+           
             </span>
 
         </div>
@@ -399,6 +406,54 @@
 
                     </div>
 
+
+                    @php
+    $metadata = $alerta->metadata;
+
+    if (is_string($metadata)) {
+        $metadata = json_decode($metadata, true);
+    }
+@endphp
+
+@if(
+    is_array($metadata) &&
+    !empty($metadata['referencia']) &&
+    isset($metadata['valor']) &&
+    $metadata['valor'] !== ''
+)
+
+    @php
+        $nombreReferencia = match ($metadata['referencia']) {
+            'matricula' => 'Matrícula',
+            'codigo' => 'Código',
+            'identificador_tributario' => 'Identificador tributario',
+            default => ucfirst(
+                str_replace(
+                    '_',
+                    ' ',
+                    $metadata['referencia']
+                )
+            ),
+        };
+    @endphp
+
+    <div style="
+        margin-top:4px;
+        font-size:13px;
+        color:var(--text-secondary);
+    ">
+
+        🏷️
+
+        <strong style="color:var(--text);">
+            {{ $nombreReferencia }}:
+        </strong>
+
+        {{ $metadata['valor'] }}
+
+    </div>
+
+@endif
 
                     <!-- ================================================= -->
                     <!-- MENSAJE -->

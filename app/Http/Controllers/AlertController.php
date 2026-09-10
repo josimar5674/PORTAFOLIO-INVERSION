@@ -16,8 +16,12 @@ class AlertController extends Controller
             'alertable_type' => ['required', 'string'],
             'alertable_id' => ['required', 'integer'],
 
+               'referencia' => ['nullable','string','max:100'],
+
             'fecha' => ['required', 'date'],
             'hora' => ['required'],
+
+
 
             'recurrencia' => [
                 'required',
@@ -71,6 +75,14 @@ class AlertController extends Controller
             $validated['alertable_id']
         );
 
+      $referencia = $validated['referencia'] ?? null;
+
+        $valorReferencia = null;
+
+        if ($referencia) {
+            $valorReferencia = $modelo->{$referencia} ?? null;
+        }
+
         $nextRunAt = Carbon::parse(
             $validated['fecha'] . ' ' . $validated['hora']
         );
@@ -79,7 +91,9 @@ class AlertController extends Controller
             $validated,
             $request,
             $modelo,
-            $nextRunAt
+            $nextRunAt,
+            $referencia,
+            $valorReferencia
         ) {
 
             /*
@@ -106,7 +120,8 @@ class AlertController extends Controller
 
                 'next_run_at' => $nextRunAt,
 
-                'metadata' => null,
+                'metadata' => $referencia? json_encode([
+                    'referencia' => $referencia,'valor' => $valorReferencia,]): null,
 
                 'active' => $request->boolean('active'),
 

@@ -157,5 +157,14 @@ public function notas()
     );
 }
 
+public function alertas()
+{
+    return $this->morphMany(
+        Alert::class,
+        'alertable'
+    );
+}
+
+
 
 }

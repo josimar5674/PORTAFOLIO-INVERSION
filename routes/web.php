@@ -22,6 +22,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ConfigurationOptionController;
 use App\Http\Controllers\AlertController;
 use App\Http\Controllers\GoogleWorkspaceController;
+use App\Http\Controllers\BitacoraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -491,7 +492,15 @@ Route::post(
     [GoogleWorkspaceController::class, 'disconnect']
 )->name('google.disconnect');
 
-});
+
+
+
+Route::get(
+    '/inversiones/{inversion}/bitacoras',
+    [BitacoraController::class, 'index']
+)->name('inversiones.bitacoras');
+
+
 
 
 Route::get(
@@ -536,14 +545,8 @@ Route::delete(
 );
 
 
-use App\Services\GoogleGmailService;
 
-Route::get('/test-gmail', function (GoogleGmailService $gmail) {
-    $gmail->send(
-        'josimarherrera7@gmail.com',
-        'Prueba de Gmail API',
-        'Este es un correo de prueba enviado desde Laravel mediante Google Gmail API.'
-    );
 
-    return 'Correo enviado correctamente.';
+
+
 });

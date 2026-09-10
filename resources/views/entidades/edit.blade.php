@@ -242,6 +242,12 @@
 ])
 
 
+@include('components.alerts',[
+    'modelo' => $entidad,
+    'referencia' => 'matricula',
+    'modelClass' => 'App\Models\Entidad'
+])
+
 
 
 </div>
