@@ -460,17 +460,6 @@
 
 <div class="grid-2">
 
-@include('components.notes',[
-    'modelo' => $inversion,
-    'modelClass' => 'App\Models\Inversion'
-])  
-
-
-@include('components.documents',[
-    'modelo' => $inversion,
-    'modelClass' => 'App\Models\Inversion'
-])
-
 </div>
 
 
