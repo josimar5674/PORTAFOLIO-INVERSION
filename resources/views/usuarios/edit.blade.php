@@ -10,7 +10,7 @@
     <div class="form-title">
         👤 Editar Usuario
     </div>
-
+ 
     @if ($errors->any())
 
         <div class="error-box">
@@ -37,18 +37,21 @@
 
 
         <!-- NOMBRE -->
-        <div class="form-group">
+  <div class="form-group">
 
-            <label class="form-label">
-                Nombre
-            </label>
+    <label for="name">
+        Nombre de usuario
+    </label>
 
-            <input type="text"
-                   class="form-control"
-                   value="{{ $usuario->name }}"
-                   disabled>
+    <input
+        type="text"
+        id="name"
+        name="name"
+        value="{{ old('name', $usuario->name) }}"
+        required
+    >
 
-        </div>
+</div>
 
 
         <!-- EMAIL -->
@@ -94,339 +97,724 @@
 
         </div>
 
+<!-- ===================================================== -->
+<!-- PERMISOS -->
+<!-- ===================================================== -->
 
-        <!-- ===================================================== -->
-        <!-- PERMISOS -->
-        <!-- ===================================================== -->
+<div id="permisosContainer">
 
-        <div id="permisosContainer">
+    <!-- ================================================= -->
+    <!-- PESTAÑAS -->
+    <!-- ================================================= -->
 
-            <!-- PESTAÑAS -->
+    <div class="permission-tabs">
 
-      <!-- PESTAÑAS -->
+        <!-- INVERSIONES -->
 
-<!-- PESTAÑAS -->
-
-<div class="permission-tabs">
-
-    <button type="button"
+        <button
+            type="button"
             id="tabInversiones"
             class="permission-tab active"
-            onclick="mostrarPermisos('inversiones')">
+            onclick="mostrarPermisos('inversiones')"
+        >
 
-        🏢 Inversiones
+            🏢 Inversiones
 
-    </button>
+        </button>
 
 
-    <button type="button"
+        <!-- PERSONAS -->
+
+        <button
+            type="button"
             id="tabClientes"
             class="permission-tab"
-            onclick="mostrarPermisos('clientes')">
+            onclick="mostrarPermisos('clientes')"
+        >
 
-        👤 Clientes
+            👤 Personas
 
-    </button>
-
-</div>
+        </button>
 
 
-            <!-- ================================================= -->
-            <!-- INVERSIONES -->
-            <!-- ================================================= -->
+        <!-- ENTIDADES -->
 
-            <div id="permisos-inversiones">
+        <button
+            type="button"
+            id="tabEntidades"
+            class="permission-tab"
+            onclick="mostrarPermisos('entidades')"
+        >
 
-                <div class="form-group">
+            🏛️ Entidades
 
-                    <label class="form-label">
+        </button>
 
-                        Inversiones Permitidas
+
+        <!-- BUSINESS CUSTOMERS -->
+
+        <button
+            type="button"
+            id="tabBusinessCustomers"
+            class="permission-tab"
+            onclick="mostrarPermisos('businessCustomers')"
+        >
+
+            💼 Clientes
+
+        </button>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- INVERSIONES -->
+    <!-- ================================================= -->
+
+    <div id="permisos-inversiones">
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Inversiones Permitidas
+
+            </label>
+
+
+            @foreach($inversiones as $inversion)
+
+                @php
+                    $permiso =
+                        $permisos[$inversion->id] ?? null;
+                @endphp
+
+
+                <div style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    border-radius:8px;
+                    margin-bottom:15px;
+                ">
+
+                    <!-- INVERSIÓN -->
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            name="inversiones[]"
+                            value="{{ $inversion->id }}"
+                            {{ in_array(
+                                $inversion->id,
+                                $inversionesUsuario
+                            ) ? 'checked' : '' }}
+                        >
+
+                        <strong>
+
+                            {{ $inversion->nombre }}
+
+                        </strong>
 
                     </label>
 
 
-                    @foreach($inversiones as $inversion)
+                    <!-- MÓDULOS -->
 
-                        @php
-                            $permiso = $permisos[$inversion->id] ?? null;
-                        @endphp
+                    <div style="
+                        margin-top:10px;
+                        margin-left:25px;
+                        display:grid;
+                        grid-template-columns:repeat(3,1fr);
+                        gap:8px;
+                    ">
 
+                        <!-- AVALÚOS -->
 
-                        <div style="
-                            border:1px solid #ddd;
-                            padding:15px;
-                            border-radius:8px;
-                            margin-bottom:15px;
-                        ">
+                        <label>
 
-                            <!-- INVERSIÓN -->
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][avaluos]"
+                                {{ $permiso && $permiso->avaluos
+                                    ? 'checked'
+                                    : '' }}
+                            >
 
-                            <label>
+                            Avalúos
 
-                                <input type="checkbox"
-                                       name="inversiones[]"
-                                       value="{{ $inversion->id }}"
-                                       {{ in_array($inversion->id, $inversionesUsuario) ? 'checked' : '' }}>
-
-                                <strong>
-
-                                    {{ $inversion->nombre }}
-
-                                </strong>
-
-                            </label>
+                        </label>
 
 
-                            <!-- MÓDULOS -->
+                        <!-- ACTIVOS -->
 
-                            <div style="
-                                margin-top:10px;
-                                margin-left:25px;
-                                display:grid;
-                                grid-template-columns:repeat(3,1fr);
-                                gap:8px;
-                            ">
+                        <label>
 
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][activos]"
+                                {{ $permiso && $permiso->activos
+                                    ? 'checked'
+                                    : '' }}
+                            >
 
-                                <!-- AVALÚOS -->
+                            Activos
 
-                                <label>
-
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][avaluos]"
-                                           {{ $permiso && $permiso->avaluos ? 'checked' : '' }}>
-
-                                    Avalúos
-
-                                </label>
+                        </label>
 
 
-                                <!-- ACTIVOS -->
+                        <!-- SERVICIOS -->
 
-                                <label>
+                        <label>
 
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][activos]"
-                                           {{ $permiso && $permiso->activos ? 'checked' : '' }}>
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][servicios]"
+                                {{ $permiso && $permiso->servicios
+                                    ? 'checked'
+                                    : '' }}
+                            >
 
-                                    Activos
+                            Servicios
 
-                                </label>
-
-
-                                <!-- SERVICIOS -->
-
-                                <label>
-
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][servicios]"
-                                           {{ $permiso && $permiso->servicios ? 'checked' : '' }}>
-
-                                    Servicios
-
-                                </label>
+                        </label>
 
 
-                                <!-- COMERCIAL -->
+                        <!-- COMERCIAL -->
 
-                                <label>
+                        <label>
 
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][comercial]"
-                                           {{ $permiso && $permiso->comercial ? 'checked' : '' }}>
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][comercial]"
+                                {{ $permiso && $permiso->comercial
+                                    ? 'checked'
+                                    : '' }}
+                            >
 
-                                    Comercial
+                            Comercial
 
-                                </label>
-
-
-                                <!-- ENTIDADES -->
-
-                                <label>
-
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][entidades]"
-                                           {{ $permiso && $permiso->entidades ? 'checked' : '' }}>
-
-                                    Entidades
-
-                                </label>
+                        </label>
 
 
-                                <!-- ESTADO RESULTADOS -->
+                        <!-- ENTIDADES -->
 
-                                <label>
+                        <label>
 
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][estado_resultados]"
-                                           {{ $permiso && $permiso->estado_resultados ? 'checked' : '' }}>
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][entidades]"
+                                {{ $permiso && $permiso->entidades
+                                    ? 'checked'
+                                    : '' }}
+                            >
 
-                                    Estado Resultados
+                            Entidades
 
-                                </label>
-
-
-                                <!-- BITÁCORAS -->
-
-                                <label>
-
-                                    <input type="checkbox"
-                                           name="permisos[{{ $inversion->id }}][bitacoras]"
-                                           {{ $permiso && $permiso->bitacoras ? 'checked' : '' }}>
-
-                                    Bitácoras
-
-                                </label>
+                        </label>
 
 
-                            </div>
+                        <!-- ESTADO RESULTADOS -->
 
-                        </div>
+                        <label>
 
-                    @endforeach
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][estado_resultados]"
+                                {{ $permiso && $permiso->estado_resultados
+                                    ? 'checked'
+                                    : '' }}
+                            >
+
+                            Estado Resultados
+
+                        </label>
+
+
+                        <!-- ACTIVOS REGISTRALES -->
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][activos_registrales]"
+                                {{ $permiso && $permiso->activos_registrales
+                                    ? 'checked'
+                                    : '' }}
+                            >
+
+                            Activos Registrales
+
+                        </label>
+
+
+                        <!-- BITÁCORAS -->
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="permisos[{{ $inversion->id }}][bitacoras]"
+                                {{ $permiso && $permiso->bitacoras
+                                    ? 'checked'
+                                    : '' }}
+                            >
+
+                            Bitácoras
+
+                        </label>
+
+                    </div>
 
                 </div>
 
-            </div>
+            @endforeach
 
-<!-- ================================================= -->
-<!-- BUSINESS CUSTOMERS -->
-<!-- ================================================= -->
+        </div>
 
-<div id="permisos-clientes"
-     style="display:none;">
-
-    <div class="form-group">
-
-        <label class="form-label">
-            Business Customers Permitidos
-        </label>
+    </div>
 
 
-        @if($businessCustomers->count())
+    <!-- ================================================= -->
+    <!-- PERSONAS -->
+    <!-- ================================================= -->
 
-            <div style="
-                display:grid;
-                grid-template-columns:repeat(2, minmax(0, 1fr));
-                gap:12px;
-            ">
+    <div
+        id="permisos-clientes"
+        style="display:none;"
+    >
 
-                @foreach($businessCustomers as $businessCustomer)
+        <div class="form-group">
 
-                    <label
-                        style="
-                            display:flex !important;
-                            align-items:center !important;
-                            gap:12px !important;
+            <label class="form-label">
 
-                            width:100% !important;
-                            box-sizing:border-box !important;
+                Personas Permitidas
 
-                            padding:14px 16px !important;
+            </label>
 
-                            border:1px solid #3a465c !important;
-                            border-radius:10px !important;
 
-                            background:rgba(255,255,255,0.02) !important;
+            @if($clientes->count())
 
-                            cursor:pointer !important;
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+                    gap:12px;
+                ">
 
-                            margin:0 !important;
+                    @foreach($clientes as $cliente)
 
-                            overflow:hidden !important;
-                        "
-                    >
-
-                        <!-- CHECKBOX -->
-
-                        <input
-                            type="checkbox"
-                            name="business_customers[]"
-                            value="{{ $businessCustomer->id }}"
-                            {{ in_array(
-                                $businessCustomer->id,
-                                $businessCustomersUsuario
-                            ) ? 'checked' : '' }}
-
+                        <label
                             style="
-                                flex:0 0 auto !important;
-                                width:16px !important;
-                                height:16px !important;
+                                display:flex !important;
+                                align-items:center !important;
+                                gap:12px !important;
+
+                                width:100% !important;
+                                box-sizing:border-box !important;
+
+                                padding:14px 16px !important;
+
+                                border:1px solid #3a465c !important;
+                                border-radius:10px !important;
+
+                                background:rgba(
+                                    255,
+                                    255,
+                                    255,
+                                    0.02
+                                ) !important;
+
+                                cursor:pointer !important;
+
                                 margin:0 !important;
+
+                                overflow:hidden !important;
                             "
                         >
 
+                            <input
+                                type="checkbox"
+                                name="clientes[]"
+                                value="{{ $cliente->id }}"
+                                {{ in_array(
+                                    $cliente->id,
+                                    $clientesUsuario
+                                ) ? 'checked' : '' }}
 
-                        <!-- INFORMACIÓN -->
+                                style="
+                                    flex:0 0 auto !important;
+                                    width:16px !important;
+                                    height:16px !important;
+                                    margin:0 !important;
+                                "
+                            >
 
-                        <div style="
-                            min-width:0;
-                            flex:1;
-                            overflow:hidden;
-                        ">
 
                             <div style="
-                                font-weight:600;
-                                font-size:15px;
-                                white-space:nowrap;
+                                min-width:0;
+                                flex:1;
                                 overflow:hidden;
-                                text-overflow:ellipsis;
                             ">
 
-                                {{ $businessCustomer->nombre }}
-
-                            </div>
-
-
-                            @if($businessCustomer->identificador_tributario)
-
                                 <div style="
-                                    margin-top:4px;
-                                    font-size:12px;
-                                    opacity:.65;
+                                    font-weight:600;
+                                    font-size:15px;
                                     white-space:nowrap;
                                     overflow:hidden;
                                     text-overflow:ellipsis;
                                 ">
 
-                                    ID:
-                                    {{ $businessCustomer->identificador_tributario }}
+                                    {{ $cliente->nombre }}
 
                                 </div>
 
-                            @endif
 
-                        </div>
+                                @if($cliente->email)
 
-                    </label>
+                                    <div style="
+                                        margin-top:4px;
+                                        font-size:12px;
+                                        opacity:.65;
+                                        white-space:nowrap;
+                                        overflow:hidden;
+                                        text-overflow:ellipsis;
+                                    ">
 
-                @endforeach
+                                        {{ $cliente->email }}
 
-            </div>
+                                    </div>
 
-        @else
+                                @endif
 
-            <div style="
-                padding:20px;
-                border:1px dashed #555;
-                border-radius:10px;
-                text-align:center;
-                opacity:.7;
-            ">
+                            </div>
 
-                No hay Business Customers registrados.
+                        </label>
 
-            </div>
+                    @endforeach
 
-        @endif
+                </div>
+
+            @else
+
+                <div style="
+                    padding:20px;
+                    border:1px dashed #555;
+                    border-radius:10px;
+                    text-align:center;
+                    opacity:.7;
+                ">
+
+                    No hay personas registradas.
+
+                </div>
+
+            @endif
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- ENTIDADES -->
+    <!-- ================================================= -->
+
+    <div
+        id="permisos-entidades"
+        style="display:none;"
+    >
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Entidades Permitidas
+
+            </label>
+
+
+            @if($entidades->count())
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+                    gap:12px;
+                ">
+
+                    @foreach($entidades as $entidad)
+
+                        <label
+                            style="
+                                display:flex !important;
+                                align-items:center !important;
+                                gap:12px !important;
+
+                                width:100% !important;
+                                box-sizing:border-box !important;
+
+                                padding:14px 16px !important;
+
+                                border:1px solid #3a465c !important;
+                                border-radius:10px !important;
+
+                                background:rgba(
+                                    255,
+                                    255,
+                                    255,
+                                    0.02
+                                ) !important;
+
+                                cursor:pointer !important;
+
+                                margin:0 !important;
+
+                                overflow:hidden !important;
+                            "
+                        >
+
+                            <input
+                                type="checkbox"
+                                name="entidades[]"
+                                value="{{ $entidad->id }}"
+                                {{ in_array(
+                                    $entidad->id,
+                                    $entidadesUsuario
+                                ) ? 'checked' : '' }}
+
+                                style="
+                                    flex:0 0 auto !important;
+                                    width:16px !important;
+                                    height:16px !important;
+                                    margin:0 !important;
+                                "
+                            >
+
+
+                            <div style="
+                                min-width:0;
+                                flex:1;
+                                overflow:hidden;
+                            ">
+
+                                <div style="
+                                    font-weight:600;
+                                    font-size:15px;
+                                    white-space:nowrap;
+                                    overflow:hidden;
+                                    text-overflow:ellipsis;
+                                ">
+
+                                    {{ $entidad->denominacion_social
+                                        ?: 'Entidad #' . $entidad->id }}
+
+                                </div>
+
+
+                                @if($entidad->matricula)
+
+                                    <div style="
+                                        margin-top:4px;
+                                        font-size:12px;
+                                        opacity:.65;
+                                        white-space:nowrap;
+                                        overflow:hidden;
+                                        text-overflow:ellipsis;
+                                    ">
+
+                                        Matrícula:
+                                        {{ $entidad->matricula }}
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                        </label>
+
+                    @endforeach
+
+                </div>
+
+            @else
+
+                <div style="
+                    padding:20px;
+                    border:1px dashed #555;
+                    border-radius:10px;
+                    text-align:center;
+                    opacity:.7;
+                ">
+
+                    No hay entidades registradas.
+
+                </div>
+
+            @endif
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- BUSINESS CUSTOMERS -->
+    <!-- ================================================= -->
+
+    <div
+        id="permisos-businessCustomers"
+        style="display:none;"
+    >
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Business Customers Permitidos
+
+            </label>
+
+
+            @if($businessCustomers->count())
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+                    gap:12px;
+                ">
+
+                    @foreach($businessCustomers as $businessCustomer)
+
+                        <label
+                            style="
+                                display:flex !important;
+                                align-items:center !important;
+                                gap:12px !important;
+
+                                width:100% !important;
+                                box-sizing:border-box !important;
+
+                                padding:14px 16px !important;
+
+                                border:1px solid #3a465c !important;
+                                border-radius:10px !important;
+
+                                background:rgba(
+                                    255,
+                                    255,
+                                    255,
+                                    0.02
+                                ) !important;
+
+                                cursor:pointer !important;
+
+                                margin:0 !important;
+
+                                overflow:hidden !important;
+                            "
+                        >
+
+                            <input
+                                type="checkbox"
+                                name="business_customers[]"
+                                value="{{ $businessCustomer->id }}"
+                                {{ in_array(
+                                    $businessCustomer->id,
+                                    $businessCustomersUsuario
+                                ) ? 'checked' : '' }}
+
+                                style="
+                                    flex:0 0 auto !important;
+                                    width:16px !important;
+                                    height:16px !important;
+                                    margin:0 !important;
+                                "
+                            >
+
+
+                            <div style="
+                                min-width:0;
+                                flex:1;
+                                overflow:hidden;
+                            ">
+
+                                <div style="
+                                    font-weight:600;
+                                    font-size:15px;
+                                    white-space:nowrap;
+                                    overflow:hidden;
+                                    text-overflow:ellipsis;
+                                ">
+
+                                    {{ $businessCustomer->nombre }}
+
+                                </div>
+
+
+                                @if($businessCustomer->identificador_tributario)
+
+                                    <div style="
+                                        margin-top:4px;
+                                        font-size:12px;
+                                        opacity:.65;
+                                        white-space:nowrap;
+                                        overflow:hidden;
+                                        text-overflow:ellipsis;
+                                    ">
+
+                                        ID:
+                                        {{ $businessCustomer->identificador_tributario }}
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                        </label>
+
+                    @endforeach
+
+                </div>
+
+            @else
+
+                <div style="
+                    padding:20px;
+                    border:1px dashed #555;
+                    border-radius:10px;
+                    text-align:center;
+                    opacity:.7;
+                ">
+
+                    No hay Business Customers registrados.
+
+                </div>
+
+            @endif
+
+        </div>
 
     </div>
 
 </div>
-        <!-- ===================================================== -->
-        <!-- ESTADO -->
-        <!-- ===================================================== -->
+
+
+
+    <!-- ================================================= -->
+    <!-- Estados -->
+    <!-- ================================================= -->
+
 
         <div class="form-group">
 
@@ -493,49 +881,108 @@
 <!-- ============================================================= -->
 <!-- JAVASCRIPT DE PESTAÑAS -->
 <!-- ============================================================= -->
+
+
+@endsection
+
+
 <script>
 
 function mostrarPermisos(tipo)
 {
-    const inversiones =
-        document.getElementById('permisos-inversiones');
+    console.log('Pestaña seleccionada:', tipo);
 
-    const clientes =
-        document.getElementById('permisos-clientes');
+    const tipos = [
+        'inversiones',
+        'clientes',
+        'entidades',
+        'businessCustomers'
+    ];
 
-    const tabInversiones =
-        document.getElementById('tabInversiones');
+    /*
+    |--------------------------------------------------------------------------
+    | OCULTAR TODOS LOS PANELES
+    |--------------------------------------------------------------------------
+    */
 
-    const tabClientes =
-        document.getElementById('tabClientes');
+    tipos.forEach(function(nombre) {
+
+        const panel =
+            document.getElementById(
+                'permisos-' + nombre
+            );
+
+        if (panel) {
+            panel.style.display = 'none';
+        }
+
+    });
 
 
-    if (tipo === 'inversiones') {
+    /*
+    |--------------------------------------------------------------------------
+    | QUITAR ACTIVE DE TODAS LAS PESTAÑAS
+    |--------------------------------------------------------------------------
+    */
 
-        inversiones.style.display = 'block';
+    document
+        .querySelectorAll('.permission-tab')
+        .forEach(function(tab) {
 
-        clientes.style.display = 'none';
+            tab.classList.remove('active');
 
-        tabInversiones.classList.add('active');
+        });
 
-        tabClientes.classList.remove('active');
+
+    /*
+    |--------------------------------------------------------------------------
+    | MOSTRAR PANEL SELECCIONADO
+    |--------------------------------------------------------------------------
+    */
+
+    const panel =
+        document.getElementById(
+            'permisos-' + tipo
+        );
+
+    if (panel) {
+
+        panel.style.display = 'block';
 
     }
 
 
-    if (tipo === 'clientes') {
+    /*
+    |--------------------------------------------------------------------------
+    | ACTIVAR PESTAÑA
+    |--------------------------------------------------------------------------
+    */
 
-        inversiones.style.display = 'none';
+    const botones = {
 
-        clientes.style.display = 'block';
+        inversiones: 'tabInversiones',
 
-        tabInversiones.classList.remove('active');
+        clientes: 'tabClientes',
 
-        tabClientes.classList.add('active');
+        entidades: 'tabEntidades',
+
+        businessCustomers:
+            'tabBusinessCustomers'
+
+    };
+
+
+    const boton =
+        document.getElementById(
+            botones[tipo]
+        );
+
+    if (boton) {
+
+        boton.classList.add('active');
 
     }
+
 }
 
 </script>
-
-@endsection

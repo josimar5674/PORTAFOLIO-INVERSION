@@ -76,18 +76,18 @@
                     Inversiones
                 </a>
 
-                @if(Auth::user()->role == 'admin')
+               
 
                 <a href="/clientes">
                     Personas
                 </a>
-                @endif
+               
 
 
                 <a href="/business-customers">
                     Clientes
                 </a>
-                @if(Auth::user()->role == 'admin')
+               
 
 
                 <a href="/entidades">
@@ -95,7 +95,7 @@
                 </a>
 
 
-                @endif
+            
 
                 @auth
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Inversion;
 use App\Models\BusinessCustomer;
+use App\Models\Entidad;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
@@ -37,17 +39,55 @@ class UserController extends Controller
 
     public function create()
     {
+        /*
+        |--------------------------------------------------------------------------
+        | INVERSIONES
+        |--------------------------------------------------------------------------
+        */
+
         $inversiones = Inversion::all();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | BUSINESS CUSTOMERS
+        |--------------------------------------------------------------------------
+        */
 
         $businessCustomers = BusinessCustomer::orderBy(
             'nombre'
         )->get();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENTIDADES
+        |--------------------------------------------------------------------------
+        */
+
+        $entidades = Entidad::orderBy(
+            'denominacion_social'
+        )->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PERSONAS
+        |--------------------------------------------------------------------------
+        */
+
+        $clientes = Cliente::orderBy(
+            'nombre'
+        )->get();
+
+
         return view(
             'usuarios.create',
             compact(
                 'inversiones',
-                'businessCustomers'
+                'businessCustomers',
+                'entidades',
+                'clientes'
             )
         );
     }
@@ -65,30 +105,45 @@ class UserController extends Controller
 
             'name' => 'required',
 
-            'email' => 'required|email|unique:users,email',
+            'email' =>
+                'required|email|unique:users,email',
 
-            'password' => 'required|min:6',
+            'password' =>
+                'required|min:6',
 
-            'role' => 'required',
+            'role' =>
+                'required',
 
-            'estado' => 'required',
+            'estado' =>
+                'required',
 
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | CREAR USUARIO
+        |--------------------------------------------------------------------------
+        */
+
         $usuario = User::create([
 
-            'name' => $request->name,
+            'name' =>
+                $request->name,
 
-            'email' => $request->email,
+            'email' =>
+                $request->email,
 
-            'password' => Hash::make(
-                $request->password
-            ),
+            'password' =>
+                Hash::make(
+                    $request->password
+                ),
 
-            'role' => $request->role,
+            'role' =>
+                $request->role,
 
-            'estado' => $request->estado,
+            'estado' =>
+                $request->estado,
 
         ]);
 
@@ -99,8 +154,8 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if ($request->role == 'user') {
-
+        if ($request->role == 'user')
+        {
 
             /*
             |--------------------------------------------------------------------------
@@ -111,7 +166,10 @@ class UserController extends Controller
             if ($request->has('inversiones'))
             {
 
-                foreach ($request->inversiones as $inversionId)
+                foreach (
+                    $request->inversiones
+                    as $inversionId
+                )
                 {
 
                     DB::table(
@@ -247,6 +305,82 @@ class UserController extends Controller
 
             }
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | ENTIDADES
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->has('entidades'))
+            {
+
+                foreach (
+                    $request->entidades
+                    as $entidadId
+                )
+                {
+
+                    DB::table(
+                        'user_entidad'
+                    )->insert([
+
+                        'user_id' =>
+                            $usuario->id,
+
+                        'entidad_id' =>
+                            $entidadId,
+
+                        'created_at' =>
+                            now(),
+
+                        'updated_at' =>
+                            now(),
+
+                    ]);
+
+                }
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PERSONAS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->has('clientes'))
+            {
+
+                foreach (
+                    $request->clientes
+                    as $clienteId
+                )
+                {
+
+                    DB::table(
+                        'user_cliente'
+                    )->insert([
+
+                        'user_id' =>
+                            $usuario->id,
+
+                        'cliente_id' =>
+                            $clienteId,
+
+                        'created_at' =>
+                            now(),
+
+                        'updated_at' =>
+                            now(),
+
+                    ]);
+
+                }
+
+            }
+
         }
 
 
@@ -352,6 +486,70 @@ class UserController extends Controller
             ->toArray();
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | ENTIDADES
+        |--------------------------------------------------------------------------
+        */
+
+        $entidades =
+            Entidad::orderBy(
+                'denominacion_social'
+            )->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENTIDADES DEL USUARIO
+        |--------------------------------------------------------------------------
+        */
+
+        $entidadesUsuario =
+            DB::table(
+                'user_entidad'
+            )
+            ->where(
+                'user_id',
+                $usuario->id
+            )
+            ->pluck(
+                'entidad_id'
+            )
+            ->toArray();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PERSONAS
+        |--------------------------------------------------------------------------
+        */
+
+        $clientes =
+            Cliente::orderBy(
+                'nombre'
+            )->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PERSONAS DEL USUARIO
+        |--------------------------------------------------------------------------
+        */
+
+        $clientesUsuario =
+            DB::table(
+                'user_cliente'
+            )
+            ->where(
+                'user_id',
+                $usuario->id
+            )
+            ->pluck(
+                'cliente_id'
+            )
+            ->toArray();
+
+
         return view(
             'usuarios.edit',
             compact(
@@ -366,7 +564,15 @@ class UserController extends Controller
 
                 'businessCustomers',
 
-                'businessCustomersUsuario'
+                'businessCustomersUsuario',
+
+                'entidades',
+
+                'entidadesUsuario',
+
+                'clientes',
+
+                'clientesUsuario'
 
             )
         );
@@ -389,19 +595,21 @@ class UserController extends Controller
             User::findOrFail($id);
 
 
-        $request->validate([
+    $request->validate([
 
-            'email' =>
-                'required|email',
+    'name' =>
+    'required|string|max:255|unique:users,name,' . $id,
 
-            'role' =>
-                'required',
+    'email' =>
+        'required|email',
 
-            'estado' =>
-                'required',
+    'role' =>
+        'required',
 
-        ]);
+    'estado' =>
+        'required',
 
+]);
 
         /*
         |--------------------------------------------------------------------------
@@ -409,14 +617,18 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $usuario->email =
-            $request->email;
+    $usuario->name =
 
-        $usuario->role =
-            $request->role;
+    $request->name;
 
-        $usuario->estado =
-            $request->estado;
+$usuario->email =
+    $request->email;
+
+$usuario->role =
+    $request->role;
+
+$usuario->estado =
+    $request->estado;
 
         $usuario->save();
 
@@ -471,13 +683,44 @@ class UserController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | LIMPIAR ENTIDADES
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table(
+            'user_entidad'
+        )
+        ->where(
+            'user_id',
+            $usuario->id
+        )
+        ->delete();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LIMPIAR PERSONAS
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table(
+            'user_cliente'
+        )
+        ->where(
+            'user_id',
+            $usuario->id
+        )
+        ->delete();
+
+
+        /*
+        |--------------------------------------------------------------------------
         | GUARDAR PERMISOS NUEVOS
         |--------------------------------------------------------------------------
         */
 
         if ($request->role == 'user')
         {
-
 
             /*
             |--------------------------------------------------------------------------
@@ -620,6 +863,82 @@ class UserController extends Controller
 
                         'business_customer_id' =>
                             $businessCustomerId,
+
+                        'created_at' =>
+                            now(),
+
+                        'updated_at' =>
+                            now(),
+
+                    ]);
+
+                }
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ENTIDADES
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->has('entidades'))
+            {
+
+                foreach (
+                    $request->entidades
+                    as $entidadId
+                )
+                {
+
+                    DB::table(
+                        'user_entidad'
+                    )->insert([
+
+                        'user_id' =>
+                            $usuario->id,
+
+                        'entidad_id' =>
+                            $entidadId,
+
+                        'created_at' =>
+                            now(),
+
+                        'updated_at' =>
+                            now(),
+
+                    ]);
+
+                }
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PERSONAS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->has('clientes'))
+            {
+
+                foreach (
+                    $request->clientes
+                    as $clienteId
+                )
+                {
+
+                    DB::table(
+                        'user_cliente'
+                    )->insert([
+
+                        'user_id' =>
+                            $usuario->id,
+
+                        'cliente_id' =>
+                            $clienteId,
 
                         'created_at' =>
                             now(),

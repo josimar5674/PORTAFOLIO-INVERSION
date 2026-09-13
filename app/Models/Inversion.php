@@ -165,6 +165,18 @@ public function alertas()
     );
 }
 
+public function imagenes()
 
+{
+
+    return $this->morphMany(
+
+        \App\Models\Imagen::class,
+
+        'imageable'
+
+    );
+
+}
 
 }

@@ -23,6 +23,7 @@ use App\Http\Controllers\ConfigurationOptionController;
 use App\Http\Controllers\AlertController;
 use App\Http\Controllers\GoogleWorkspaceController;
 use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\ImagenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,16 +69,89 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| CLIENTES / PERSONAS
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| LISTADO — USUARIOS AUTENTICADOS
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/clientes',
+    [ClienteController::class, 'index']
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMINISTRACIÓN — SOLO ADMIN
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| CLIENTES / PERSONAS
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| LISTADO — USUARIOS AUTENTICADOS
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/clientes',
+    [ClienteController::class, 'index']
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| VER / EDITAR — USUARIOS AUTENTICADOS
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/clientes/{id}/edit',
+    [ClienteController::class, 'edit']
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| CREAR / MODIFICAR — SOLO ADMIN
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('admin')->group(function () {
 
-    Route::get('/clientes', [ClienteController::class, 'index']);
-    Route::get('/clientes/create', [ClienteController::class, 'create']);
-    Route::post('/clientes', [ClienteController::class, 'store']);
+    Route::get(
+        '/clientes/create',
+        [ClienteController::class, 'create']
+    );
 
-    Route::get('/clientes/{id}/edit', [ClienteController::class, 'edit']);
-    Route::put('/clientes/{id}', [ClienteController::class, 'update']);
+    Route::post(
+        '/clientes',
+        [ClienteController::class, 'store']
+    );
 
-    Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']);
+    Route::put(
+        '/clientes/{id}',
+        [ClienteController::class, 'update']
+    );
+
+    Route::delete(
+        '/clientes/{id}',
+        [ClienteController::class, 'destroy']
+    );
+
+
 
 });
     /*
@@ -347,18 +421,40 @@ Route::middleware('admin')->group(function () {
             |--------------------------------------------------------------------------
             */
 
-    Route::get('/usuarios', [UserController::class, 'index']);
+/*
+|--------------------------------------------------------------------------
+| USUARIOS (SOLO ADMIN)
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/usuarios/create', [UserController::class, 'create']);
+Route::middleware('admin')->group(function () {
 
-    Route::post('/usuarios', [UserController::class, 'store']);
+    Route::get(
+        '/usuarios',
+        [UserController::class, 'index']
+    );
 
-    Route::get('/usuarios/{id}/edit', [UserController::class, 'edit']);
+    Route::get(
+        '/usuarios/create',
+        [UserController::class, 'create']
+    );
 
-    Route::put('/usuarios/{id}', [UserController::class, 'update']);
+    Route::post(
+        '/usuarios',
+        [UserController::class, 'store']
+    );
 
+    Route::get(
+        '/usuarios/{id}/edit',
+        [UserController::class, 'edit']
+    );
 
+    Route::put(
+        '/usuarios/{id}',
+        [UserController::class, 'update']
+    );
 
+});
 
 
 
@@ -545,6 +641,18 @@ Route::delete(
 );
 
 
+
+/*
+|--------------------------------------------------------------------------
+|Imagenes
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/imagenes', [ImagenController::class, 'store'])
+    ->name('imagenes.store');
+
+Route::delete('/imagenes/{imagen}', [ImagenController::class, 'destroy'])
+    ->name('imagenes.destroy');
 
 
 

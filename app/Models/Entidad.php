@@ -82,6 +82,12 @@ public function alertas()
     );
 }    
 
-
+public function usuarios()
+{
+    return $this->belongsToMany(
+        \App\Models\User::class,
+        'user_entidad'
+    )->withTimestamps();
+}
 
 }

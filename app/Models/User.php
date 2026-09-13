@@ -84,4 +84,20 @@ public function businessCustomers()
         'user_business_customer'
     )->withTimestamps();
 }
+
+public function entidades()
+{
+    return $this->belongsToMany(
+        \App\Models\Entidad::class,
+        'user_entidad'
+    )->withTimestamps();
+}
+
+public function clientes()
+{
+    return $this->belongsToMany(
+        \App\Models\Cliente::class,
+        'user_cliente'
+    )->withTimestamps();
+}
 }

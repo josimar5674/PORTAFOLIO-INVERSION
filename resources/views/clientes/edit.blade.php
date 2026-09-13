@@ -45,6 +45,22 @@
         </div>
 
         <div class="form-group">
+
+    <label for="clave">
+        Clave <span style="color:#888;"></span>
+    </label>
+
+    <input
+        type="text"
+        id="clave"
+        name="clave"
+        value="{{ old('clave', $cliente->clave) }}"
+        placeholder="Ingrese una clave"
+    >
+
+</div>
+
+        <div class="form-group">
             <label>Email</label>
             <input type="email" name="email" class="form-control"
                 value="{{ old('email', $cliente->email) }}">

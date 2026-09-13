@@ -128,31 +128,35 @@
 
                 <td>
 
-                    <a href="/business-customers/{{ $cliente->id }}/edit"
-                       class="btn-secondary">
+               <a href="/business-customers/{{ $cliente->id }}/edit"
+   class="btn-secondary">
 
-                        Ver
+    Ver
 
-                    </a>
+</a>
 
-                    <form
-                        method="POST"
-                        action="/business-customers/{{ $cliente->id }}"
-                        style="display:inline;"
-                        onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+@if(auth()->user()->role === 'admin')
 
-                        @csrf
-                        @method('DELETE')
+    <form
+        method="POST"
+        action="/business-customers/{{ $cliente->id }}"
+        style="display:inline;"
+        onsubmit="event.preventDefault(); confirmarEliminacion(this)">
 
-                        <button
-                            type="submit"
-                            class="btn-danger">
+        @csrf
+        @method('DELETE')
 
-                            🗑️
+        <button
+            type="submit"
+            class="btn-danger">
 
-                        </button>
+            🗑️
 
-                    </form>
+        </button>
+
+    </form>
+
+@endif
 
                 </td>
 

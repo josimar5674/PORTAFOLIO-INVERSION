@@ -136,15 +136,34 @@ $juridicas =
 
     style="cursor:pointer;">
 
-            <td>
+         <td>
 
-                <strong>
+    <strong>
 
-                    {{ $cliente->nombre }}
+        {{ $cliente->nombre }}
 
-                </strong>
+    </strong>
 
-            </td>
+    @if($cliente->clave)
+
+        <div style="
+
+            margin-top: 4px;
+
+            font-size: 13px;
+
+            color: #9ca3af;
+
+        ">
+
+            Clave: {{ $cliente->clave }}
+
+        </div>
+
+    @endif
+
+</td>
+            
 
             <td>
 
@@ -164,34 +183,34 @@ $juridicas =
 
             </td>
 
-            <td>
+       <td>
 
-                <a href="/clientes/{{ $cliente->id }}/edit"
-                   class="btn-secondary">
+    <a href="/clientes/{{ $cliente->id }}/edit"
+       class="btn-secondary">
+        Editar
+    </a>
 
-                    Editar
+    @if(auth()->user()->role === 'admin')
+        <form method="POST"
+              action="/clientes/{{ $cliente->id }}"
+              style="display:inline;"
+              onsubmit="event.preventDefault(); confirmarEliminacion(this);">
 
-                </a>
+            @csrf
+            @method('DELETE')
 
-                <form method="POST"
-                      action="/clientes/{{ $cliente->id }}"
-                      style="display:inline;"
-                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+            <button type="submit"
+                    class="btn-danger"
+                    onclick="event.stopPropagation();">
 
-                    @csrf
-                    @method('DELETE')
+                🗑️
 
-                    <button
-                        type="submit"
-                        class="btn-danger">
+            </button>
 
-                        🗑️
+        </form>
+    @endif
 
-                    </button>
-
-                </form>
-
-            </td>
+</td>
 
         </tr>
 

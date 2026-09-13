@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Entidad;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\DB;
 
 class EntidadController extends Controller
 {
@@ -45,24 +46,52 @@ class EntidadController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        if (auth()->user()->role != 'admin') {
-            abort(403);
-        }
+public function index()
+{
+    $usuario = auth()->user();
 
-        $entidades = Entidad::all();
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN
+    |--------------------------------------------------------------------------
+    */
 
-        $inversion = null;
+    if ($usuario->role === 'admin') {
 
-        return view(
-            'entidades.index',
-            compact(
-                'entidades',
-                'inversion'
-            )
-        );
+        $entidades = Entidad::orderBy(
+            'denominacion_social'
+        )->get();
+
+    } else {
+
+        /*
+        |--------------------------------------------------------------------------
+        | SOLO ENTIDADES AUTORIZADAS
+        |--------------------------------------------------------------------------
+        */
+
+        $entidades = $usuario->entidades()
+            ->orderBy('denominacion_social')
+            ->get();
+
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIN INVERSIÓN ESPECÍFICA
+    |--------------------------------------------------------------------------
+    */
+
+    $inversion = null;
+
+    return view(
+        'entidades.index',
+        compact(
+            'entidades',
+            'inversion'
+        )
+    );
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -273,23 +302,27 @@ class EntidadController extends Controller
             );
     }
 
-    private function puedeEditarEntidad($entidad)
-    {
-        if (auth()->user()->role == 'admin') {
-            return true;
-        }
+private function puedeEditarEntidad($entidad)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN
+    |--------------------------------------------------------------------------
+    */
 
-        foreach ($entidad->inversiones as $inversion) {
-            if (
-                auth()->user()->tienePermiso(
-                    $inversion->id,
-                    'entidades'
-                )
-            ) {
-                return true;
-            }
-        }
-
-        return false;
+    if (auth()->user()->role === 'admin') {
+        return true;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ENTIDAD AUTORIZADA
+    |--------------------------------------------------------------------------
+    */
+
+    return DB::table('user_entidad')
+        ->where('user_id', auth()->id())
+        ->where('entidad_id', $entidad->id)
+        ->exists();
+}
 }

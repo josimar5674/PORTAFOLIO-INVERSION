@@ -187,11 +187,21 @@
 
         </a>
 
+
+
         @endif
+
+
 
     </div>
 
+    
+    
+
 </div>
+@include('components.imagenes', [
+    'modelo' => $inversion
+])
 
 <div class="summary-grid">
 

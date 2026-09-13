@@ -11,6 +11,7 @@ class Cliente extends Model
 {
     protected $fillable = [
         'nombre',
+        'clave',
         'tipo',
         'telefono',
         'email'
@@ -79,5 +80,11 @@ public function alertas()
     );
 }    
 
-
+public function usuarios()
+{
+    return $this->belongsToMany(
+        \App\Models\User::class,
+        'user_cliente'
+    )->withTimestamps();
+}
 }

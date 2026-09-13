@@ -8,41 +8,52 @@ use App\Models\Entidad;
 
 class ClienteController extends Controller
 {
-    public function index()
-    {
-        $clientes = Cliente::all();
-        return view('clientes.index', compact('clientes'));
+  public function index()
+{
+    $usuario = auth()->user();
+
+    if ($usuario->role === 'admin') {
+
+        $clientes = Cliente::orderBy('nombre')->get();
+
+    } else {
+
+        $clientes = $usuario->clientes()
+            ->orderBy('nombre')
+            ->get();
+
     }
 
-    public function create()
+    return view(
+        'clientes.index',
+        compact('clientes')
+    );
+}
 
-    {
+public function create()
+{
+    $entidades = Entidad::orderBy(
+        'denominacion_social'
+    )->get();
 
-        $entidades = Entidad::orderBy(
-
-            'denominacion_social'
-
-        )->get();
-
-        return view(
-
-            'clientes.create',
-
-            compact('entidades')
-
-        );
-    }
+    return view(
+        'clientes.create',
+        compact('entidades')
+    );
+}
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required',
-            'tipo' => 'required'
+            'tipo' => 'required',
+            'clave'  => 'nullable|string|max:255'
         ]);
 
         $cliente = Cliente::create([
 
             'nombre' => $request->nombre,
+              'clave' => $request->clave,
 
             'tipo' => $request->tipo,
 
@@ -116,26 +127,45 @@ class ClienteController extends Controller
         );
     }
 
-    public function edit($id)
-    {
-        $cliente = Cliente::with([
-            'entidades',
-            'identificaciones',
-            'nacionalidades'
-        ])->findOrFail($id);
+public function edit($id)
+{
+    $cliente = Cliente::with([
+        'entidades',
+        'identificaciones',
+        'nacionalidades'
+    ])->findOrFail($id);
 
-        $entidades = Entidad::orderBy(
-            'denominacion_social'
-        )->get();
+    /*
+    |--------------------------------------------------------------------------
+    | AUTORIZACIÓN
+    |--------------------------------------------------------------------------
+    */
 
-        return view(
-            'clientes.edit',
-            compact(
-                'cliente',
-                'entidades'
-            )
-        );
+    if (auth()->user()->role !== 'admin') {
+
+        $tieneAcceso = auth()->user()
+            ->clientes()
+            ->where('clientes.id', $cliente->id)
+            ->exists();
+
+        if (!$tieneAcceso) {
+            abort(403);
+        }
+
     }
+
+    $entidades = Entidad::orderBy(
+        'denominacion_social'
+    )->get();
+
+    return view(
+        'clientes.edit',
+        compact(
+            'cliente',
+            'entidades'
+        )
+    );
+}
 
     public function update(Request $request, $id)
     {
@@ -150,6 +180,7 @@ class ClienteController extends Controller
         $cliente->update([
 
             'nombre'   => $request->nombre,
+            'clave'    => $request->clave,
             'email'    => $request->email,
             'telefono' => $request->telefono,
             'tipo'     => $request->tipo,
@@ -184,4 +215,19 @@ return redirect("/clientes/{$cliente->id}/edit")
         'Cliente actualizado correctamente.'
     );
     }
+
+public function destroy($id)
+{
+    if (auth()->user()->role !== 'admin') {
+        abort(403);
+    }
+
+    $cliente = Cliente::findOrFail($id);
+
+    $cliente->delete();
+
+    return redirect('/clientes')
+        ->with('success', 'Persona eliminada correctamente.');
+}
+
 }

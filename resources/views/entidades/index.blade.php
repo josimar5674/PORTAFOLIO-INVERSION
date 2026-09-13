@@ -18,6 +18,7 @@ $totalTipos =
 
 @endphp
 
+
 <div class="investment-header">
 
     <div>
@@ -28,7 +29,8 @@ $totalTipos =
 
         <small>
 
-@if(!empty($inversion))
+            @if($inversion)
+
                 {{ $inversion->nombre }}
 
                 ·
@@ -41,22 +43,24 @@ $totalTipos =
 
     </div>
 
+
     <div>
 
-@if(!empty($inversion))
-       
+        @if($inversion)
 
-        <a href="/inversiones/{{ $inversion->id }}"
-           class="btn-secondary">
+            <a
+                href="/inversiones/{{ $inversion->id }}"
+                class="btn-secondary">
 
-            ← Volver
+                ← Volver
 
-        </a>
+            </a>
 
         @else
 
-            <a href="/"
-               class="btn-secondary">
+            <a
+                href="/"
+                class="btn-secondary">
 
                 ← Dashboard
 
@@ -64,29 +68,39 @@ $totalTipos =
 
         @endif
 
-     @if(auth()->user()->role == 'admin')
 
-<a href="/entidades/create"
-   class="btn-primary-custom">
+        @if(auth()->user()->role == 'admin')
 
-    + Nueva Entidad
+            <a
+                href="/entidades/create"
+                class="btn-primary-custom">
 
-</a>
+                + Nueva Entidad
 
-@endif
+            </a>
+
+        @endif
+
     </div>
 
 </div>
 
+
 @if(session('success'))
 
-<div class="alert alert-success">
+    <div class="alert alert-success">
 
-    {{ session('success') }}
+        {{ session('success') }}
 
-</div>
+    </div>
 
 @endif
+
+
+
+{{-- ========================================================= --}}
+{{-- RESUMEN --}}
+{{-- ========================================================= --}}
 
 <div class="summary-grid">
 
@@ -102,6 +116,7 @@ $totalTipos =
 
     </div>
 
+
     <div class="summary-card">
 
         🏛️ Tipos Societarios
@@ -114,13 +129,14 @@ $totalTipos =
 
     </div>
 
+
     <div class="summary-card">
 
         💰 Capital Social
 
         <strong>
 
-            $ {{ number_format($totalCapital,2) }}
+            $ {{ number_format($totalCapital, 2) }}
 
         </strong>
 
@@ -128,143 +144,185 @@ $totalTipos =
 
 </div>
 
+
+
+{{-- ========================================================= --}}
+{{-- TABLA --}}
+{{-- ========================================================= --}}
+
 <div style="overflow-x:auto; margin-top:25px;">
 
-<table class="table-dashboard">
+    <table class="table-dashboard">
 
-    <thead>
+        <thead>
 
-        <tr>
+            <tr>
 
-            <th>Entidad</th>
+                <th>Entidad</th>
 
-            <th>RTN</th>
+                <th>RTN</th>
 
-            <th>Tipo</th>
+                <th>Tipo</th>
 
-            <th>Gerente</th>
+                <th>Gerente</th>
 
-            <th>Constitución</th>
+                <th>Constitución</th>
 
-            <th>Capital</th>
+                <th>Capital</th>
 
-            <th>Inversiones</th>
+                <th>Inversiones</th>
 
-            <th>Acciones</th>
+                <th>Acciones</th>
 
-        </tr>
+            </tr>
 
-    </thead>
+        </thead>
 
-    <tbody>
 
-    @foreach($entidades as $entidad)
+        <tbody>
 
-        <tr>
+        @forelse($entidades as $entidad)
 
-            <td>
+            <tr>
 
-                <strong>
+                <td>
 
-                    {{ $entidad->denominacion_social }}
+                    <strong>
 
-                </strong>
+                        {{ $entidad->denominacion_social }}
 
-            </td>
+                    </strong>
 
-            <td>
+                </td>
 
-                {{ $entidad->identificador_tributario }}
 
-            </td>
+                <td>
 
-            <td>
+                    {{ $entidad->identificador_tributario }}
 
-                {{ $entidad->tipo_societario }}
+                </td>
 
-            </td>
 
-            <td>
+                <td>
 
-                {{ $entidad->gerente_general }}
+                    {{ $entidad->tipo_societario }}
 
-            </td>
+                </td>
 
-            <td>
 
-                {{ $entidad->fecha_constitucion }}
+                <td>
 
-            </td>
+                    {{ $entidad->gerente_general }}
 
-            <td>
+                </td>
 
-                $ {{ number_format($entidad->capital_social_max ?? 0,2) }}
 
-            </td>
+                <td>
 
-            <td>
+                    {{ $entidad->fecha_constitucion }}
 
-                {{ $entidad->inversiones->count() }}
+                </td>
 
-            </td>
 
-            <td>
+                <td>
 
-             @if(
-    auth()->user()->role == 'admin'
-    ||
-    auth()->user()->tienePermiso($inversion->id, 'entidades')
-)
+                    $ {{ number_format(
+                        $entidad->capital_social_max ?? 0,
+                        2
+                    ) }}
 
-@if(isset($inversion))
+                </td>
 
-<a href="/entidades/{{ $entidad->id }}/edit?inversion_id={{ $inversion->id }}"
-   class="btn-secondary">
 
-    Ver
+                <td>
 
-</a>
+                    {{ $entidad->inversiones->count() }}
 
-@else
+                </td>
 
-<a href="/entidades/{{ $entidad->id }}/edit"
-   class="btn-secondary">
 
-    Ver
+                <td>
 
-</a>
+                    {{-- ====================================== --}}
+                    {{-- VER / EDITAR --}}
+                    {{-- ====================================== --}}
 
-@endif
+                    @if($inversion)
 
-@endif
+                        <a
+                            href="/entidades/{{ $entidad->id }}/edit?inversion_id={{ $inversion->id }}"
+                            class="btn-secondary">
 
-                <form method="POST"
-                      action="/entidades/{{ $entidad->id }}"
-                      style="display:inline;"
-                      onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+                            Ver
 
-                    @csrf
-                    @method('DELETE')
+                        </a>
 
-                    <button type="submit"
-                            class="btn-danger">
+                    @else
 
-                        🗑️
+                        <a
+                            href="/entidades/{{ $entidad->id }}/edit"
+                            class="btn-secondary">
 
-                    </button>
+                            Ver
 
-                </form>
+                        </a>
 
-            </td>
+                    @endif
 
-        </tr>
 
-    @endforeach
+                    {{-- ====================================== --}}
+                    {{-- ELIMINAR --}}
+                    {{-- ====================================== --}}
 
-    </tbody>
+                    @if(auth()->user()->role == 'admin')
 
-</table>
+                        <form
+                            method="POST"
+                            action="/entidades/{{ $entidad->id }}"
+                            style="display:inline;"
+                            onsubmit="event.preventDefault(); confirmarEliminacion(this)">
+
+                            @csrf
+
+                            @method('DELETE')
+
+                            <button
+                                type="submit"
+                                class="btn-danger">
+
+                                🗑️
+
+                            </button>
+
+                        </form>
+
+                    @endif
+
+                </td>
+
+            </tr>
+
+        @empty
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="text-align:center; padding:30px;">
+
+                    No tienes entidades autorizadas para visualizar.
+
+                </td>
+
+            </tr>
+
+        @endforelse
+
+        </tbody>
+
+    </table>
 
 </div>
+
 
 @endsection
